@@ -1,6 +1,15 @@
 from datetime import datetime, date, time
 from typing import Any, Dict, List, Optional
-from sqlalchemy import TEXT, TIME, DateTime, Integer, UniqueConstraint, func
+from sqlalchemy import (
+    JSON,
+    TEXT,
+    TIME,
+    DateTime,
+    ForeignKey,
+    Integer,
+    UniqueConstraint,
+    func,
+)
 from typing_extensions import Annotated
 from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
 
@@ -34,6 +43,10 @@ class Base(DeclarativeBase):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     created: Mapped[datetime] = dt_create
     updated: Mapped[datetime] = dt_update
+
+    type_annotation_map = {
+        Dict[str, Any]: JSON,
+    }
 
     def get_id(self):
         """
@@ -167,7 +180,7 @@ class EventType(Base):
     name: Mapped[str]
     description: Mapped[Optional[text]]
     acronyms: Mapped[Optional[str]]
-    category_id: Mapped[int] = mapped_column(foreign_key="event_categories.id")
+    category_id: Mapped[int] = mapped_column(ForeignKey("event_categories.id"))
 
     event_category: Mapped["EventCategory"] = relationship(back_populates="event_types")
 
@@ -215,8 +228,8 @@ class Role_x_Permission(Base):
 
     __tablename__ = "roles_x_permissions"
 
-    role_id: Mapped[int] = mapped_column(foreign_key="roles.id")
-    permission_id: Mapped[int] = mapped_column(foreign_key="permissions.id")
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
+    permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id"))
 
     role: Mapped["Role"] = relationship(back_populates="role_x_permission")
     permission: Mapped["Permission"] = relationship(back_populates="role_x_permission")
@@ -240,9 +253,9 @@ class Role_x_User_x_Org(Base):
         UniqueConstraint("role_id", "user_id", "org_id", name="_role_user_org_uc"),
     )
 
-    role_id: Mapped[int] = mapped_column(foreign_key="roles.id")
-    user_id: Mapped[int] = mapped_column(foreign_key="users.id")
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
 
     role: Mapped["Role"] = relationship(back_populates="role_x_user_x_org")
     user: Mapped["User"] = relationship(back_populates="role_x_user_x_org")
@@ -275,8 +288,8 @@ class Org(Base):
 
     __tablename__ = "orgs"
 
-    parent_id: Mapped[Optional[int]] = mapped_column(foreign_key="orgs.id")
-    org_type_id: Mapped[int] = mapped_column(foreign_key="org_types.id")
+    parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
+    org_type_id: Mapped[int] = mapped_column(ForeignKey("org_types.id"))
     default_location_id: Mapped[Optional[int]]
     name: Mapped[str]
     description: Mapped[Optional[text]]
@@ -313,8 +326,8 @@ class EventType_x_Org(Base):
 
     __tablename__ = "event_types_x_org"
 
-    event_type_id: Mapped[int] = mapped_column(foreign_key="event_types.id")
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
+    event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"))
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     is_default: Mapped[bool]
 
     event_type: Mapped["EventType"] = relationship(back_populates="event_type_x_org")
@@ -352,8 +365,8 @@ class EventTag_x_Org(Base):
 
     __tablename__ = "event_tags_x_org"
 
-    event_tag_id: Mapped[int] = mapped_column(foreign_key="event_tags.id")
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
+    event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"))
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     color_override: Mapped[Optional[str]]
 
     event_tag: Mapped["EventTag"] = relationship(back_populates="event_tag_x_org")
@@ -373,8 +386,8 @@ class Org_x_Slack(Base):
 
     __tablename__ = "org_x_slack"
 
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
-    slack_space_id: Mapped[str] = mapped_column(foreign_key="slack_spaces.team_id")
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    slack_space_id: Mapped[str] = mapped_column(ForeignKey("slack_spaces.team_id"))
 
     slack_space: Mapped["SlackSpace"] = relationship(back_populates="org_x_slack")
     org: Mapped["Org"] = relationship(back_populates="org_x_slack")
@@ -402,7 +415,7 @@ class Location(Base):
 
     __tablename__ = "locations"
 
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     name: Mapped[str]
     description: Mapped[Optional[text]]
     is_active: Mapped[bool]
@@ -460,11 +473,11 @@ class Event(Base):
 
     __tablename__ = "events"
 
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
-    location_id: Mapped[Optional[int]] = mapped_column(foreign_key="locations.id")
-    event_type_id: Mapped[int] = mapped_column(foreign_key="event_types.id")
-    event_tag_id: Mapped[Optional[int]] = mapped_column(foreign_key="event_tags.id")
-    series_id: Mapped[Optional[int]] = mapped_column(foreign_key="events.id")
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
+    event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"))
+    event_tag_id: Mapped[Optional[int]] = mapped_column(ForeignKey("event_tags.id"))
+    series_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
     is_series: Mapped[bool]
     is_active: Mapped[bool]
     highlight: Mapped[bool]
@@ -528,9 +541,9 @@ class Attendance(Base):
 
     __tablename__ = "attendance"
 
-    event_id: Mapped[int] = mapped_column(foreign_key="events.id")
-    user_id: Mapped[Optional[int]] = mapped_column(foreign_key="users.id")
-    attendance_type_id: Mapped[int] = mapped_column(foreign_key="attendance_types.id")
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
+    user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
+    attendance_type_id: Mapped[int] = mapped_column(ForeignKey("attendance_types.id"))
     is_planned: Mapped[bool]
     meta: Mapped[Optional[Dict[str, Any]]]
 
@@ -565,7 +578,7 @@ class User(Base):
     last_name: Mapped[Optional[str]]
     email: Mapped[str]
     phone: Mapped[Optional[str]]
-    home_region_id: Mapped[Optional[int]] = mapped_column(foreign_key="orgs.id")
+    home_region_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
 
@@ -605,9 +618,9 @@ class SlackUser(Base):
     is_admin: Mapped[bool]
     is_owner: Mapped[bool]
     is_bot: Mapped[bool]
-    user_id: Mapped[Optional[int]] = mapped_column(foreign_key="users.id")
+    user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
     avatar_url: Mapped[Optional[str]]
-    slack_team_id: Mapped[str] = mapped_column(foreign_key="slack_spaces.team_id")
+    slack_team_id: Mapped[str] = mapped_column(ForeignKey("slack_spaces.team_id"))
     strava_access_token: Mapped[Optional[str]]
     strava_refresh_token: Mapped[Optional[str]]
     strava_expires_at: Mapped[Optional[datetime]]
@@ -653,8 +666,8 @@ class Achievement_x_User(Base):
 
     __tablename__ = "achievements_x_users"
 
-    achievement_id: Mapped[int] = mapped_column(foreign_key="achievements.id")
-    user_id: Mapped[int] = mapped_column(foreign_key="users.id")
+    achievement_id: Mapped[int] = mapped_column(ForeignKey("achievements.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     date_awarded: Mapped[date]
 
     achievement: Mapped["Achievement"] = relationship(
@@ -677,8 +690,8 @@ class Achievement_x_Org(Base):
 
     __tablename__ = "achievements_x_org"
 
-    achievement_id: Mapped[int] = mapped_column(foreign_key="achievements.id")
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
+    achievement_id: Mapped[int] = mapped_column(ForeignKey("achievements.id"))
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
 
     achievement: Mapped["Achievement"] = relationship(
         back_populates="achievement_x_org"
@@ -701,8 +714,8 @@ class Position(Base):
 
     name: Mapped[str]
     description: Mapped[Optional[str]]
-    org_type_id: Mapped[int] = mapped_column(foreign_key="org_types.id")
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
+    org_type_id: Mapped[int] = mapped_column(ForeignKey("org_types.id"))
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
 
 
 class Position_x_Org_x_User(Base):
@@ -725,9 +738,9 @@ class Position_x_Org_x_User(Base):
         ),
     )
 
-    position_id: Mapped[int] = mapped_column(foreign_key="positions.id")
-    org_id: Mapped[int] = mapped_column(foreign_key="orgs.id")
-    user_id: Mapped[int] = mapped_column(foreign_key="users.id")
+    position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"))
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     position: Mapped["Position"] = relationship(back_populates="position_x_org_x_user")
     org: Mapped["Org"] = relationship(back_populates="position_x_org_x_user")
@@ -772,8 +785,8 @@ class Expansion_x_User(Base):
 
     __tablename__ = "expansions_x_users"
 
-    expansion_id: Mapped[int] = mapped_column(foreign_key="expansions.id")
-    user_id: Mapped[int] = mapped_column(foreign_key="users.id")
+    expansion_id: Mapped[int] = mapped_column(ForeignKey("expansions.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     date: Mapped[date]
     notes: Mapped[Optional[text]]
 

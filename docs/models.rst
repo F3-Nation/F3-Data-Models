@@ -1,9 +1,7 @@
-# docs/models.rst
+models module
+=============
 
-Models
-======
-
-.. automodule:: f3_data_models.models
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. automodule:: models
+   :members:
+   :undoc-members:
+   :show-inheritance:
