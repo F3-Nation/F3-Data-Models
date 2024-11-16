@@ -22,15 +22,30 @@ release = "0.1.0"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
+    # "sphinx_multiversion",
 ]
 
+autoclass_content = "class"
+
 templates_path = ["_templates"]
+# html_sidebars = {
+#     "**": [
+#         "sidebar/brand.html",
+#         "sidebar/search.html",
+#         "sidebar/scroll-start.html",
+#         "sidebar/navigation.html",
+#         "sidebar/versions.html",
+#         "sidebar/scroll-end.html",
+#     ],
+# }
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
+# html_theme = "alabaster"
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]

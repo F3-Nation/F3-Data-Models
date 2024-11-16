@@ -1,8 +1,7 @@
-f3-data-models
-==============
+models
+======
 
 .. toctree::
    :maxdepth: 4
 
    models
-   utils

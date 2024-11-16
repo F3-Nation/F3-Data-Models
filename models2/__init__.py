@@ -14,6 +14,18 @@ from typing_extensions import Annotated
 from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
 
 # Custom Annotations
+dt_create = Annotated[
+    datetime, mapped_column(DateTime, server_default=func.timezone("utc", func.now()))
+]
+dt_update = Annotated[
+    datetime,
+    mapped_column(
+        DateTime,
+        server_default=func.timezone("utc", func.now()),
+        onupdate=func.timezone("utc", func.now()),
+    ),
+]
+intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
 time_notz = Annotated[time, TIME]
 text = Annotated[str, TEXT]
 
@@ -29,16 +41,8 @@ class Base(DeclarativeBase):
     """
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    # created: Mapped[datetime] = dt_create
-    # updated: Mapped[datetime] = dt_update
-    created: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func.timezone("utc", func.now())
-    )
-    updated: Mapped[datetime] = mapped_column(
-        DateTime,
-        server_default=func.timezone("utc", func.now()),
-        onupdate=func.timezone("utc", func.now()),
-    )
+    created: Mapped[datetime] = dt_create
+    updated: Mapped[datetime] = dt_update
 
     type_annotation_map = {
         Dict[str, Any]: JSON,
