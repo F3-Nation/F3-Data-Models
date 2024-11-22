@@ -114,16 +114,18 @@
 </li>
       <li><a href="models.html#models.Achievement_x_User">Achievement_x_User (class in models)</a>
 </li>
+      <li><a href="models.html#models.User.achievements_x_user">achievements_x_user (models.User attribute)</a>
+</li>
       <li><a href="models.html#models.EventType.acronyms">acronyms (models.EventType attribute)</a>
 </li>
       <li><a href="models.html#models.Location.address_city">address_city (models.Location attribute)</a>
 </li>
       <li><a href="models.html#models.Location.address_country">address_country (models.Location attribute)</a>
 </li>
-      <li><a href="models.html#models.Location.address_state">address_state (models.Location attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="models.html#models.Location.address_state">address_state (models.Location attribute)</a>
+</li>
       <li><a href="models.html#models.Location.address_street">address_street (models.Location attribute)</a>
 </li>
       <li><a href="models.html#models.Location.address_zip">address_zip (models.Location attribute)</a>
@@ -201,9 +203,13 @@
 </li>
         <li><a href="models.html#models.EventTag.created">(models.EventTag attribute)</a>
 </li>
+        <li><a href="models.html#models.EventTag_x_Event.created">(models.EventTag_x_Event attribute)</a>
+</li>
         <li><a href="models.html#models.EventTag_x_Org.created">(models.EventTag_x_Org attribute)</a>
 </li>
         <li><a href="models.html#models.EventType.created">(models.EventType attribute)</a>
+</li>
+        <li><a href="models.html#models.EventType_x_Event.created">(models.EventType_x_Event attribute)</a>
 </li>
         <li><a href="models.html#models.EventType_x_Org.created">(models.EventType_x_Org attribute)</a>
 </li>
@@ -299,18 +305,32 @@
       <li><a href="models.html#models.Event">Event (class in models)</a>
 </li>
       <li><a href="models.html#models.Attendance.event">event (models.Attendance attribute)</a>
+
+      <ul>
+        <li><a href="models.html#models.EventTag_x_Event.event">(models.EventTag_x_Event attribute)</a>
 </li>
+        <li><a href="models.html#models.EventType_x_Event.event">(models.EventType_x_Event attribute)</a>
+</li>
+      </ul></li>
       <li><a href="models.html#models.EventType.event_category">event_category (models.EventType attribute)</a>
 </li>
       <li><a href="models.html#models.Attendance.event_id">event_id (models.Attendance attribute)</a>
+
+      <ul>
+        <li><a href="models.html#models.EventTag_x_Event.event_id">(models.EventTag_x_Event attribute)</a>
 </li>
+        <li><a href="models.html#models.EventType_x_Event.event_id">(models.EventType_x_Event attribute)</a>
+</li>
+      </ul></li>
       <li><a href="models.html#models.Event.event_tag">event_tag (models.Event attribute)</a>
 
       <ul>
+        <li><a href="models.html#models.EventTag_x_Event.event_tag">(models.EventTag_x_Event attribute)</a>
+</li>
         <li><a href="models.html#models.EventTag_x_Org.event_tag">(models.EventTag_x_Org attribute)</a>
 </li>
       </ul></li>
-      <li><a href="models.html#models.Event.event_tag_id">event_tag_id (models.Event attribute)</a>
+      <li><a href="models.html#models.EventTag_x_Event.event_tag_id">event_tag_id (models.EventTag_x_Event attribute)</a>
 
       <ul>
         <li><a href="models.html#models.EventTag_x_Org.event_tag_id">(models.EventTag_x_Org attribute)</a>
@@ -318,13 +338,17 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="models.html#models.Event.event_tags_x_event">event_tags_x_event (models.Event attribute)</a>
+</li>
       <li><a href="models.html#models.Event.event_type">event_type (models.Event attribute)</a>
 
       <ul>
+        <li><a href="models.html#models.EventType_x_Event.event_type">(models.EventType_x_Event attribute)</a>
+</li>
         <li><a href="models.html#models.EventType_x_Org.event_type">(models.EventType_x_Org attribute)</a>
 </li>
       </ul></li>
-      <li><a href="models.html#models.Event.event_type_id">event_type_id (models.Event attribute)</a>
+      <li><a href="models.html#models.EventType_x_Event.event_type_id">event_type_id (models.EventType_x_Event attribute)</a>
 
       <ul>
         <li><a href="models.html#models.EventType_x_Org.event_type_id">(models.EventType_x_Org attribute)</a>
@@ -332,13 +356,19 @@
       </ul></li>
       <li><a href="models.html#models.EventCategory.event_types">event_types (models.EventCategory attribute)</a>
 </li>
+      <li><a href="models.html#models.Event.event_types_x_event">event_types_x_event (models.Event attribute)</a>
+</li>
       <li><a href="models.html#models.EventCategory">EventCategory (class in models)</a>
 </li>
       <li><a href="models.html#models.EventTag">EventTag (class in models)</a>
 </li>
+      <li><a href="models.html#models.EventTag_x_Event">EventTag_x_Event (class in models)</a>
+</li>
       <li><a href="models.html#models.EventTag_x_Org">EventTag_x_Org (class in models)</a>
 </li>
       <li><a href="models.html#models.EventType">EventType (class in models)</a>
+</li>
+      <li><a href="models.html#models.EventType_x_Event">EventType_x_Event (class in models)</a>
 </li>
       <li><a href="models.html#models.EventType_x_Org">EventType_x_Org (class in models)</a>
 </li>
@@ -417,9 +447,13 @@
 </li>
         <li><a href="models.html#models.EventTag.id">(models.EventTag attribute)</a>
 </li>
+        <li><a href="models.html#models.EventTag_x_Event.id">(models.EventTag_x_Event attribute)</a>
+</li>
         <li><a href="models.html#models.EventTag_x_Org.id">(models.EventTag_x_Org attribute)</a>
 </li>
         <li><a href="models.html#models.EventType.id">(models.EventType attribute)</a>
+</li>
+        <li><a href="models.html#models.EventType_x_Event.id">(models.EventType_x_Event attribute)</a>
 </li>
         <li><a href="models.html#models.EventType_x_Org.id">(models.EventType_x_Org attribute)</a>
 </li>
@@ -593,8 +627,6 @@
       <li><a href="models.html#models.Achievement_x_Org.org">org (models.Achievement_x_Org attribute)</a>
 
       <ul>
-        <li><a href="models.html#models.Achievement_x_User.org">(models.Achievement_x_User attribute)</a>
-</li>
         <li><a href="models.html#models.Event.org">(models.Event attribute)</a>
 </li>
         <li><a href="models.html#models.EventTag_x_Org.org">(models.EventTag_x_Org attribute)</a>
@@ -640,6 +672,8 @@
       </ul></li>
       <li><a href="models.html#models.Org_x_Slack">Org_x_Slack (class in models)</a>
 </li>
+      <li><a href="models.html#models.SlackSpace.org_x_slack">org_x_slack (models.SlackSpace attribute)</a>
+</li>
       <li><a href="models.html#models.OrgType">OrgType (class in models)</a>
 </li>
   </ul></td>
@@ -675,6 +709,8 @@
       <li><a href="models.html#models.Position_x_Org_x_User.position_id">position_id (models.Position_x_Org_x_User attribute)</a>
 </li>
       <li><a href="models.html#models.Position_x_Org_x_User">Position_x_Org_x_User (class in models)</a>
+</li>
+      <li><a href="models.html#models.User.positions_x_orgs_x_users">positions_x_orgs_x_users (models.User attribute)</a>
 </li>
       <li><a href="models.html#models.Event.preblast">preblast (models.Event attribute)</a>
 </li>
@@ -714,6 +750,8 @@
 </li>
       <li><a href="models.html#models.Role_x_User_x_Org">Role_x_User_x_Org (class in models)</a>
 </li>
+      <li><a href="models.html#models.User.roles_x_users_x_org">roles_x_users_x_org (models.User attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -738,9 +776,11 @@
 </li>
       <li><a href="models.html#models.SlackUser.slack_team_id">slack_team_id (models.SlackUser attribute)</a>
 </li>
+      <li><a href="models.html#models.SlackUser.slack_updated">slack_updated (models.SlackUser attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="models.html#models.SlackUser.slack_updated">slack_updated (models.SlackUser attribute)</a>
+      <li><a href="models.html#models.User.slack_users">slack_users (models.User attribute)</a>
 </li>
       <li><a href="models.html#models.SlackSpace">SlackSpace (class in models)</a>
 </li>
@@ -799,9 +839,13 @@
 </li>
         <li><a href="models.html#models.EventTag.updated">(models.EventTag attribute)</a>
 </li>
+        <li><a href="models.html#models.EventTag_x_Event.updated">(models.EventTag_x_Event attribute)</a>
+</li>
         <li><a href="models.html#models.EventTag_x_Org.updated">(models.EventTag_x_Org attribute)</a>
 </li>
         <li><a href="models.html#models.EventType.updated">(models.EventType attribute)</a>
+</li>
+        <li><a href="models.html#models.EventType_x_Event.updated">(models.EventType_x_Event attribute)</a>
 </li>
         <li><a href="models.html#models.EventType_x_Org.updated">(models.EventType_x_Org attribute)</a>
 </li>

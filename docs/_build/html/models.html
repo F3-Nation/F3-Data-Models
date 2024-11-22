@@ -71,7 +71,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.date_awarded"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.date_awarded</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.achievement"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.achievement</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.user"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.user</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.org"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.org</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.created"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.created</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.id"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Achievement_x_User.updated"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.updated</span></code></a></li>
@@ -113,8 +112,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#models.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.org_id"><code class="docutils literal notranslate"><span class="pre">Event.org_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.location_id"><code class="docutils literal notranslate"><span class="pre">Event.location_id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#models.Event.event_type_id"><code class="docutils literal notranslate"><span class="pre">Event.event_type_id</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#models.Event.event_tag_id"><code class="docutils literal notranslate"><span class="pre">Event.event_tag_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.series_id"><code class="docutils literal notranslate"><span class="pre">Event.series_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.is_series"><code class="docutils literal notranslate"><span class="pre">Event.is_series</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.is_active"><code class="docutils literal notranslate"><span class="pre">Event.is_active</span></code></a></li>
@@ -144,6 +141,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.event_tag"><code class="docutils literal notranslate"><span class="pre">Event.event_tag</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.series"><code class="docutils literal notranslate"><span class="pre">Event.series</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.attendance"><code class="docutils literal notranslate"><span class="pre">Event.attendance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.Event.event_tags_x_event"><code class="docutils literal notranslate"><span class="pre">Event.event_tags_x_event</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.Event.event_types_x_event"><code class="docutils literal notranslate"><span class="pre">Event.event_types_x_event</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.created"><code class="docutils literal notranslate"><span class="pre">Event.created</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.id"><code class="docutils literal notranslate"><span class="pre">Event.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.Event.updated"><code class="docutils literal notranslate"><span class="pre">Event.updated</span></code></a></li>
@@ -167,6 +166,16 @@
 <li class="toctree-l4"><a class="reference internal" href="#models.EventTag.updated"><code class="docutils literal notranslate"><span class="pre">EventTag.updated</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#models.EventTag_x_Event"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.event_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.event_tag_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event_tag_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.event"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.event_tag"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event_tag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.created"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.created</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Event.updated"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.updated</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#models.EventTag_x_Org"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Org</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Org.event_tag_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Org.event_tag_id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.EventTag_x_Org.org_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Org.org_id</span></code></a></li>
@@ -187,6 +196,16 @@
 <li class="toctree-l4"><a class="reference internal" href="#models.EventType.created"><code class="docutils literal notranslate"><span class="pre">EventType.created</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.EventType.id"><code class="docutils literal notranslate"><span class="pre">EventType.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.EventType.updated"><code class="docutils literal notranslate"><span class="pre">EventType.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#models.EventType_x_Event"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.event_id"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.event_type_id"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event_type_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.event"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.event_type"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.created"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.created</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.id"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.EventType_x_Event.updated"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.updated</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#models.EventType_x_Org"><code class="docutils literal notranslate"><span class="pre">EventType_x_Org</span></code></a><ul>
@@ -349,6 +368,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.workspace_name"><code class="docutils literal notranslate"><span class="pre">SlackSpace.workspace_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.bot_token"><code class="docutils literal notranslate"><span class="pre">SlackSpace.bot_token</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.settings"><code class="docutils literal notranslate"><span class="pre">SlackSpace.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.org_x_slack"><code class="docutils literal notranslate"><span class="pre">SlackSpace.org_x_slack</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.created"><code class="docutils literal notranslate"><span class="pre">SlackSpace.created</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.id"><code class="docutils literal notranslate"><span class="pre">SlackSpace.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.SlackSpace.updated"><code class="docutils literal notranslate"><span class="pre">SlackSpace.updated</span></code></a></li>
@@ -388,6 +408,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#models.User.meta"><code class="docutils literal notranslate"><span class="pre">User.meta</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.User.home_region"><code class="docutils literal notranslate"><span class="pre">User.home_region</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.User.attendance"><code class="docutils literal notranslate"><span class="pre">User.attendance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.User.slack_users"><code class="docutils literal notranslate"><span class="pre">User.slack_users</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.User.achievements_x_user"><code class="docutils literal notranslate"><span class="pre">User.achievements_x_user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.User.positions_x_orgs_x_users"><code class="docutils literal notranslate"><span class="pre">User.positions_x_orgs_x_users</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#models.User.roles_x_users_x_org"><code class="docutils literal notranslate"><span class="pre">User.roles_x_users_x_org</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.User.created"><code class="docutils literal notranslate"><span class="pre">User.created</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#models.User.updated"><code class="docutils literal notranslate"><span class="pre">User.updated</span></code></a></li>
@@ -620,17 +644,6 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="models.Achievement_x_User.org">
-<span class="sig-name descname"><span class="pre">org</span></span><a class="headerlink" href="#models.Achievement_x_User.org" title="Link to this definition"></a></dt>
-<dd><p>The organization associated with this relationship.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#models.Org" title="models.Org">Org</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="models.Achievement_x_User.created">
 <span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.Achievement_x_User.created" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -688,7 +701,7 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Attendance.is_planned">
 <span class="sig-name descname"><span class="pre">is_planned</span></span><a class="headerlink" href="#models.Attendance.is_planned" title="Link to this definition"></a></dt>
-<dd><p>Whether the attendance was planned.</p>
+<dd><p>Whether this is planned attendance (True) vs actual attendance (False).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -761,7 +774,7 @@
 <dt class="sig sig-object py" id="models.AttendanceType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">AttendanceType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#AttendanceType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.AttendanceType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an attendance type.</p>
+<p>Model representing an attendance type. Basic types are 1=’PAX’, 2=’Q’, 3=’Co-Q’</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.AttendanceType.type">
 <span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#models.AttendanceType.type" title="Link to this definition"></a></dt>
@@ -908,7 +921,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Event">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Event" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an event.</p>
+<p>Model representing an event or series; the same model is used for both with a self-referential relationship for series.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.org_id">
 <span class="sig-name descname"><span class="pre">org_id</span></span><a class="headerlink" href="#models.Event.org_id" title="Link to this definition"></a></dt>
@@ -932,28 +945,6 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="models.Event.event_type_id">
-<span class="sig-name descname"><span class="pre">event_type_id</span></span><a class="headerlink" href="#models.Event.event_type_id" title="Link to this definition"></a></dt>
-<dd><p>The ID of the associated event type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="models.Event.event_tag_id">
-<span class="sig-name descname"><span class="pre">event_tag_id</span></span><a class="headerlink" href="#models.Event.event_tag_id" title="Link to this definition"></a></dt>
-<dd><p>The ID of the associated event tag.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[int]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.series_id">
 <span class="sig-name descname"><span class="pre">series_id</span></span><a class="headerlink" href="#models.Event.series_id" title="Link to this definition"></a></dt>
 <dd><p>The ID of the associated event series.</p>
@@ -967,7 +958,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.is_series">
 <span class="sig-name descname"><span class="pre">is_series</span></span><a class="headerlink" href="#models.Event.is_series" title="Link to this definition"></a></dt>
-<dd><p>Whether the event is part of a series.</p>
+<dd><p>Whether this record is a series or single occurrence. Default is False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -978,7 +969,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.is_active">
 <span class="sig-name descname"><span class="pre">is_active</span></span><a class="headerlink" href="#models.Event.is_active" title="Link to this definition"></a></dt>
-<dd><p>Whether the event is active.</p>
+<dd><p>Whether the event is active. Default is True.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -989,7 +980,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.highlight">
 <span class="sig-name descname"><span class="pre">highlight</span></span><a class="headerlink" href="#models.Event.highlight" title="Link to this definition"></a></dt>
-<dd><p>Whether the event is highlighted.</p>
+<dd><p>Whether the event is highlighted. Default is False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -1044,7 +1035,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.day_of_week">
 <span class="sig-name descname"><span class="pre">day_of_week</span></span><a class="headerlink" href="#models.Event.day_of_week" title="Link to this definition"></a></dt>
-<dd><p>The day of the week of the event.</p>
+<dd><p>The day of the week of the event. (0=Monday, 6=Sunday)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[int]</p>
@@ -1077,7 +1068,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.recurrence_pattern">
 <span class="sig-name descname"><span class="pre">recurrence_pattern</span></span><a class="headerlink" href="#models.Event.recurrence_pattern" title="Link to this definition"></a></dt>
-<dd><p>The recurrence pattern of the event.</p>
+<dd><p>The recurrence pattern of the event. Current options are ‘weekly’ or ‘monthly’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[str]</p>
@@ -1088,7 +1079,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.recurrence_interval">
 <span class="sig-name descname"><span class="pre">recurrence_interval</span></span><a class="headerlink" href="#models.Event.recurrence_interval" title="Link to this definition"></a></dt>
-<dd><p>The recurrence interval of the event.</p>
+<dd><p>The recurrence interval of the event (e.g. every 2 weeks).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[int]</p>
@@ -1099,7 +1090,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.index_within_interval">
 <span class="sig-name descname"><span class="pre">index_within_interval</span></span><a class="headerlink" href="#models.Event.index_within_interval" title="Link to this definition"></a></dt>
-<dd><p>The index within the recurrence interval.</p>
+<dd><p>The index within the recurrence interval. (e.g. 2nd Tuesday of the month).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[int]</p>
@@ -1154,7 +1145,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.preblast_rich">
 <span class="sig-name descname"><span class="pre">preblast_rich</span></span><a class="headerlink" href="#models.Event.preblast_rich" title="Link to this definition"></a></dt>
-<dd><p>The rich text pre-event announcement.</p>
+<dd><p>The rich text pre-event announcement (e.g. Slack message).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[Dict[str, Any]]</p>
@@ -1165,7 +1156,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.backblast_rich">
 <span class="sig-name descname"><span class="pre">backblast_rich</span></span><a class="headerlink" href="#models.Event.backblast_rich" title="Link to this definition"></a></dt>
-<dd><p>The rich text post-event report.</p>
+<dd><p>The rich text post-event report (e.g. Slack message).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[Dict[str, Any]]</p>
@@ -1176,7 +1167,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.preblast_ts">
 <span class="sig-name descname"><span class="pre">preblast_ts</span></span><a class="headerlink" href="#models.Event.preblast_ts" title="Link to this definition"></a></dt>
-<dd><p>The timestamp of the pre-event announcement.</p>
+<dd><p>The Slack post timestamp of the pre-event announcement.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[float]</p>
@@ -1187,7 +1178,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.backblast_ts">
 <span class="sig-name descname"><span class="pre">backblast_ts</span></span><a class="headerlink" href="#models.Event.backblast_ts" title="Link to this definition"></a></dt>
-<dd><p>The timestamp of the post-event report.</p>
+<dd><p>The Slack post timestamp of the post-event report.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[float]</p>
@@ -1242,7 +1233,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.event_tag">
 <span class="sig-name descname"><span class="pre">event_tag</span></span><a class="headerlink" href="#models.Event.event_tag" title="Link to this definition"></a></dt>
-<dd><p>The event tag associated with this event.</p>
+<dd><p>Any event tags associated with this event.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#models.EventTag" title="models.EventTag">EventTag</a></p>
@@ -1273,6 +1264,28 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="models.Event.event_tags_x_event">
+<span class="sig-name descname"><span class="pre">event_tags_x_event</span></span><a class="headerlink" href="#models.Event.event_tags_x_event" title="Link to this definition"></a></dt>
+<dd><p>The event tags associated with this event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#models.EventTag_x_Event" title="models.EventTag_x_Event">EventTag_x_Event</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.Event.event_types_x_event">
+<span class="sig-name descname"><span class="pre">event_types_x_event</span></span><a class="headerlink" href="#models.Event.event_types_x_event" title="Link to this definition"></a></dt>
+<dd><p>The event types associated with this event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#models.EventType_x_Event" title="models.EventType_x_Event">EventType_x_Event</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="models.Event.created">
 <span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.Event.created" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -1293,7 +1306,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.EventCategory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventCategory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventCategory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventCategory" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an event category.</p>
+<p>Model representing an event category. These are immutable cateogies that we will define at the Nation level.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventCategory.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#models.EventCategory.name" title="Link to this definition"></a></dt>
@@ -1348,7 +1361,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.EventTag">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventTag" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an event tag.</p>
+<p>Model representing an event tag. These are used to mark special events, such as anniversaries or special workouts.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventTag.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#models.EventTag.name" title="Link to this definition"></a></dt>
@@ -1374,7 +1387,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventTag.color">
 <span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#models.EventTag.color" title="Link to this definition"></a></dt>
-<dd><p>The color associated with the event tag.</p>
+<dd><p>The color used for the calendar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[str]</p>
@@ -1400,10 +1413,76 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="models.EventTag_x_Event">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventTag_x_Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventTag_x_Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventTag_x_Event" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Model representing the association between event tags and events. The intention is that a single event can be associated with multiple event tags.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.event_id">
+<span class="sig-name descname"><span class="pre">event_id</span></span><a class="headerlink" href="#models.EventTag_x_Event.event_id" title="Link to this definition"></a></dt>
+<dd><p>The ID of the associated event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.event_tag_id">
+<span class="sig-name descname"><span class="pre">event_tag_id</span></span><a class="headerlink" href="#models.EventTag_x_Event.event_tag_id" title="Link to this definition"></a></dt>
+<dd><p>The ID of the associated event tag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.event">
+<span class="sig-name descname"><span class="pre">event</span></span><a class="headerlink" href="#models.EventTag_x_Event.event" title="Link to this definition"></a></dt>
+<dd><p>The event associated with this relationship.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#models.Event" title="models.Event">Event</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.event_tag">
+<span class="sig-name descname"><span class="pre">event_tag</span></span><a class="headerlink" href="#models.EventTag_x_Event.event_tag" title="Link to this definition"></a></dt>
+<dd><p>The event tag associated with this relationship.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#models.EventTag" title="models.EventTag">EventTag</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.EventTag_x_Event.created" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.EventTag_x_Event.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventTag_x_Event.updated">
+<span class="sig-name descname"><span class="pre">updated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.EventTag_x_Event.updated" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="models.EventTag_x_Org">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventTag_x_Org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventTag_x_Org"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventTag_x_Org" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing the association between event tags and organizations.</p>
+<p>Model representing the association between event tags and organizations. Controls which event tags are available for selection at the region level.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventTag_x_Org.event_tag_id">
 <span class="sig-name descname"><span class="pre">event_tag_id</span></span><a class="headerlink" href="#models.EventTag_x_Org.event_tag_id" title="Link to this definition"></a></dt>
@@ -1429,7 +1508,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventTag_x_Org.color_override">
 <span class="sig-name descname"><span class="pre">color_override</span></span><a class="headerlink" href="#models.EventTag_x_Org.color_override" title="Link to this definition"></a></dt>
-<dd><p>The color override for the event tag.</p>
+<dd><p>The color override for the event tag (if the region wants to use something other than the default).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[str]</p>
@@ -1480,7 +1559,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.EventType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an event type.</p>
+<p>Model representing an event type. Event types can be shared by regions or not, and should roll up into event categories.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventType.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#models.EventType.name" title="Link to this definition"></a></dt>
@@ -1554,10 +1633,76 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="models.EventType_x_Event">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventType_x_Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventType_x_Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventType_x_Event" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
+<p>Model representing the association between events and event types. The intention is that a single event can be associated with multiple event types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.event_id">
+<span class="sig-name descname"><span class="pre">event_id</span></span><a class="headerlink" href="#models.EventType_x_Event.event_id" title="Link to this definition"></a></dt>
+<dd><p>The ID of the associated event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.event_type_id">
+<span class="sig-name descname"><span class="pre">event_type_id</span></span><a class="headerlink" href="#models.EventType_x_Event.event_type_id" title="Link to this definition"></a></dt>
+<dd><p>The ID of the associated event type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.event">
+<span class="sig-name descname"><span class="pre">event</span></span><a class="headerlink" href="#models.EventType_x_Event.event" title="Link to this definition"></a></dt>
+<dd><p>The event associated with this relationship.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#models.Event" title="models.Event">Event</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.event_type">
+<span class="sig-name descname"><span class="pre">event_type</span></span><a class="headerlink" href="#models.EventType_x_Event.event_type" title="Link to this definition"></a></dt>
+<dd><p>The event type associated with this relationship.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#models.EventType" title="models.EventType">EventType</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.EventType_x_Event.created" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.EventType_x_Event.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.EventType_x_Event.updated">
+<span class="sig-name descname"><span class="pre">updated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Mapped</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#models.EventType_x_Event.updated" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="models.EventType_x_Org">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">EventType_x_Org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#EventType_x_Org"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.EventType_x_Org" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing the association between event types and organizations.</p>
+<p>Model representing the association between event types and organizations. This controls which event types are available for selection at the region level, as well as default types for each AO.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.EventType_x_Org.event_type_id">
 <span class="sig-name descname"><span class="pre">event_type_id</span></span><a class="headerlink" href="#models.EventType_x_Org.event_type_id" title="Link to this definition"></a></dt>
@@ -1810,7 +1955,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Location">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Location"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Location" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing a location.</p>
+<p>Model representing a location. Locations are expected to belong to a single organization (region).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Location.org_id">
 <span class="sig-name descname"><span class="pre">org_id</span></span><a class="headerlink" href="#models.Location.org_id" title="Link to this definition"></a></dt>
@@ -1975,7 +2120,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Org">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Org"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Org" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an organization.</p>
+<p>Model representing an organization. The same model is used for all levels of organization (AOs, Regions, etc.).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Org.parent_id">
 <span class="sig-name descname"><span class="pre">parent_id</span></span><a class="headerlink" href="#models.Org.parent_id" title="Link to this definition"></a></dt>
@@ -2184,7 +2329,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.OrgType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">OrgType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#OrgType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.OrgType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing an organization type.</p>
+<p>Model representing an organization type / level. 1=AO, 2=Region, 3=Area, 4=Sector</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.OrgType.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#models.OrgType.name" title="Link to this definition"></a></dt>
@@ -2228,7 +2373,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Org_x_Slack">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Org_x_Slack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Org_x_Slack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Org_x_Slack" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing the association between organizations and Slack workspaces.</p>
+<p>Model representing the association between organizations and Slack workspaces. This is currently meant to be one to one, but theoretically could support multiple workspaces per organization.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Org_x_Slack.org_id">
 <span class="sig-name descname"><span class="pre">org_id</span></span><a class="headerlink" href="#models.Org_x_Slack.org_id" title="Link to this definition"></a></dt>
@@ -2492,7 +2637,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Role">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Role"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Role" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing a role.</p>
+<p>Model representing a role. A role is a set of permissions that can be assigned to users.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Role.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#models.Role.name" title="Link to this definition"></a></dt>
@@ -2536,7 +2681,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Role_x_Permission">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Role_x_Permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Role_x_Permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Role_x_Permission" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing the association between roles and permissions.</p>
+<p>Model representing the assignment of permissions to roles.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Role_x_Permission.role_id">
 <span class="sig-name descname"><span class="pre">role_id</span></span><a class="headerlink" href="#models.Role_x_Permission.role_id" title="Link to this definition"></a></dt>
@@ -2602,7 +2747,7 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dt class="sig sig-object py" id="models.Role_x_User_x_Org">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.</span></span><span class="sig-name descname"><span class="pre">Role_x_User_x_Org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/models.html#Role_x_User_x_Org"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#models.Role_x_User_x_Org" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#models.Base" title="models.Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></a></p>
-<p>Model representing the association between roles, users, and organizations.</p>
+<p>Model representing the assignment of roles, users, and organizations.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.Role_x_User_x_Org.role_id">
 <span class="sig-name descname"><span class="pre">role_id</span></span><a class="headerlink" href="#models.Role_x_User_x_Org.role_id" title="Link to this definition"></a></dt>
@@ -2727,10 +2872,21 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="py attribute">
 <dt class="sig sig-object py" id="models.SlackSpace.settings">
 <span class="sig-name descname"><span class="pre">settings</span></span><a class="headerlink" href="#models.SlackSpace.settings" title="Link to this definition"></a></dt>
-<dd><p>Additional settings for the Slack workspace.</p>
+<dd><p>Slack Bot settings for the Slack workspace.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Optional[Dict[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.SlackSpace.org_x_slack">
+<span class="sig-name descname"><span class="pre">org_x_slack</span></span><a class="headerlink" href="#models.SlackSpace.org_x_slack" title="Link to this definition"></a></dt>
+<dd><p>The organization associated with this Slack workspace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#models.Org_x_Slack" title="models.Org_x_Slack">Org_x_Slack</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -3072,6 +3228,50 @@ for new <code class="xref py py-class docutils literal notranslate"><span class=
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference internal" href="#models.Attendance" title="models.Attendance">Attendance</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.User.slack_users">
+<span class="sig-name descname"><span class="pre">slack_users</span></span><a class="headerlink" href="#models.User.slack_users" title="Link to this definition"></a></dt>
+<dd><p>The Slack users associated with this user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#models.SlackUser" title="models.SlackUser">SlackUser</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.User.achievements_x_user">
+<span class="sig-name descname"><span class="pre">achievements_x_user</span></span><a class="headerlink" href="#models.User.achievements_x_user" title="Link to this definition"></a></dt>
+<dd><p>The achievements associated with this user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#models.Achievement_x_User" title="models.Achievement_x_User">Achievement_x_User</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.User.positions_x_orgs_x_users">
+<span class="sig-name descname"><span class="pre">positions_x_orgs_x_users</span></span><a class="headerlink" href="#models.User.positions_x_orgs_x_users" title="Link to this definition"></a></dt>
+<dd><p>The positions associated with this user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#models.Position_x_Org_x_User" title="models.Position_x_Org_x_User">Position_x_Org_x_User</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="models.User.roles_x_users_x_org">
+<span class="sig-name descname"><span class="pre">roles_x_users_x_org</span></span><a class="headerlink" href="#models.User.roles_x_users_x_org" title="Link to this definition"></a></dt>
+<dd><p>The roles associated with this user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#models.Role_x_User_x_Org" title="models.Role_x_User_x_Org">Role_x_User_x_Org</a>]</p>
 </dd>
 </dl>
 </dd></dl>

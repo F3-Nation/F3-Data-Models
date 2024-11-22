@@ -1,0 +1,33 @@
+name: Build Sphinx Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    build_docs:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+    
+        steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v3
+          with:
+            python-version: '3.12'
+        - name: Install dependencies
+          run: |
+            pip install -e .
+            pip install sphinx
+            pip install sphinx-rtd-theme
+            pip install sphinx-autodoc-typehints
+        - name: Build docs
+          run: |
+            sphinx-build -b html docs docs/_build/html
+        - name: Deploy docs
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: docs/_build/html
+            force_orphan: true
