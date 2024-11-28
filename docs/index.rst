@@ -3,13 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-F3 Nation Data documentation
+F3 Nation Data Documentation
 ============================
 
+More Info
+---------
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   models
-
+.. automodule:: f3_data_models.models
+   :members:
+   :show-inheritance:
+   :member-order: bysource

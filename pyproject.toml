@@ -1,9 +1,14 @@
 [tool.poetry]
 name = "f3-data-models"
 version = "0.1.0"
-description = ""
+description = "The data schema and models for F3 Nation applications."
 authors = ["Evan Petzoldt <evan.petzoldt@protonmail.com>"]
 readme = "README.md"
+packages = [{include = "f3_data_models"}]
+package-mode = true
+license = "MIT"
+repository = "https://github.com/F3-Nation/f3-data-models"
+documentation = "https://github.io/F3-Nation/f3-data-models"
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -17,6 +22,7 @@ sphinx = "^8.1.3"
 sphinx-autodoc-typehints = "^2.5.0"
 sphinx-rtd-theme = "^3.0.2"
 sphinx-multiversion = "^0.2.4"
+psycopg2-binary = "^2.9.10"
 
 
 [build-system]
