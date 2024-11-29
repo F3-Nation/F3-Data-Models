@@ -9,7 +9,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 
-from .models import Base
+from f3_data_models.models import Base
 
 from pydot import Dot
 from sqlalchemy_schemadisplay import create_schema_graph
@@ -247,12 +247,12 @@ def create_diagram():
     graph: Dot = create_schema_graph(
         engine=get_engine(),
         metadata=Base.metadata,
-        show_datatypes=False,
-        show_indexes=False,
+        show_datatypes=True,
+        show_indexes=True,
         rankdir="LR",
-        concentrate=False,
+        show_column_keys=True,
     )
-    graph.write_png("schema_diagram.png")
+    graph.write_png("docs/_static/schema_diagram.png")
 
 
 if __name__ == "__main__":

@@ -6,7 +6,13 @@
 F3 Nation Data Documentation
 ============================
 
-.. automodule:: f3_data_models.models
-   :members:
-   :show-inheritance:
-   :member-order: bysource
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   modules
+
+Schema Diagram
+--------------
+.. image:: _static/schema_diagram.png
+
