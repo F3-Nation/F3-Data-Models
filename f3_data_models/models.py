@@ -798,16 +798,16 @@ class Position(Base):
     Attributes:
         name (str): The name of the position.
         description (Optional[str]): A description of the position.
-        org_type_id (int): The ID of the associated organization type.
-        org_id (int): The ID of the associated organization.
+        org_type_id (Optional[int]): The ID of the associated organization type. This is used to limit the positions available to certain types of organizations. If null, the position is available to all organization types.
+        org_id (Optional[int]): The ID of the associated organization. This is used to limit the positions available to certain organizations. If null, the position is available to all organizations.
     """
 
     __tablename__ = "positions"
 
     name: Mapped[str]
     description: Mapped[Optional[str]]
-    org_type_id: Mapped[int] = mapped_column(ForeignKey("org_types.id"))
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    org_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("org_types.id"))
+    org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
 
 
 class Position_x_Org_x_User(Base):
