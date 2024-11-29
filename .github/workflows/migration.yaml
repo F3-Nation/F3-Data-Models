@@ -28,7 +28,7 @@ jobs:
             poetry install --no-root
         - name: Set up environment variables
           run: |
-              echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+              echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> $GITHUB_ENV
               echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> $GITHUB_ENV
               echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
               echo "DATABASE_SCHEMA=f3_dev" >> $GITHUB_ENV
