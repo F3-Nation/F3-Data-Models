@@ -6,9 +6,6 @@
 F3 Nation Data Documentation
 ============================
 
-More Info
----------
-
 .. automodule:: f3_data_models.models
    :members:
    :show-inheritance:
