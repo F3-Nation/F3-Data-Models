@@ -19,7 +19,7 @@ jobs:
         - uses: 'google-github-actions/auth@v2'
           with:
             service_account: ${{ secrets.GCP_AUTH_SERVICE_ACCOUNT }}
-            project_id: ${{ secrets.GCP_AUTH_PROJECT_ID }}
+            workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
         - name: Install dependencies
           run: |
             python -m pip install --upgrade pip
