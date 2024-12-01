@@ -1,9 +1,9 @@
 import os
 from dataclasses import dataclass
-from typing import List, Tuple, TypeVar
+from typing import List, Optional, Tuple, TypeVar
 
 import sqlalchemy
-from sqlalchemy import and_
+from sqlalchemy import and_, select
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
@@ -88,13 +88,32 @@ class DbManager:
             session.rollback()
             close_session(session)
 
-    def find_records(cls: T, filters) -> List[T]:
+    def get(cls: T, id: int) -> T:
         session = get_session()
         try:
-            records = session.query(cls).filter(and_(*filters)).all()
+            return session.scalars(select(cls).filter(cls.id == id)).one()
+        finally:
+            session.rollback()
+            close_session(session)
+
+    def find_records(cls: T, filters: Optional[List]) -> List[T]:
+        session = get_session()
+        try:
+            records = session.scalars(select(cls).filter(*filters)).all()
             for r in records:
                 session.expunge(r)
             return records
+        finally:
+            session.rollback()
+            close_session(session)
+
+    def find_first_record(cls: T, filters: Optional[List]) -> T:
+        session = get_session()
+        try:
+            record = session.scalars(select(cls).filter(*filters)).first()
+            if record:
+                session.expunge(record)
+            return record
         finally:
             session.rollback()
             close_session(session)
