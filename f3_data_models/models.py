@@ -118,6 +118,7 @@ class SlackSpace(Base):
         settings (Optional[Dict[str, Any]]): Slack Bot settings for the Slack workspace.
 
         org_x_slack (Org_x_Slack): The organization associated with this Slack workspace.
+        org (Org): The organization associated with this Slack workspace.
     """
 
     __tablename__ = "slack_spaces"
@@ -128,6 +129,9 @@ class SlackSpace(Base):
     settings: Mapped[Optional[Dict[str, Any]]]
 
     org_x_slack: Mapped["Org_x_Slack"] = relationship(back_populates="slack_space")
+    org: Mapped["Org"] = relationship(
+        back_populates="slack_space", secondary="org_x_slack", lazy="joined"
+    )
 
 
 class OrgType(Base):
@@ -214,9 +218,11 @@ class Role_x_Permission(Base):
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
     permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id"))
 
-    role: Mapped["Role"] = relationship(back_populates="role_x_permission")
+    role: Mapped["Role"] = relationship(
+        back_populates="role_x_permission", lazy="joined"
+    )
     permissions: Mapped[List["Permission"]] = relationship(
-        back_populates="role_x_permission"
+        back_populates="role_x_permission", lazy="joined"
     )
 
 
@@ -242,9 +248,13 @@ class Role_x_User_x_Org(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
 
-    role: Mapped["Role"] = relationship(back_populates="role_x_user_x_org")
-    user: Mapped["User"] = relationship(back_populates="role_x_user_x_org")
-    org: Mapped["Org"] = relationship(back_populates="role_x_user_x_org")
+    role: Mapped["Role"] = relationship(
+        back_populates="role_x_user_x_org", lazy="joined"
+    )
+    user: Mapped["User"] = relationship(
+        back_populates="role_x_user_x_org", lazy="joined"
+    )
+    org: Mapped["Org"] = relationship(back_populates="role_x_user_x_org", lazy="joined")
 
 
 class Org(Base):
@@ -294,7 +304,9 @@ class Org(Base):
     child_orgs: Mapped[List["Org"]] = relationship(
         "Org", back_populates="parent_org", join_depth=3
     )
-    locations: Mapped[List["Location"]] = relationship(back_populates="org")
+    locations: Mapped[List["Location"]] = relationship(
+        back_populates="org", lazy="joined"
+    )
 
 
 class EventType(Base):
@@ -316,7 +328,9 @@ class EventType(Base):
     acronyms: Mapped[Optional[str]]
     category_id: Mapped[int] = mapped_column(ForeignKey("event_categories.id"))
 
-    event_category: Mapped["EventCategory"] = relationship(back_populates="event_types")
+    event_category: Mapped["EventCategory"] = relationship(
+        back_populates="event_types", lazy="joined"
+    )
 
 
 class EventType_x_Event(Base):
@@ -338,9 +352,11 @@ class EventType_x_Event(Base):
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
     event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"))
 
-    event: Mapped["Event"] = relationship(back_populates="events_x_event_types")
+    event: Mapped["Event"] = relationship(
+        back_populates="events_x_event_types", lazy="joined"
+    )
     event_type: Mapped["EventType"] = relationship(
-        back_populates="events_x_event_types"
+        back_populates="events_x_event_types", lazy="joined"
     )
 
 
@@ -365,8 +381,10 @@ class EventType_x_Org(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     is_default: Mapped[bool]
 
-    event_type: Mapped["EventType"] = relationship(back_populates="event_type_x_org")
-    org: Mapped["Org"] = relationship(back_populates="event_type_x_org")
+    event_type: Mapped["EventType"] = relationship(
+        back_populates="event_type_x_org", lazy="joined"
+    )
+    org: Mapped["Org"] = relationship(back_populates="event_type_x_org", lazy="joined")
 
 
 class EventTag(Base):
@@ -405,8 +423,12 @@ class EventTag_x_Event(Base):
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
     event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"))
 
-    event: Mapped["Event"] = relationship(back_populates="event_tag_x_event")
-    event_tags: Mapped["EventTag"] = relationship(back_populates="event_tag_x_event")
+    event: Mapped["Event"] = relationship(
+        back_populates="event_tag_x_event", lazy="joined"
+    )
+    event_tag: Mapped["EventTag"] = relationship(
+        back_populates="event_tag_x_event", lazy="joined"
+    )
 
 
 class EventTag_x_Org(Base):
@@ -430,8 +452,10 @@ class EventTag_x_Org(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     color_override: Mapped[Optional[str]]
 
-    event_tag: Mapped["EventTag"] = relationship(back_populates="event_tag_x_org")
-    org: Mapped["Org"] = relationship(back_populates="event_tag_x_org")
+    event_tag: Mapped["EventTag"] = relationship(
+        back_populates="event_tag_x_org", lazy="joined"
+    )
+    org: Mapped["Org"] = relationship(back_populates="event_tag_x_org", lazy="joined")
 
 
 class Org_x_Slack(Base):
@@ -453,8 +477,10 @@ class Org_x_Slack(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     slack_space_id: Mapped[str] = mapped_column(ForeignKey("slack_spaces.id"))
 
-    slack_space: Mapped["SlackSpace"] = relationship(back_populates="org_x_slack")
-    org: Mapped["Org"] = relationship(back_populates="org_x_slack")
+    slack_space: Mapped["SlackSpace"] = relationship(
+        back_populates="org_x_slack", lazy="joined"
+    )
+    org: Mapped["Org"] = relationship(back_populates="org_x_slack", lazy="joined")
 
 
 class Location(Base):
@@ -492,7 +518,7 @@ class Location(Base):
     address_country: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
 
-    org: Mapped["Org"] = relationship(back_populates="locations")
+    org: Mapped["Org"] = relationship(back_populates="locations", lazy="joined")
 
 
 class Event(Base):
@@ -533,6 +559,8 @@ class Event(Base):
         attendance (List[Attendance]): The attendance records for this event.
         event_tags_x_event (List[EventTag_x_Event]): The event tags associated with this event.
         event_types_x_event (List[EventType_x_Event]): The event types associated with this event.
+        event_tags (List[EventTag]): The event tags associated with this event.
+        event_types (List[EventType]): The event types associated with this event.
     """
 
     __tablename__ = "events"
@@ -563,18 +591,28 @@ class Event(Base):
     backblast_ts: Mapped[Optional[float]]
     meta: Mapped[Optional[Dict[str, Any]]]
 
-    org: Mapped["Org"] = relationship(back_populates="events")
-    location: Mapped["Location"] = relationship(back_populates="events")
+    org: Mapped["Org"] = relationship(back_populates="events", lazy="joined")
+    location: Mapped["Location"] = relationship(back_populates="events", lazy="joined")
     series: Mapped["Event"] = relationship(
-        back_populates="events", remote_side="Event.id"
+        back_populates="events", remote_side="Event.id", lazy="joined"
     )
-    occurences: Mapped[List["Event"]] = relationship(back_populates="series")
-    attendance: Mapped[List["Attendance"]] = relationship(back_populates="events")
+    occurences: Mapped[List["Event"]] = relationship(
+        back_populates="series", lazy="joined"
+    )
+    attendance: Mapped[List["Attendance"]] = relationship(
+        back_populates="events", lazy="joined"
+    )
     event_tags_x_event: Mapped[List["EventTag_x_Event"]] = relationship(
         back_populates="events"
     )
     event_types_x_event: Mapped[List["EventType_x_Event"]] = relationship(
         back_populates="events"
+    )
+    event_tags: Mapped[List["EventTag"]] = relationship(
+        back_populates="event", secondary="event_tags_x_event", lazy="joined"
+    )
+    event_types: Mapped[List["EventType"]] = relationship(
+        back_populates="event", secondary="event_types_x_event", lazy="joined"
     )
 
 
@@ -621,10 +659,10 @@ class Attendance(Base):
     is_planned: Mapped[bool]
     meta: Mapped[Optional[Dict[str, Any]]]
 
-    event: Mapped["Event"] = relationship(back_populates="attendance")
-    user: Mapped["User"] = relationship(back_populates="attendance")
+    event: Mapped["Event"] = relationship(back_populates="attendance", lazy="joined")
+    user: Mapped["User"] = relationship(back_populates="attendance", lazy="joined")
     attendance_type: Mapped["AttendanceType"] = relationship(
-        back_populates="attendance"
+        back_populates="attendance", lazy="joined"
     )
 
 
@@ -647,6 +685,8 @@ class User(Base):
         achievements_x_user (List[Achievement_x_User]): The achievements associated with this user.
         positions_x_orgs_x_users (List[Position_x_Org_x_User]): The positions associated with this user.
         roles_x_users_x_org (List[Role_x_User_x_Org]): The roles associated with this user.
+        positions (List[Position]): The positions associated with this user.
+        roles (List[Role]): The roles associated with this user.
     """
 
     __tablename__ = "users"
@@ -660,9 +700,13 @@ class User(Base):
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
 
-    home_region: Mapped["Org"] = relationship(back_populates="users")
-    attendance: Mapped[List["Attendance"]] = relationship(back_populates="users")
-    slack_users: Mapped[List["SlackUser"]] = relationship(back_populates="users")
+    home_region: Mapped["Org"] = relationship(back_populates="users", lazy="joined")
+    attendance: Mapped[List["Attendance"]] = relationship(
+        back_populates="users", lazy="joined"
+    )
+    slack_users: Mapped[List["SlackUser"]] = relationship(
+        back_populates="users", lazy="joined"
+    )
     achievements_x_user: Mapped[List["Achievement_x_User"]] = relationship(
         back_populates="user"
     )
@@ -671,6 +715,15 @@ class User(Base):
     )
     roles_x_users_x_org: Mapped[List["Role_x_User_x_Org"]] = relationship(
         back_populates="user"
+    )
+    achievements: Mapped[List["Achievement"]] = relationship(
+        back_populates="user", secondary="achievements_x_users", lazy="joined"
+    )
+    positions: Mapped[List["Position"]] = relationship(
+        back_populates="user", secondary="positions_x_orgs_x_users", lazy="joined"
+    )
+    roles: Mapped[List["Role"]] = relationship(
+        back_populates="user", secondary="roles_x_users_x_org", lazy="joined"
     )
 
 
@@ -716,8 +769,10 @@ class SlackUser(Base):
     meta: Mapped[Optional[Dict[str, Any]]]
     slack_updated: Mapped[Optional[datetime]]
 
-    slack_space: Mapped["SlackSpace"] = relationship(back_populates="slack_users")
-    user: Mapped["User"] = relationship(back_populates="slack_users")
+    slack_space: Mapped["SlackSpace"] = relationship(
+        back_populates="slack_users", lazy="joined"
+    )
+    user: Mapped["User"] = relationship(back_populates="slack_users", lazy="joined")
 
 
 class Achievement(Base):
@@ -761,9 +816,11 @@ class Achievement_x_User(Base):
     date_awarded: Mapped[date]
 
     achievement: Mapped["Achievement"] = relationship(
-        back_populates="achievement_x_user"
+        back_populates="achievement_x_user", lazy="joined"
     )
-    user: Mapped["User"] = relationship(back_populates="achievement_x_user")
+    user: Mapped["User"] = relationship(
+        back_populates="achievement_x_user", lazy="joined"
+    )
 
 
 class Achievement_x_Org(Base):
@@ -786,9 +843,9 @@ class Achievement_x_Org(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
 
     achievement: Mapped["Achievement"] = relationship(
-        back_populates="achievement_x_org"
+        back_populates="achievement_x_org", lazy="joined"
     )
-    org: Mapped["Org"] = relationship(back_populates="achievement_x_org")
+    org: Mapped["Org"] = relationship(back_populates="achievement_x_org", lazy="joined")
 
 
 class Position(Base):
@@ -834,9 +891,15 @@ class Position_x_Org_x_User(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
-    position: Mapped["Position"] = relationship(back_populates="position_x_org_x_user")
-    org: Mapped["Org"] = relationship(back_populates="position_x_org_x_user")
-    user: Mapped["User"] = relationship(back_populates="position_x_org_x_user")
+    position: Mapped["Position"] = relationship(
+        back_populates="position_x_org_x_user", lazy="joined"
+    )
+    org: Mapped["Org"] = relationship(
+        back_populates="position_x_org_x_user", lazy="joined"
+    )
+    user: Mapped["User"] = relationship(
+        back_populates="position_x_org_x_user", lazy="joined"
+    )
 
 
 class Expansion(Base):
@@ -885,5 +948,9 @@ class Expansion_x_User(Base):
     date: Mapped[date]
     notes: Mapped[Optional[text]]
 
-    expansion: Mapped["Expansion"] = relationship(back_populates="expansion_x_user")
-    user: Mapped["User"] = relationship(back_populates="expansion_x_user")
+    expansion: Mapped["Expansion"] = relationship(
+        back_populates="expansion_x_user", lazy="joined"
+    )
+    user: Mapped["User"] = relationship(
+        back_populates="expansion_x_user", lazy="joined"
+    )
