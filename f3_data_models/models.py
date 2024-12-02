@@ -316,7 +316,7 @@ class Org(Base):
     event_types: Mapped[List["EventType"]] = relationship(
         back_populates="org", secondary="event_types_x_org", lazy="joined"
     )
-    events = Mapped[List["Event"]] = relationship(back_populates="org", lazy="joined")
+    events: Mapped[List["Event"]] = relationship(back_populates="org", lazy="joined")
 
 
 class EventType(Base):
