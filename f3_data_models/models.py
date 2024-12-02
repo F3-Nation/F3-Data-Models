@@ -279,6 +279,9 @@ class Org(Base):
         parent_org (Optional[Org]): The parent organization.
         child_orgs (List[Org]): The child organizations.
         locations (List[Location]): The locations associated with the organization.
+        event_tags (List[EventTag]): The event tags associated with the organization.
+        event_types (List[EventType]): The event types associated with the organization.
+        events (List[Event]): The events associated with the organization.
     """
 
     __tablename__ = "orgs"
@@ -307,6 +310,13 @@ class Org(Base):
     locations: Mapped[List["Location"]] = relationship(
         back_populates="org", lazy="joined"
     )
+    event_tags: Mapped[List["EventTag"]] = relationship(
+        back_populates="org", secondary="event_tags_x_org", lazy="joined"
+    )
+    event_types: Mapped[List["EventType"]] = relationship(
+        back_populates="org", secondary="event_types_x_org", lazy="joined"
+    )
+    events = Mapped[List["Event"]] = relationship(back_populates="org", lazy="joined")
 
 
 class EventType(Base):
