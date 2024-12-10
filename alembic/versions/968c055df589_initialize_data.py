@@ -1,8 +1,8 @@
-"""initial dummy data for tables
+"""Initialize data
 
-Revision ID: bdacfda2bb03
-Revises: 5c3d6d2cc8eb
-Create Date: 2024-12-02 06:53:06.310817
+Revision ID: 968c055df589
+Revises: 60f136397b36
+Create Date: 2024-12-10 11:04:56.119489
 
 """
 
@@ -14,10 +14,11 @@ from f3_data_models.models import Base
 
 
 # revision identifiers, used by Alembic.
-revision: str = "bdacfda2bb03"
-down_revision: Union[str, None] = "5c3d6d2cc8eb"
+revision: str = "968c055df589"
+down_revision: Union[str, None] = "60f136397b36"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
+
 
 metadata = Base.metadata
 

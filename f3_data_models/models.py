@@ -1,5 +1,5 @@
 from datetime import datetime, date, time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from sqlalchemy import (
     JSON,
     TEXT,
@@ -9,38 +9,43 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
-    UniqueConstraint,
     func,
 )
 from typing_extensions import Annotated
-from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    mapped_column,
+    Mapped,
+)
 
 # Custom Annotations
 time_notz = Annotated[time, TIME]
 text = Annotated[str, TEXT]
+intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
+dt_create = Annotated[
+    datetime, mapped_column(DateTime, server_default=func.timezone("utc", func.now()))
+]
+dt_update = Annotated[
+    datetime,
+    mapped_column(
+        DateTime,
+        server_default=func.timezone("utc", func.now()),
+        server_onupdate=func.timezone("utc", func.now()),
+    ),
+]
 
 
 class Base(DeclarativeBase):
     """
-    Base class for all models, providing common fields and methods.
+    Base class for all models, providing common methods.
 
-    Attributes:
-        id (int): Primary key of the model.
-        created (datetime): Timestamp when the model was created.
-        updated (datetime): Timestamp when the model was last updated.
+    Methods:
+        get_id: Get the primary key of the model.
+        get: Get the value of a specified attribute.
+        to_json: Convert the model instance to a JSON-serializable dictionary.
+        __repr__: Get a string representation of the model instance.
+        _update: Update the model instance with the provided fields.
     """
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    # created: Mapped[datetime] = dt_create
-    # updated: Mapped[datetime] = dt_update
-    created: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func.timezone("utc", func.now())
-    )
-    updated: Mapped[datetime] = mapped_column(
-        DateTime,
-        server_default=func.timezone("utc", func.now()),
-        onupdate=func.timezone("utc", func.now()),
-    )
 
     type_annotation_map = {
         Dict[str, Any]: JSON,
@@ -112,26 +117,24 @@ class SlackSpace(Base):
     Model representing a Slack workspace.
 
     Attributes:
+        id (int): Primary Key of the model.
         team_id (str): The Slack-internal unique identifier for the Slack team.
         workspace_name (Optional[str]): The name of the Slack workspace.
         bot_token (Optional[str]): The bot token for the Slack workspace.
         settings (Optional[Dict[str, Any]]): Slack Bot settings for the Slack workspace.
-
-        org_x_slack (Org_x_Slack): The organization associated with this Slack workspace.
-        org (Org): The organization associated with this Slack workspace.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "slack_spaces"
 
+    id: Mapped[intpk]
     team_id: Mapped[str] = mapped_column(VARCHAR, unique=True)
     workspace_name: Mapped[Optional[str]]
     bot_token: Mapped[Optional[str]]
     settings: Mapped[Optional[Dict[str, Any]]]
-
-    org_x_slack: Mapped["Org_x_Slack"] = relationship(back_populates="slack_space")
-    org: Mapped["Org"] = relationship(
-        back_populates="slack_space", secondary="org_x_slack", lazy="joined"
-    )
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class OrgType(Base):
@@ -139,14 +142,20 @@ class OrgType(Base):
     Model representing an organization type / level. 1=AO, 2=Region, 3=Area, 4=Sector
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the organization type.
         description (Optional[text]): A description of the organization type.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "org_types"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class EventCategory(Base):
@@ -154,19 +163,20 @@ class EventCategory(Base):
     Model representing an event category. These are immutable cateogies that we will define at the Nation level.
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the event category.
         description (Optional[text]): A description of the event category.
-        event_types (List[EventType]): A list of event types associated with this category.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "event_categories"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
-
-    event_types: Mapped[List["EventType"]] = relationship(
-        back_populates="event_category"
-    )
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Role(Base):
@@ -174,14 +184,20 @@ class Role(Base):
     Model representing a role. A role is a set of permissions that can be assigned to users.
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the role.
         description (Optional[text]): A description of the role.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "roles"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Permission(Base):
@@ -189,14 +205,20 @@ class Permission(Base):
     Model representing a permission.
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the permission.
         description (Optional[text]): A description of the permission.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "permissions"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Role_x_Permission(Base):
@@ -206,23 +228,13 @@ class Role_x_Permission(Base):
     Attributes:
         role_id (int): The ID of the associated role.
         permission_id (int): The ID of the associated permission.
-        role (Role): The role associated with this relationship.
-        permission (Permission): The permission associated with this relationship.
     """
 
     __tablename__ = "roles_x_permissions"
-    __table_args__ = (
-        UniqueConstraint("role_id", "permission_id", name="_role_permission_uc"),
-    )
 
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
-    permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id"))
-
-    role: Mapped["Role"] = relationship(
-        back_populates="role_x_permission", lazy="joined"
-    )
-    permissions: Mapped[List["Permission"]] = relationship(
-        back_populates="role_x_permission", lazy="joined"
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), primary_key=True)
+    permission_id: Mapped[int] = mapped_column(
+        ForeignKey("permissions.id"), primary_key=True
     )
 
 
@@ -234,27 +246,13 @@ class Role_x_User_x_Org(Base):
         role_id (int): The ID of the associated role.
         user_id (int): The ID of the associated user.
         org_id (int): The ID of the associated organization.
-        role (Role): The role associated with this relationship.
-        user (User): The user associated with this relationship.
-        org (Org): The organization associated with this relationship.
     """
 
     __tablename__ = "roles_x_users_x_org"
-    __table_args__ = (
-        UniqueConstraint("role_id", "user_id", "org_id", name="_role_user_org_uc"),
-    )
 
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
-
-    role: Mapped["Role"] = relationship(
-        back_populates="role_x_user_x_org", lazy="joined"
-    )
-    user: Mapped["User"] = relationship(
-        back_populates="role_x_user_x_org", lazy="joined"
-    )
-    org: Mapped["Org"] = relationship(back_populates="role_x_user_x_org", lazy="joined")
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
 
 
 class Org(Base):
@@ -262,6 +260,7 @@ class Org(Base):
     Model representing an organization. The same model is used for all levels of organization (AOs, Regions, etc.).
 
     Attributes:
+        id (int): Primary Key of the model.
         parent_id (Optional[int]): The ID of the parent organization.
         org_type_id (int): The ID of the organization type.
         default_location_id (Optional[int]): The ID of the default location.
@@ -276,16 +275,13 @@ class Org(Base):
         instagram (Optional[str]): The organization's Instagram handle.
         last_annual_review (Optional[date]): The date of the last annual review.
         meta (Optional[Dict[str, Any]]): Additional metadata for the organization.
-        parent_org (Optional[Org]): The parent organization.
-        child_orgs (List[Org]): The child organizations.
-        locations (List[Location]): The locations associated with the organization.
-        event_tags (List[EventTag]): The event tags associated with the organization.
-        event_types (List[EventType]): The event types associated with the organization.
-        events (List[Event]): The events associated with the organization.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "orgs"
 
+    id: Mapped[intpk]
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     org_type_id: Mapped[int] = mapped_column(ForeignKey("org_types.id"))
     default_location_id: Mapped[Optional[int]]
@@ -300,23 +296,8 @@ class Org(Base):
     instagram: Mapped[Optional[str]]
     last_annual_review: Mapped[Optional[date]]
     meta: Mapped[Optional[Dict[str, Any]]]
-
-    parent_org: Mapped[Optional["Org"]] = relationship(
-        "Org", remote_side="Org.id", back_populates="child_orgs"
-    )
-    child_orgs: Mapped[List["Org"]] = relationship(
-        "Org", back_populates="parent_org", join_depth=3
-    )
-    locations: Mapped[List["Location"]] = relationship(
-        back_populates="org", lazy="joined"
-    )
-    event_tags: Mapped[List["EventTag"]] = relationship(
-        back_populates="org", secondary="event_tags_x_org", lazy="joined"
-    )
-    event_types: Mapped[List["EventType"]] = relationship(
-        back_populates="org", secondary="event_types_x_org", lazy="joined"
-    )
-    events: Mapped[List["Event"]] = relationship(back_populates="org", lazy="joined")
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class EventType(Base):
@@ -324,23 +305,24 @@ class EventType(Base):
     Model representing an event type. Event types can be shared by regions or not, and should roll up into event categories.
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the event type.
         description (Optional[text]): A description of the event type.
         acronyms (Optional[str]): Acronyms associated with the event type.
         category_id (int): The ID of the associated event category.
-        event_category (EventCategory): The event category associated with this event type.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "event_types"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
     acronyms: Mapped[Optional[str]]
     category_id: Mapped[int] = mapped_column(ForeignKey("event_categories.id"))
-
-    event_category: Mapped["EventCategory"] = relationship(
-        back_populates="event_types", lazy="joined"
-    )
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class EventType_x_Event(Base):
@@ -350,23 +332,13 @@ class EventType_x_Event(Base):
     Attributes:
         event_id (int): The ID of the associated event.
         event_type_id (int): The ID of the associated event type.
-        event (Event): The event associated with this relationship.
-        event_type (EventType): The event type associated with this relationship.
     """
 
     __tablename__ = "events_x_event_types"
-    __table_args__ = (
-        UniqueConstraint("event_id", "event_type_id", name="_event_event_type_uc"),
-    )
 
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
-    event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"))
-
-    event: Mapped["Event"] = relationship(
-        back_populates="events_x_event_types", lazy="joined"
-    )
-    event_type: Mapped["EventType"] = relationship(
-        back_populates="events_x_event_types", lazy="joined"
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    event_type_id: Mapped[int] = mapped_column(
+        ForeignKey("event_types.id"), primary_key=True
     )
 
 
@@ -377,24 +349,16 @@ class EventType_x_Org(Base):
     Attributes:
         event_type_id (int): The ID of the associated event type.
         org_id (int): The ID of the associated organization.
-        is_default (bool): Whether this is the default event type for the organization.
-        event_type (EventType): The event type associated with this relationship.
-        org (Org): The organization associated with this relationship.
+        is_default (bool): Whether this is the default event type for the organization. Default is False.
     """
 
     __tablename__ = "event_types_x_org"
-    __table_args__ = (
-        UniqueConstraint("event_type_id", "org_id", name="_event_type_org_uc"),
-    )
 
-    event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"))
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
-    is_default: Mapped[bool]
-
-    event_type: Mapped["EventType"] = relationship(
-        back_populates="event_type_x_org", lazy="joined"
+    event_type_id: Mapped[int] = mapped_column(
+        ForeignKey("event_types.id"), primary_key=True
     )
-    org: Mapped["Org"] = relationship(back_populates="event_type_x_org", lazy="joined")
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+    is_default: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class EventTag(Base):
@@ -402,16 +366,22 @@ class EventTag(Base):
     Model representing an event tag. These are used to mark special events, such as anniversaries or special workouts.
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the event tag.
         description (Optional[text]): A description of the event tag.
         color (Optional[str]): The color used for the calendar.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "event_tags"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
     color: Mapped[Optional[str]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class EventTag_x_Event(Base):
@@ -421,23 +391,13 @@ class EventTag_x_Event(Base):
     Attributes:
         event_id (int): The ID of the associated event.
         event_tag_id (int): The ID of the associated event tag.
-        event (Event): The event associated with this relationship.
-        event_tag (EventTag): The event tag associated with this relationship.
     """
 
     __tablename__ = "event_tags_x_events"
-    __table_args__ = (
-        UniqueConstraint("event_id", "event_tag_id", name="_event_event_tag_uc"),
-    )
 
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
-    event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"))
-
-    event: Mapped["Event"] = relationship(
-        back_populates="event_tag_x_event", lazy="joined"
-    )
-    event_tag: Mapped["EventTag"] = relationship(
-        back_populates="event_tag_x_event", lazy="joined"
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    event_tag_id: Mapped[int] = mapped_column(
+        ForeignKey("event_tags.id"), primary_key=True
     )
 
 
@@ -448,24 +408,16 @@ class EventTag_x_Org(Base):
     Attributes:
         event_tag_id (int): The ID of the associated event tag.
         org_id (int): The ID of the associated organization.
-        color_override (Optional[str]): The color override for the event tag (if the region wants to use something other than the default).
-        event_tag (EventTag): The event tag associated with this relationship.
-        org (Org): The organization associated with this relationship.
+        color_override (Optional[str]): The calendar color override for the event tag (if the region wants to use something other than the default).
     """
 
     __tablename__ = "event_tags_x_org"
-    __table_args__ = (
-        UniqueConstraint("event_tag_id", "org_id", name="_event_tag_org_uc"),
-    )
 
-    event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"))
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    event_tag_id: Mapped[int] = mapped_column(
+        ForeignKey("event_tags.id"), primary_key=True
+    )
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
     color_override: Mapped[Optional[str]]
-
-    event_tag: Mapped["EventTag"] = relationship(
-        back_populates="event_tag_x_org", lazy="joined"
-    )
-    org: Mapped["Org"] = relationship(back_populates="event_tag_x_org", lazy="joined")
 
 
 class Org_x_Slack(Base):
@@ -475,22 +427,14 @@ class Org_x_Slack(Base):
     Attributes:
         org_id (int): The ID of the associated organization.
         slack_space_id (str): The ID of the associated Slack workspace.
-        slack_space (SlackSpace): The Slack workspace associated with this relationship.
-        org (Org): The organization associated with this relationship.
     """
 
     __tablename__ = "org_x_slack"
-    __table_args__ = (
-        UniqueConstraint("org_id", "slack_space_id", name="_org_slack_uc"),
-    )
 
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
-    slack_space_id: Mapped[str] = mapped_column(ForeignKey("slack_spaces.id"))
-
-    slack_space: Mapped["SlackSpace"] = relationship(
-        back_populates="org_x_slack", lazy="joined"
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+    slack_space_id: Mapped[str] = mapped_column(
+        ForeignKey("slack_spaces.id"), primary_key=True
     )
-    org: Mapped["Org"] = relationship(back_populates="org_x_slack", lazy="joined")
 
 
 class Location(Base):
@@ -498,6 +442,7 @@ class Location(Base):
     Model representing a location. Locations are expected to belong to a single organization (region).
 
     Attributes:
+        id (int): Primary Key of the model.
         org_id (int): The ID of the associated organization.
         name (str): The name of the location.
         description (Optional[text]): A description of the location.
@@ -510,11 +455,13 @@ class Location(Base):
         address_zip (Optional[str]): The ZIP code of the location.
         address_country (Optional[str]): The country of the location.
         meta (Optional[Dict[str, Any]]): Additional metadata for the location.
-        org (Org): The organization associated with this location.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "locations"
 
+    id: Mapped[intpk]
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     name: Mapped[str]
     description: Mapped[Optional[text]]
@@ -527,8 +474,8 @@ class Location(Base):
     address_zip: Mapped[Optional[str]]
     address_country: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
-
-    org: Mapped["Org"] = relationship(back_populates="locations", lazy="joined")
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Event(Base):
@@ -536,6 +483,7 @@ class Event(Base):
     Model representing an event or series; the same model is used for both with a self-referential relationship for series.
 
     Attributes:
+        id (int): Primary Key of the model.
         org_id (int): The ID of the associated organization.
         location_id (Optional[int]): The ID of the associated location.
         series_id (Optional[int]): The ID of the associated event series.
@@ -561,20 +509,13 @@ class Event(Base):
         preblast_ts (Optional[float]): The Slack post timestamp of the pre-event announcement.
         backblast_ts (Optional[float]): The Slack post timestamp of the post-event report.
         meta (Optional[Dict[str, Any]]): Additional metadata for the event.
-        org (Org): The organization associated with this event.
-        location (Location): The location associated with this event.
-        event_type (EventType): The event type associated with this event.
-        event_tag (EventTag): Any event tags associated with this event.
-        series (Event): The event series associated with this event.
-        attendance (List[Attendance]): The attendance records for this event.
-        event_tags_x_event (List[EventTag_x_Event]): The event tags associated with this event.
-        event_types_x_event (List[EventType_x_Event]): The event types associated with this event.
-        event_tags (List[EventTag]): The event tags associated with this event.
-        event_types (List[EventType]): The event types associated with this event.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "events"
 
+    id: Mapped[intpk]
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
     series_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
@@ -600,30 +541,8 @@ class Event(Base):
     preblast_ts: Mapped[Optional[float]]
     backblast_ts: Mapped[Optional[float]]
     meta: Mapped[Optional[Dict[str, Any]]]
-
-    org: Mapped["Org"] = relationship(back_populates="events", lazy="joined")
-    location: Mapped["Location"] = relationship(back_populates="events", lazy="joined")
-    series: Mapped["Event"] = relationship(
-        back_populates="events", remote_side="Event.id", lazy="joined"
-    )
-    occurences: Mapped[List["Event"]] = relationship(
-        back_populates="series", lazy="joined"
-    )
-    attendance: Mapped[List["Attendance"]] = relationship(
-        back_populates="events", lazy="joined"
-    )
-    event_tags_x_event: Mapped[List["EventTag_x_Event"]] = relationship(
-        back_populates="events"
-    )
-    event_types_x_event: Mapped[List["EventType_x_Event"]] = relationship(
-        back_populates="events"
-    )
-    event_tags: Mapped[List["EventTag"]] = relationship(
-        back_populates="event", secondary="event_tags_x_event", lazy="joined"
-    )
-    event_types: Mapped[List["EventType"]] = relationship(
-        back_populates="event", secondary="event_types_x_event", lazy="joined"
-    )
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class AttendanceType(Base):
@@ -637,8 +556,11 @@ class AttendanceType(Base):
 
     __tablename__ = "attendance_types"
 
+    id: Mapped[intpk]
     type: Mapped[str]
     description: Mapped[Optional[str]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Attendance(Base):
@@ -651,29 +573,21 @@ class Attendance(Base):
         attendance_type_id (int): The ID of the associated attendance type.
         is_planned (bool): Whether this is planned attendance (True) vs actual attendance (False).
         meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
-        event (Event): The event associated with this attendance.
-        user (User): The user associated with this attendance.
-        attendance_type (AttendanceType): The attendance type associated with this attendance.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "attendance"
-    __table_args__ = (
-        UniqueConstraint(
-            "event_id", "user_id", "is_planned", name="_event_user_planned_uc"
-        ),
-    )
 
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
-    user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
-    attendance_type_id: Mapped[int] = mapped_column(ForeignKey("attendance_types.id"))
-    is_planned: Mapped[bool]
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    user_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("users.id"), primary_key=True
+    )  # NOTE: Should this be optional?
+    attendance_type_id: Mapped[int] = mapped_column(
+        ForeignKey("attendance_types.id"), primary_key=True
+    )
+    is_planned: Mapped[bool] = mapped_column(Boolean, primary_key=True)
     meta: Mapped[Optional[Dict[str, Any]]]
-
-    event: Mapped["Event"] = relationship(back_populates="attendance", lazy="joined")
-    user: Mapped["User"] = relationship(back_populates="attendance", lazy="joined")
-    attendance_type: Mapped["AttendanceType"] = relationship(
-        back_populates="attendance", lazy="joined"
-    )
 
 
 class User(Base):
@@ -681,6 +595,7 @@ class User(Base):
     Model representing a user.
 
     Attributes:
+        id (int): Primary Key of the model.
         f3_name (Optional[str]): The F3 name of the user.
         first_name (Optional[str]): The first name of the user.
         last_name (Optional[str]): The last name of the user.
@@ -689,18 +604,13 @@ class User(Base):
         home_region_id (Optional[int]): The ID of the home region.
         avatar_url (Optional[str]): The URL of the user's avatar.
         meta (Optional[Dict[str, Any]]): Additional metadata for the user.
-        home_region (Org): The home region associated with this user.
-        attendance (List[Attendance]): The attendance records for this user.
-        slack_users (List[SlackUser]): The Slack users associated with this user.
-        achievements_x_user (List[Achievement_x_User]): The achievements associated with this user.
-        positions_x_orgs_x_users (List[Position_x_Org_x_User]): The positions associated with this user.
-        roles_x_users_x_org (List[Role_x_User_x_Org]): The roles associated with this user.
-        positions (List[Position]): The positions associated with this user.
-        roles (List[Role]): The roles associated with this user.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "users"
 
+    id: Mapped[intpk]
     f3_name: Mapped[Optional[str]]
     first_name: Mapped[Optional[str]]
     last_name: Mapped[Optional[str]]
@@ -709,32 +619,8 @@ class User(Base):
     home_region_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
-
-    home_region: Mapped["Org"] = relationship(back_populates="users", lazy="joined")
-    attendance: Mapped[List["Attendance"]] = relationship(
-        back_populates="users", lazy="joined"
-    )
-    slack_users: Mapped[List["SlackUser"]] = relationship(
-        back_populates="users", lazy="joined"
-    )
-    achievements_x_user: Mapped[List["Achievement_x_User"]] = relationship(
-        back_populates="user"
-    )
-    positions_x_orgs_x_users: Mapped[List["Position_x_Org_x_User"]] = relationship(
-        back_populates="user"
-    )
-    roles_x_users_x_org: Mapped[List["Role_x_User_x_Org"]] = relationship(
-        back_populates="user"
-    )
-    achievements: Mapped[List["Achievement"]] = relationship(
-        back_populates="user", secondary="achievements_x_users", lazy="joined"
-    )
-    positions: Mapped[List["Position"]] = relationship(
-        back_populates="user", secondary="positions_x_orgs_x_users", lazy="joined"
-    )
-    roles: Mapped[List["Role"]] = relationship(
-        back_populates="user", secondary="roles_x_users_x_org", lazy="joined"
-    )
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class SlackUser(Base):
@@ -742,6 +628,7 @@ class SlackUser(Base):
     Model representing a Slack user.
 
     Attributes:
+        id (int): Primary Key of the model.
         slack_id (str): The Slack ID of the user.
         user_name (str): The username of the Slack user.
         email (str): The email of the Slack user.
@@ -757,12 +644,13 @@ class SlackUser(Base):
         strava_athlete_id (Optional[int]): The Strava athlete ID of the user.
         meta (Optional[Dict[str, Any]]): Additional metadata for the Slack user.
         slack_updated (Optional[datetime]): The last update time of the Slack user.
-        slack_space (SlackSpace): The Slack workspace associated with this user.
-        user (User): The user associated with this Slack user.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "slack_users"
 
+    id: Mapped[intpk]
     slack_id: Mapped[str]
     user_name: Mapped[str]
     email: Mapped[str]
@@ -778,11 +666,8 @@ class SlackUser(Base):
     strava_athlete_id: Mapped[Optional[int]]
     meta: Mapped[Optional[Dict[str, Any]]]
     slack_updated: Mapped[Optional[datetime]]
-
-    slack_space: Mapped["SlackSpace"] = relationship(
-        back_populates="slack_users", lazy="joined"
-    )
-    user: Mapped["User"] = relationship(back_populates="slack_users", lazy="joined")
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Achievement(Base):
@@ -790,18 +675,24 @@ class Achievement(Base):
     Model representing an achievement.
 
     Attributes:
+        id (int): Primary Key of the model.
         name (str): The name of the achievement.
         description (Optional[str]): A description of the achievement.
         verb (str): The verb associated with the achievement.
         image_url (Optional[str]): The URL of the achievement's image.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "achievements"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[str]]
     verb: Mapped[str]
     image_url: Mapped[Optional[str]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Achievement_x_User(Base):
@@ -811,25 +702,17 @@ class Achievement_x_User(Base):
     Attributes:
         achievement_id (int): The ID of the associated achievement.
         user_id (int): The ID of the associated user.
-        date_awarded (date): The date the achievement was awarded.
-        achievement (Achievement): The achievement associated with this relationship.
-        user (User): The user associated with this relationship.
+        date_awarded (date): The date the achievement was awarded. Default is the current date.
     """
 
     __tablename__ = "achievements_x_users"
-    __table_args__ = (
-        UniqueConstraint("achievement_id", "user_id", name="_achievement_user_uc"),
-    )
 
-    achievement_id: Mapped[int] = mapped_column(ForeignKey("achievements.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    date_awarded: Mapped[date]
-
-    achievement: Mapped["Achievement"] = relationship(
-        back_populates="achievement_x_user", lazy="joined"
+    achievement_id: Mapped[int] = mapped_column(
+        ForeignKey("achievements.id"), primary_key=True
     )
-    user: Mapped["User"] = relationship(
-        back_populates="achievement_x_user", lazy="joined"
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    date_awarded: Mapped[date] = mapped_column(
+        DateTime, server_default=func.timezone("utc", func.now())
     )
 
 
@@ -840,22 +723,14 @@ class Achievement_x_Org(Base):
     Attributes:
         achievement_id (int): The ID of the associated achievement.
         org_id (int): The ID of the associated organization.
-        achievement (Achievement): The achievement associated with this relationship.
-        org (Org): The organization associated with this relationship.
     """
 
     __tablename__ = "achievements_x_org"
-    __table_args__ = (
-        UniqueConstraint("achievement_id", "org_id", name="_achievement_org_uc"),
-    )
 
-    achievement_id: Mapped[int] = mapped_column(ForeignKey("achievements.id"))
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
-
-    achievement: Mapped["Achievement"] = relationship(
-        back_populates="achievement_x_org", lazy="joined"
+    achievement_id: Mapped[int] = mapped_column(
+        ForeignKey("achievements.id"), primary_key=True
     )
-    org: Mapped["Org"] = relationship(back_populates="achievement_x_org", lazy="joined")
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
 
 
 class Position(Base):
@@ -871,10 +746,13 @@ class Position(Base):
 
     __tablename__ = "positions"
 
+    id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[str]]
     org_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("org_types.id"))
     org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Position_x_Org_x_User(Base):
@@ -885,31 +763,15 @@ class Position_x_Org_x_User(Base):
         position_id (int): The ID of the associated position.
         org_id (int): The ID of the associated organization.
         user_id (int): The ID of the associated user.
-        position (Position): The position associated with this relationship.
-        org (Org): The organization associated with this relationship.
-        user (User): The user associated with this relationship.
     """
 
     __tablename__ = "positions_x_orgs_x_users"
-    __table_args__ = (
-        UniqueConstraint(
-            "position_id", "user_id", "org_id", name="_position_user_org_uc"
-        ),
-    )
 
-    position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"))
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-
-    position: Mapped["Position"] = relationship(
-        back_populates="position_x_org_x_user", lazy="joined"
+    position_id: Mapped[int] = mapped_column(
+        ForeignKey("positions.id"), primary_key=True
     )
-    org: Mapped["Org"] = relationship(
-        back_populates="position_x_org_x_user", lazy="joined"
-    )
-    user: Mapped["User"] = relationship(
-        back_populates="position_x_org_x_user", lazy="joined"
-    )
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
 
 class Expansion(Base):
@@ -917,22 +779,28 @@ class Expansion(Base):
     Model representing an expansion.
 
     Attributes:
+        id (int): Primary Key of the model.
         area (str): The area of the expansion.
         pinned_lat (float): The pinned latitude of the expansion.
         pinned_lon (float): The pinned longitude of the expansion.
         user_lat (float): The user's latitude.
         user_lon (float): The user's longitude.
         interested_in_organizing (bool): Whether the user is interested in organizing.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "expansions"
 
+    id: Mapped[intpk]
     area: Mapped[str]
     pinned_lat: Mapped[float]
     pinned_lon: Mapped[float]
     user_lat: Mapped[float]
     user_lon: Mapped[float]
     interested_in_organizing: Mapped[bool]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
 
 class Expansion_x_User(Base):
@@ -942,25 +810,124 @@ class Expansion_x_User(Base):
     Attributes:
         expansion_id (int): The ID of the associated expansion.
         user_id (int): The ID of the associated user.
-        date (date): The date of the association.
+        requst_date (date): The date of the request. Default is the current date.
         notes (Optional[text]): Additional notes for the association.
-        expansion (Expansion): The expansion associated with this relationship.
-        user (User): The user associated with this relationship.
     """
 
     __tablename__ = "expansions_x_users"
-    __table_args__ = (
-        UniqueConstraint("expansion_id", "user_id", name="_expansion_user_uc"),
-    )
 
-    expansion_id: Mapped[int] = mapped_column(ForeignKey("expansions.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    date: Mapped[date]
+    expansion_id: Mapped[int] = mapped_column(
+        ForeignKey("expansions.id"), primary_key=True
+    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    request_date: Mapped[date] = mapped_column(
+        DateTime, server_default=func.timezone("utc", func.now())
+    )
     notes: Mapped[Optional[text]]
 
-    expansion: Mapped["Expansion"] = relationship(
-        back_populates="expansion_x_user", lazy="joined"
-    )
-    user: Mapped["User"] = relationship(
-        back_populates="expansion_x_user", lazy="joined"
-    )
+
+# def upgrade() -> None:
+#     # ### commands auto generated by Alembic - please adjust! ###
+#     op.create_table(
+#         "magiclinkauthrecord",
+#         sa.Column("id", sa.Integer(), nullable=False),
+#         sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+#         sa.Column("otp_hash", sa.LargeBinary(), nullable=False),
+#         sa.Column(
+#             "created",
+#             sa.DateTime(timezone=True),
+#             server_default=sa.text("(CURRENT_TIMESTAMP)"),
+#             nullable=False,
+#         ),
+#         sa.Column(
+#             "expiration",
+#             sa.DateTime(timezone=True),
+#             server_default=sa.text("(CURRENT_TIMESTAMP)"),
+#             nullable=False,
+#         ),
+#         sa.Column("client_ip", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+#         sa.Column("recent_attempts", sa.Integer(), nullable=False),
+#         sa.PrimaryKeyConstraint("id"),
+#     )
+#     op.create_table(
+#         "magiclinkauthsession",
+#         sa.Column("id", sa.Integer(), nullable=False),
+#         sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+#         sa.Column("persistent_id", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+#         sa.Column("session_token", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+#         sa.Column(
+#             "created",
+#             sa.DateTime(timezone=True),
+#             server_default=sa.text("(CURRENT_TIMESTAMP)"),
+#             nullable=False,
+#         ),
+#         sa.Column(
+#             "expiration",
+#             sa.DateTime(timezone=True),
+#             server_default=sa.text("(CURRENT_TIMESTAMP)"),
+#             nullable=False,
+#         ),
+#         sa.PrimaryKeyConstraint("id"),
+#     )
+#     with op.batch_alter_table("magiclinkauthsession", schema=None) as batch_op:
+#         batch_op.create_index(
+#             batch_op.f("ix_magiclinkauthsession_email"), ["email"], unique=False
+#         )
+#         batch_op.create_index(
+#             batch_op.f("ix_magiclinkauthsession_persistent_id"),
+#             ["persistent_id"],
+#             unique=False,
+#         )
+#         batch_op.create_index(
+#             batch_op.f("ix_magiclinkauthsession_session_token"),
+#             ["session_token"],
+#             unique=True,
+#         )
+
+
+class MagicLinkAuthRecord(Base):
+    """
+    Model representing a Magic Link Auth Record.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        email (str): The email of the user.
+        otp_hash (bytes): The hash of the OTP.
+        created (datetime): The timestamp when the record was created.
+        expiration (datetime): The timestamp when the record expires.
+        client_ip (str): The client IP address.
+        recent_attempts (int): The number of recent attempts.
+    """
+
+    __tablename__ = "magiclinkauthrecord"
+
+    id: Mapped[intpk]
+    email: Mapped[str]
+    otp_hash: Mapped[bytes]
+    created: Mapped[dt_create]
+    expiration: Mapped[dt_create]
+    client_ip: Mapped[str]
+    recent_attempts: Mapped[int]
+
+
+class MagicLinkAuthSession(Base):
+    """
+    Model representing a Magic Link Auth Session.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        email (str): The email of the user.
+        persistent_id (str): The persistent ID.
+        session_token (str): The session token.
+        created (datetime): The timestamp when the record was created.
+        expiration (datetime): The timestamp when the record expires.
+    """
+
+    __tablename__ = "magiclinkauthsession"
+
+    id: Mapped[intpk]
+    email: Mapped[str]
+    persistent_id: Mapped[str]
+    session_token: Mapped[str]
+    created: Mapped[dt_create]
+    expiration: Mapped[dt_create]
