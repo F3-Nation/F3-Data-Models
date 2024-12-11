@@ -1,8 +1,8 @@
-"""Initialize data
+"""Insert Dummy Data
 
-Revision ID: 968c055df589
-Revises: 60f136397b36
-Create Date: 2024-12-10 11:04:56.119489
+Revision ID: 893179b61ab1
+Revises: bc8d946e6cf2
+Create Date: 2024-12-11 07:51:38.531440
 
 """
 
@@ -14,8 +14,8 @@ from f3_data_models.models import Base
 
 
 # revision identifiers, used by Alembic.
-revision: str = "968c055df589"
-down_revision: Union[str, None] = "60f136397b36"
+revision: str = "893179b61ab1"
+down_revision: Union[str, None] = "bc8d946e6cf2"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
