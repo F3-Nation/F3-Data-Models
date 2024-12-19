@@ -309,7 +309,7 @@ class EventType(Base):
         id (int): Primary Key of the model.
         name (str): The name of the event type.
         description (Optional[text]): A description of the event type.
-        acronyms (Optional[str]): Acronyms associated with the event type.
+        acronym (Optional[str]): Acronyms associated with the event type.
         category_id (int): The ID of the associated event category.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -320,7 +320,7 @@ class EventType(Base):
     id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[text]]
-    acronyms: Mapped[Optional[str]]
+    acronym: Mapped[Optional[str]]
     category_id: Mapped[int] = mapped_column(ForeignKey("event_categories.id"))
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
@@ -421,7 +421,7 @@ class EventTag_x_Org(Base):
     color_override: Mapped[Optional[str]]
 
 
-class Org_x_Slack(Base):
+class Org_x_SlackSpace(Base):
     """
     Model representing the association between organizations and Slack workspaces. This is currently meant to be one to one, but theoretically could support multiple workspaces per organization.
 
@@ -430,10 +430,10 @@ class Org_x_Slack(Base):
         slack_space_id (str): The ID of the associated Slack workspace.
     """
 
-    __tablename__ = "org_x_slack"
+    __tablename__ = "orgs_x_slack_spaces"
 
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-    slack_space_id: Mapped[str] = mapped_column(
+    slack_space_id: Mapped[int] = mapped_column(
         ForeignKey("slack_spaces.id"), primary_key=True
     )
 
@@ -635,6 +635,9 @@ class User(Base):
     last_name: Mapped[Optional[str]]
     email: Mapped[str] = mapped_column(VARCHAR, unique=True)
     phone: Mapped[Optional[str]]
+    emergency_contact: Mapped[Optional[str]]
+    emergency_phone: Mapped[Optional[str]]
+    emergency_notes: Mapped[Optional[str]]
     home_region_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
