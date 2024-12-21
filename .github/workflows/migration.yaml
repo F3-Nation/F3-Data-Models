@@ -31,7 +31,7 @@ jobs:
               echo "DATABASE_HOST=${{ secrets.DATABASE_HOST }}" >> $GITHUB_ENV
               echo "DATABASE_USER=${{ secrets.DATABASE_USER }}" >> $GITHUB_ENV
               echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
-              echo "DATABASE_SCHEMA=f3_dev" >> $GITHUB_ENV
+              echo "DATABASE_SCHEMA=f3_staging" >> $GITHUB_ENV
               echo "USE_GCP=True" >> $GITHUB_ENV
 
         - name: Run Alembic migrations

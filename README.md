@@ -27,11 +27,26 @@ If you would like to make a change, you will need to:
 source .env && alembic revision --autogenerate -m "Your Message Here"
 ```
 3. Make any edits to the migration script in `alembic/versions`
-4. The github pages documentation will be updated when you push to `main`, but if you would like to preview locally, run:
+4. Run the upgrade on your local db:
+```sh
+source .env && alembic upgrade head
+```
+5. Bump the version on `pyproject.toml`:
+```sh
+poetry version patch[minor][major]
+```
+6. Tag your final commit and make sure to push those tags to trigger the pypi package build:
+```sh
+git tag <new_version> -a -m "Your message here"
+git push origin --tags
+```
+> [!NOTE] The github pages documentation will be updated when you push to `main`, but if you would like to preview locally, run:
+
 ```sh
 poetry run sphinx-build -b html docs docs/_build/html
 cd docs
 poetry run python -m http.server --directory _build/html
 ```
+
 > [!TIP]  
 > Adding new fields as nullable (ie `Optional[]`) has the best chance of reducing breaking changes to the apps.
