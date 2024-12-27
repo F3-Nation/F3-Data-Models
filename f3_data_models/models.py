@@ -6,11 +6,9 @@ from sqlalchemy import (
     TIME,
     VARCHAR,
     Boolean,
-    Column,
     DateTime,
     ForeignKey,
     Integer,
-    Table,
     func,
     UniqueConstraint,
 )
@@ -259,30 +257,6 @@ class Role_x_User_x_Org(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
 
 
-event_type_x_org_table = Table(
-    "event_types_x_org",
-    Base.metadata,
-    Column("event_type_id", Integer, ForeignKey("event_types.id"), primary_key=True),
-    Column("org_id", Integer, ForeignKey("orgs.id"), primary_key=True),
-    Column("is_default", Boolean, default=False, nullable=False),
-)
-
-event_tag_x_org_table = Table(
-    "event_tags_x_org",
-    Base.metadata,
-    Column("event_tag_id", Integer, ForeignKey("event_tags.id"), primary_key=True),
-    Column("org_id", Integer, ForeignKey("orgs.id"), primary_key=True),
-    Column("color_override", VARCHAR),
-)
-
-achievement_x_org_table = Table(
-    "achievements_x_org",
-    Base.metadata,
-    Column("achievement_id", Integer, ForeignKey("achievements.id"), primary_key=True),
-    Column("org_id", Integer, ForeignKey("orgs.id"), primary_key=True),
-)
-
-
 class Org(Base):
     """
     Model representing an organization. The same model is used for all levels of organization (AOs, Regions, etc.).
@@ -328,13 +302,13 @@ class Org(Base):
     updated: Mapped[dt_update]
 
     event_types: Mapped[Optional[List["EventType"]]] = relationship(
-        "EventType", secondary=event_type_x_org_table, cascade="expunge"
+        "EventType", secondary="event_types_x_org", cascade="expunge"
     )
     event_tags: Mapped[Optional[List["EventTag"]]] = relationship(
-        "EventTag", secondary=event_tag_x_org_table, cascade="expunge"
+        "EventTag", secondary="event_tags_x_org", cascade="expunge"
     )
     achievements: Mapped[Optional[List["Achievement"]]] = relationship(
-        "Achievement", secondary=achievement_x_org_table, cascade="expunge"
+        "Achievement", secondary="achievements_x_org", cascade="expunge"
     )
     parent_org: Mapped[Optional["Org"]] = relationship(
         "Org", remote_side=[id], cascade="expunge"
@@ -366,40 +340,40 @@ class EventType(Base):
     updated: Mapped[dt_update]
 
 
-# class EventType_x_Event(Base):
-#     """
-#     Model representing the association between events and event types. The intention is that a single event can be associated with multiple event types.
+class EventType_x_Event(Base):
+    """
+    Model representing the association between events and event types. The intention is that a single event can be associated with multiple event types.
 
-#     Attributes:
-#         event_id (int): The ID of the associated event.
-#         event_type_id (int): The ID of the associated event type.
-#     """
+    Attributes:
+        event_id (int): The ID of the associated event.
+        event_type_id (int): The ID of the associated event type.
+    """
 
-#     __tablename__ = "events_x_event_types"
+    __tablename__ = "events_x_event_types"
 
-#     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
-#     event_type_id: Mapped[int] = mapped_column(
-#         ForeignKey("event_types.id"), primary_key=True
-#     )
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    event_type_id: Mapped[int] = mapped_column(
+        ForeignKey("event_types.id"), primary_key=True
+    )
 
 
-# class EventType_x_Org(Base):
-#     """
-#     Model representing the association between event types and organizations. This controls which event types are available for selection at the region level, as well as default types for each AO.
+class EventType_x_Org(Base):
+    """
+    Model representing the association between event types and organizations. This controls which event types are available for selection at the region level, as well as default types for each AO.
 
-#     Attributes:
-#         event_type_id (int): The ID of the associated event type.
-#         org_id (int): The ID of the associated organization.
-#         is_default (bool): Whether this is the default event type for the organization. Default is False.
-#     """
+    Attributes:
+        event_type_id (int): The ID of the associated event type.
+        org_id (int): The ID of the associated organization.
+        is_default (bool): Whether this is the default event type for the organization. Default is False.
+    """
 
-#     __tablename__ = "event_types_x_org"
+    __tablename__ = "event_types_x_org"
 
-#     event_type_id: Mapped[int] = mapped_column(
-#         ForeignKey("event_types.id"), primary_key=True
-#     )
-#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-#     is_default: Mapped[bool] = mapped_column(Boolean, default=False)
+    event_type_id: Mapped[int] = mapped_column(
+        ForeignKey("event_types.id"), primary_key=True
+    )
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+    is_default: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class EventTag(Base):
@@ -425,40 +399,40 @@ class EventTag(Base):
     updated: Mapped[dt_update]
 
 
-# class EventTag_x_Event(Base):
-#     """
-#     Model representing the association between event tags and events. The intention is that a single event can be associated with multiple event tags.
+class EventTag_x_Event(Base):
+    """
+    Model representing the association between event tags and events. The intention is that a single event can be associated with multiple event tags.
 
-#     Attributes:
-#         event_id (int): The ID of the associated event.
-#         event_tag_id (int): The ID of the associated event tag.
-#     """
+    Attributes:
+        event_id (int): The ID of the associated event.
+        event_tag_id (int): The ID of the associated event tag.
+    """
 
-#     __tablename__ = "event_tags_x_events"
+    __tablename__ = "event_tags_x_events"
 
-#     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
-#     event_tag_id: Mapped[int] = mapped_column(
-#         ForeignKey("event_tags.id"), primary_key=True
-#     )
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    event_tag_id: Mapped[int] = mapped_column(
+        ForeignKey("event_tags.id"), primary_key=True
+    )
 
 
-# class EventTag_x_Org(Base):
-#     """
-#     Model representing the association between event tags and organizations. Controls which event tags are available for selection at the region level.
+class EventTag_x_Org(Base):
+    """
+    Model representing the association between event tags and organizations. Controls which event tags are available for selection at the region level.
 
-#     Attributes:
-#         event_tag_id (int): The ID of the associated event tag.
-#         org_id (int): The ID of the associated organization.
-#         color_override (Optional[str]): The calendar color override for the event tag (if the region wants to use something other than the default).
-#     """
+    Attributes:
+        event_tag_id (int): The ID of the associated event tag.
+        org_id (int): The ID of the associated organization.
+        color_override (Optional[str]): The calendar color override for the event tag (if the region wants to use something other than the default).
+    """
 
-#     __tablename__ = "event_tags_x_org"
+    __tablename__ = "event_tags_x_org"
 
-#     event_tag_id: Mapped[int] = mapped_column(
-#         ForeignKey("event_tags.id"), primary_key=True
-#     )
-#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-#     color_override: Mapped[Optional[str]]
+    event_tag_id: Mapped[int] = mapped_column(
+        ForeignKey("event_tags.id"), primary_key=True
+    )
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+    color_override: Mapped[Optional[str]]
 
 
 class Org_x_SlackSpace(Base):
@@ -517,21 +491,6 @@ class Location(Base):
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
-
-
-event_x_event_type_table = Table(
-    "events_x_event_types",
-    Base.metadata,
-    Column("event_id", Integer, ForeignKey("events.id"), primary_key=True),
-    Column("event_type_id", Integer, ForeignKey("event_types.id"), primary_key=True),
-)
-
-event_x_event_tag_table = Table(
-    "event_tags_x_events",
-    Base.metadata,
-    Column("event_id", Integer, ForeignKey("events.id"), primary_key=True),
-    Column("event_tag_id", Integer, ForeignKey("event_tags.id"), primary_key=True),
-)
 
 
 class Event(Base):
@@ -603,10 +562,10 @@ class Event(Base):
     org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge")
     location: Mapped[Location] = relationship(innerjoin=True, cascade="expunge")
     event_types: Mapped[List[EventType]] = relationship(
-        secondary=event_x_event_type_table, innerjoin=True, cascade="expunge"
+        secondary="events_x_event_types", innerjoin=True, cascade="expunge"
     )
     event_tags: Mapped[Optional[List[EventTag]]] = relationship(
-        secondary=event_x_event_tag_table, cascade="expunge"
+        secondary="event_tags_x_events", cascade="expunge"
     )
 
 
@@ -624,32 +583,6 @@ class AttendanceType(Base):
     id: Mapped[intpk]
     type: Mapped[str]
     description: Mapped[Optional[str]]
-    created: Mapped[dt_create]
-    updated: Mapped[dt_update]
-
-
-class Attendance(Base):
-    """
-    Model representing an attendance record.
-
-    Attributes:
-        id (int): Primary Key of the model.
-        event_id (int): The ID of the associated event.
-        user_id (Optional[int]): The ID of the associated user.
-        is_planned (bool): Whether this is planned attendance (True) vs actual attendance (False).
-        meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
-        created (datetime): The timestamp when the record was created.
-        updated (datetime): The timestamp when the record was last updated.
-    """
-
-    __tablename__ = "attendance"
-    __table_args__ = (UniqueConstraint("event_id", "user_id", "is_planned"),)
-
-    id: Mapped[intpk]
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    is_planned: Mapped[bool]
-    meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -756,6 +689,38 @@ class SlackUser(Base):
     updated: Mapped[dt_update]
 
 
+class Attendance(Base):
+    """
+    Model representing an attendance record.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        event_id (int): The ID of the associated event.
+        user_id (Optional[int]): The ID of the associated user.
+        is_planned (bool): Whether this is planned attendance (True) vs actual attendance (False).
+        meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """
+
+    __tablename__ = "attendance"
+    __table_args__ = (UniqueConstraint("event_id", "user_id", "is_planned"),)
+
+    id: Mapped[intpk]
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    is_planned: Mapped[bool]
+    meta: Mapped[Optional[Dict[str, Any]]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+    event: Mapped[Event] = relationship(innerjoin=True, cascade="expunge")
+    user: Mapped[User] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    slack_user: Mapped[Optional[SlackUser]] = relationship(
+        innerjoin=False, cascade="expunge", secondary="users"
+    )
+
+
 class Achievement(Base):
     """
     Model representing an achievement.
@@ -802,21 +767,21 @@ class Achievement_x_User(Base):
     )
 
 
-# class Achievement_x_Org(Base):
-#     """
-#     Model representing the association between achievements and organizations.
+class Achievement_x_Org(Base):
+    """
+    Model representing the association between achievements and organizations.
 
-#     Attributes:
-#         achievement_id (int): The ID of the associated achievement.
-#         org_id (int): The ID of the associated organization.
-#     """
+    Attributes:
+        achievement_id (int): The ID of the associated achievement.
+        org_id (int): The ID of the associated organization.
+    """
 
-#     __tablename__ = "achievements_x_org"
+    __tablename__ = "achievements_x_org"
 
-#     achievement_id: Mapped[int] = mapped_column(
-#         ForeignKey("achievements.id"), primary_key=True
-#     )
-#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+    achievement_id: Mapped[int] = mapped_column(
+        ForeignKey("achievements.id"), primary_key=True
+    )
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
 
 
 class Position(Base):

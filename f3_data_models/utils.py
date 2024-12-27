@@ -99,7 +99,7 @@ class DbManager:
     def find_records(
         cls: T, filters: Optional[List], joinedloads: List | str = []
     ) -> List[T]:
-        session = get_session(echo=True)
+        session = get_session()
         try:
             query = select(cls)
             query = _joinedloads(cls, query, joinedloads)
