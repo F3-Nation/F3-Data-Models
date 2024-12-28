@@ -56,7 +56,7 @@ def get_engine(echo=False) -> Engine:
     return engine
 
 
-def get_session(echo=False):
+def get_session(echo=True):
     if GLOBAL_SESSION:
         return GLOBAL_SESSION
 
@@ -254,10 +254,16 @@ class DbManager:
             session.commit()
             close_session(session)
 
-    def delete_records(cls: T, filters):
+    def delete_records(cls: T, filters, joinedloads: List | str = []):
         session = get_session()
         try:
-            session.query(cls).filter(and_(*filters)).delete()
+            query = select(cls)
+            query = _joinedloads(cls, query, joinedloads)
+            query = query.filter(*filters)
+            records = session.scalars(query).unique().all()
+            for r in records:
+                session.delete(r)
+            # session.query(cls).filter(and_(*filters)).delete()
             session.flush()
         finally:
             session.commit()

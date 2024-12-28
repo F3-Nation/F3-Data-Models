@@ -279,6 +279,11 @@ class Org(Base):
         meta (Optional[Dict[str, Any]]): Additional metadata for the organization.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
+
+        event_types (Optional[List[EventType]]): The event types associated with the organization. Used to control which event types are available for selection at the region level.
+        event_tags (Optional[List[EventTag]]): The event tags associated with the organization. Used to control which event tags are available for selection at the region level.
+        achievements (Optional[List[Achievement]]): The achievements available within the organization.
+        parent_org (Optional[Org]): The parent organization.
     """
 
     __tablename__ = "orgs"
@@ -347,6 +352,8 @@ class EventType_x_Event(Base):
     Attributes:
         event_id (int): The ID of the associated event.
         event_type_id (int): The ID of the associated event type.
+
+        event (Event): The associated event.
     """
 
     __tablename__ = "events_x_event_types"
@@ -355,6 +362,8 @@ class EventType_x_Event(Base):
     event_type_id: Mapped[int] = mapped_column(
         ForeignKey("event_types.id"), primary_key=True
     )
+
+    event: Mapped["Event"] = relationship(back_populates="event_x_event_types")
 
 
 class EventType_x_Org(Base):
@@ -406,6 +415,8 @@ class EventTag_x_Event(Base):
     Attributes:
         event_id (int): The ID of the associated event.
         event_tag_id (int): The ID of the associated event tag.
+
+        event (Event): The associated event.
     """
 
     __tablename__ = "event_tags_x_events"
@@ -414,6 +425,8 @@ class EventTag_x_Event(Base):
     event_tag_id: Mapped[int] = mapped_column(
         ForeignKey("event_tags.id"), primary_key=True
     )
+
+    event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
 
 
 class EventTag_x_Org(Base):
@@ -526,6 +539,13 @@ class Event(Base):
         meta (Optional[Dict[str, Any]]): Additional metadata for the event.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
+
+        org (Org): The associated organization.
+        location (Location): The associated location.
+        event_types (List[EventType]): The associated event types.
+        event_tags (Optional[List[EventTag]]): The associated event tags.
+        event_x_event_types (List[EventType_x_Event]): The association between the event and event types.
+        event_x_event_tags (Optional[List[EventTag_x_Event]]): The association between the event and event tags.
     """
 
     __tablename__ = "events"
@@ -559,13 +579,24 @@ class Event(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
-    org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge")
-    location: Mapped[Location] = relationship(innerjoin=True, cascade="expunge")
+    org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    location: Mapped[Location] = relationship(
+        innerjoin=True, cascade="expunge", viewonly=True
+    )
     event_types: Mapped[List[EventType]] = relationship(
-        secondary="events_x_event_types", innerjoin=True, cascade="expunge"
+        secondary="events_x_event_types",
+        innerjoin=True,
+        cascade="expunge",
+        viewonly=True,
     )
     event_tags: Mapped[Optional[List[EventTag]]] = relationship(
-        secondary="event_tags_x_events", cascade="expunge"
+        secondary="event_tags_x_events", cascade="expunge", viewonly=True
+    )
+    event_x_event_types: Mapped[List[EventType_x_Event]] = relationship(
+        back_populates="event"
+    )
+    event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
+        back_populates="event"
     )
 
 
@@ -587,13 +618,15 @@ class AttendanceType(Base):
     updated: Mapped[dt_update]
 
 
-class Attendance_x_AttenanceType(Base):
+class Attendance_x_AttendanceType(Base):
     """
     Model representing the association between attendance and attendance types.
 
     Attributes:
         attendance_id (int): The ID of the associated attendance.
         attendance_type_id (int): The ID of the associated attendance type.
+
+        attendance (Attendance): The associated attendance.
     """
 
     __tablename__ = "attendance_x_attendance_types"
@@ -603,6 +636,10 @@ class Attendance_x_AttenanceType(Base):
     )
     attendance_type_id: Mapped[int] = mapped_column(
         ForeignKey("attendance_types.id"), primary_key=True
+    )
+
+    attendance: Mapped["Attendance"] = relationship(
+        back_populates="attendance_x_attendance_types"
     )
 
 
@@ -701,6 +738,12 @@ class Attendance(Base):
         meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
+
+        event (Event): The associated event.
+        user (User): The associated user.
+        slack_user (Optional[SlackUser]): The associated Slack user.
+        attendance_x_attendance_types (List[Attendance_x_AttendanceType]): The association between the attendance and attendance types.
+        attendance_types (List[AttendanceType]): The associated attendance types.
     """
 
     __tablename__ = "attendance"
@@ -714,10 +757,21 @@ class Attendance(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
-    event: Mapped[Event] = relationship(innerjoin=True, cascade="expunge")
+    event: Mapped[Event] = relationship(
+        innerjoin=True, cascade="expunge", viewonly=True
+    )
     user: Mapped[User] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     slack_user: Mapped[Optional[SlackUser]] = relationship(
-        innerjoin=False, cascade="expunge", secondary="users"
+        innerjoin=False, cascade="expunge", secondary="users", viewonly=True
+    )
+    attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = (
+        relationship(back_populates="attendance")
+    )
+    attendance_types: Mapped[List[AttendanceType]] = relationship(
+        secondary="attendance_x_attendance_types",
+        innerjoin=True,
+        cascade="expunge",
+        viewonly=True,
     )
 
 
