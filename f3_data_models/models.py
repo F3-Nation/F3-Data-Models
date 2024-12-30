@@ -280,10 +280,12 @@ class Org(Base):
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
 
+        locations (Optional[List[Location]]): The locations associated with the organization. Probably only relevant for regions.
         event_types (Optional[List[EventType]]): The event types associated with the organization. Used to control which event types are available for selection at the region level.
         event_tags (Optional[List[EventTag]]): The event tags associated with the organization. Used to control which event tags are available for selection at the region level.
         achievements (Optional[List[Achievement]]): The achievements available within the organization.
         parent_org (Optional[Org]): The parent organization.
+        event_tags_x_org (Optional[List[EventTag_x_Org]]): The association between event tags and organizations.
     """
 
     __tablename__ = "orgs"
@@ -306,6 +308,9 @@ class Org(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
+    locations: Mapped[Optional[List["Location"]]] = relationship(
+        "Location", cascade="expunge"
+    )
     event_types: Mapped[Optional[List["EventType"]]] = relationship(
         "EventType", secondary="event_types_x_org", cascade="expunge"
     )
@@ -317,6 +322,9 @@ class Org(Base):
     )
     parent_org: Mapped[Optional["Org"]] = relationship(
         "Org", remote_side=[id], cascade="expunge"
+    )
+    event_tags_x_org: Mapped[Optional[List["EventTag_x_Org"]]] = relationship(
+        "EventTag_x_Org", cascade="expunge"
     )
 
 
