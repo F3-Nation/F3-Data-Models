@@ -91,7 +91,9 @@ class DbManager:
         try:
             query = select(cls).filter(cls.id == id)
             query = _joinedloads(cls, query, joinedloads)
-            return session.scalars(query).unique().one()
+            record = session.scalars(query).unique().one()
+            session.expunge(record)
+            return record
         finally:
             session.rollback()
             close_session(session)
