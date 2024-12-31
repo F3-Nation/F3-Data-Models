@@ -286,6 +286,7 @@ class Org(Base):
         achievements (Optional[List[Achievement]]): The achievements available within the organization.
         parent_org (Optional[Org]): The parent organization.
         event_tags_x_org (Optional[List[EventTag_x_Org]]): The association between event tags and organizations.
+        slack_space (Optional[SlackSpace]): The associated Slack workspace.
     """
 
     __tablename__ = "orgs"
@@ -325,6 +326,9 @@ class Org(Base):
     )
     event_tags_x_org: Mapped[Optional[List["EventTag_x_Org"]]] = relationship(
         "EventTag_x_Org", cascade="expunge"
+    )
+    slack_space: Mapped[Optional["SlackSpace"]] = relationship(
+        "SlackSpace", secondary="orgs_x_slack_spaces", cascade="expunge"
     )
 
 
