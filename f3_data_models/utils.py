@@ -167,7 +167,7 @@ class DbManager:
     def update_record(cls: T, id, fields):
         session = get_session()
         try:
-            session.query(cls).filter(cls.get_id() == id).update(
+            session.query(cls).filter(cls.id == id).update(
                 fields, synchronize_session="fetch"
             )
             session.flush()
@@ -250,7 +250,7 @@ class DbManager:
     def delete_record(cls: T, id):
         session = get_session()
         try:
-            session.query(cls).filter(cls.get_id() == id).delete()
+            session.query(cls).filter(cls.id == id).delete()
             session.flush()
         finally:
             session.commit()
