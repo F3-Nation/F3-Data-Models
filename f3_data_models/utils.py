@@ -56,7 +56,7 @@ def get_engine(echo=False) -> Engine:
     return engine
 
 
-def get_session(echo=True):
+def get_session(echo=os.environ.get("SQL_ECHO", "False") == "True"):
     if GLOBAL_SESSION:
         return GLOBAL_SESSION
 

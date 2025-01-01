@@ -777,7 +777,7 @@ class Attendance(Base):
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
     attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = (
-        relationship(back_populates="attendance")
+        relationship(back_populates="attendance", cascade="expunge")
     )
     attendance_types: Mapped[List[AttendanceType]] = relationship(
         secondary="attendance_x_attendance_types",
