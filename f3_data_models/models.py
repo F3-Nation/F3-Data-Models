@@ -487,6 +487,7 @@ class Location(Base):
         name (str): The name of the location.
         description (Optional[text]): A description of the location.
         is_active (bool): Whether the location is active.
+        email (Optional[str]): A contact email address associated with the location.
         lat (Optional[float]): The latitude of the location.
         lon (Optional[float]): The longitude of the location.
         address_street (Optional[str]): The street address of the location.
@@ -506,6 +507,7 @@ class Location(Base):
     name: Mapped[str]
     description: Mapped[Optional[text]]
     is_active: Mapped[bool]
+    email: Mapped[Optional[str]]
     lat: Mapped[Optional[float]]
     lon: Mapped[Optional[float]]
     address_street: Mapped[Optional[str]]
@@ -537,6 +539,7 @@ class Event(Base):
         day_of_week (Optional[int]): The day of the week of the event. (0=Monday, 6=Sunday)
         name (str): The name of the event.
         description (Optional[text]): A description of the event.
+        email (Optional[str]): A contact email address associated with the event.
         recurrence_pattern (Optional[str]): The recurrence pattern of the event. Current options are 'weekly' or 'monthly'.
         recurrence_interval (Optional[int]): The recurrence interval of the event (e.g. every 2 weeks).
         index_within_interval (Optional[int]): The index within the recurrence interval. (e.g. 2nd Tuesday of the month).
@@ -576,6 +579,7 @@ class Event(Base):
     day_of_week: Mapped[Optional[int]]
     name: Mapped[str]
     description: Mapped[Optional[text]]
+    email: Mapped[Optional[str]]
     recurrence_pattern: Mapped[Optional[str]]
     recurrence_interval: Mapped[Optional[int]]
     index_within_interval: Mapped[Optional[int]]
