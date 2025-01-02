@@ -313,10 +313,10 @@ class Org(Base):
         "Location", cascade="expunge"
     )
     event_types: Mapped[Optional[List["EventType"]]] = relationship(
-        "EventType", secondary="event_types_x_org", cascade="expunge"
+        "EventType", secondary="event_types_x_org", cascade="expunge", viewonly=True
     )
     event_tags: Mapped[Optional[List["EventTag"]]] = relationship(
-        "EventTag", secondary="event_tags_x_org", cascade="expunge"
+        "EventTag", secondary="event_tags_x_org", cascade="expunge", viewonly=True
     )
     achievements: Mapped[Optional[List["Achievement"]]] = relationship(
         "Achievement", secondary="achievements_x_org", cascade="expunge"
@@ -777,7 +777,7 @@ class Attendance(Base):
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
     attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = (
-        relationship(back_populates="attendance", cascade="expunge")
+        relationship(back_populates="attendance")
     )
     attendance_types: Mapped[List[AttendanceType]] = relationship(
         secondary="attendance_x_attendance_types",
