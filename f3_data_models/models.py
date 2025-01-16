@@ -727,7 +727,7 @@ class SlackUser(Base):
     is_bot: Mapped[bool]
     user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
     avatar_url: Mapped[Optional[str]]
-    slack_team_id: Mapped[str] = mapped_column(ForeignKey("slack_spaces.team_id"))
+    slack_team_id: Mapped[str]
     strava_access_token: Mapped[Optional[str]]
     strava_refresh_token: Mapped[Optional[str]]
     strava_expires_at: Mapped[Optional[datetime]]
