@@ -1,5 +1,5 @@
 from datetime import datetime, date, time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 from sqlalchemy import (
     JSON,
     TEXT,
@@ -17,6 +17,7 @@ from sqlalchemy.orm import (
     DeclarativeBase,
     mapped_column,
     Mapped,
+    relationship,
 )
 
 # Custom Annotations
@@ -278,11 +279,19 @@ class Org(Base):
         meta (Optional[Dict[str, Any]]): Additional metadata for the organization.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
+
+        locations (Optional[List[Location]]): The locations associated with the organization. Probably only relevant for regions.
+        event_types (Optional[List[EventType]]): The event types associated with the organization. Used to control which event types are available for selection at the region level.
+        event_tags (Optional[List[EventTag]]): The event tags associated with the organization. Used to control which event tags are available for selection at the region level.
+        achievements (Optional[List[Achievement]]): The achievements available within the organization.
+        parent_org (Optional[Org]): The parent organization.
+        event_tags_x_org (Optional[List[EventTag_x_Org]]): The association between event tags and organizations.
+        slack_space (Optional[SlackSpace]): The associated Slack workspace.
     """
 
     __tablename__ = "orgs"
 
-    id: Mapped[intpk]
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     org_type_id: Mapped[int] = mapped_column(ForeignKey("org_types.id"))
     default_location_id: Mapped[Optional[int]]
@@ -299,6 +308,28 @@ class Org(Base):
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
+
+    locations: Mapped[Optional[List["Location"]]] = relationship(
+        "Location", cascade="expunge"
+    )
+    event_types: Mapped[Optional[List["EventType"]]] = relationship(
+        "EventType", secondary="event_types_x_org", cascade="expunge", viewonly=True
+    )
+    event_tags: Mapped[Optional[List["EventTag"]]] = relationship(
+        "EventTag", secondary="event_tags_x_org", cascade="expunge", viewonly=True
+    )
+    achievements: Mapped[Optional[List["Achievement"]]] = relationship(
+        "Achievement", secondary="achievements_x_org", cascade="expunge"
+    )
+    parent_org: Mapped[Optional["Org"]] = relationship(
+        "Org", remote_side=[id], cascade="expunge"
+    )
+    event_tags_x_org: Mapped[Optional[List["EventTag_x_Org"]]] = relationship(
+        "EventTag_x_Org", cascade="expunge"
+    )
+    slack_space: Mapped[Optional["SlackSpace"]] = relationship(
+        "SlackSpace", secondary="orgs_x_slack_spaces", cascade="expunge"
+    )
 
 
 class EventType(Base):
@@ -333,6 +364,8 @@ class EventType_x_Event(Base):
     Attributes:
         event_id (int): The ID of the associated event.
         event_type_id (int): The ID of the associated event type.
+
+        event (Event): The associated event.
     """
 
     __tablename__ = "events_x_event_types"
@@ -341,6 +374,8 @@ class EventType_x_Event(Base):
     event_type_id: Mapped[int] = mapped_column(
         ForeignKey("event_types.id"), primary_key=True
     )
+
+    event: Mapped["Event"] = relationship(back_populates="event_x_event_types")
 
 
 class EventType_x_Org(Base):
@@ -392,6 +427,8 @@ class EventTag_x_Event(Base):
     Attributes:
         event_id (int): The ID of the associated event.
         event_tag_id (int): The ID of the associated event tag.
+
+        event (Event): The associated event.
     """
 
     __tablename__ = "event_tags_x_events"
@@ -400,6 +437,8 @@ class EventTag_x_Event(Base):
     event_tag_id: Mapped[int] = mapped_column(
         ForeignKey("event_tags.id"), primary_key=True
     )
+
+    event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
 
 
 class EventTag_x_Org(Base):
@@ -515,6 +554,13 @@ class Event(Base):
         meta (Optional[Dict[str, Any]]): Additional metadata for the event.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
+
+        org (Org): The associated organization.
+        location (Location): The associated location.
+        event_types (List[EventType]): The associated event types.
+        event_tags (Optional[List[EventTag]]): The associated event tags.
+        event_x_event_types (List[EventType_x_Event]): The association between the event and event types.
+        event_x_event_tags (Optional[List[EventTag_x_Event]]): The association between the event and event tags.
     """
 
     __tablename__ = "events"
@@ -549,6 +595,26 @@ class Event(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
+    org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    location: Mapped[Location] = relationship(
+        innerjoin=True, cascade="expunge", viewonly=True
+    )
+    event_types: Mapped[List[EventType]] = relationship(
+        secondary="events_x_event_types",
+        innerjoin=True,
+        cascade="expunge",
+        viewonly=True,
+    )
+    event_tags: Mapped[Optional[List[EventTag]]] = relationship(
+        secondary="event_tags_x_events", cascade="expunge", viewonly=True
+    )
+    event_x_event_types: Mapped[List[EventType_x_Event]] = relationship(
+        back_populates="event"
+    )
+    event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
+        back_populates="event"
+    )
+
 
 class AttendanceType(Base):
     """
@@ -568,39 +634,15 @@ class AttendanceType(Base):
     updated: Mapped[dt_update]
 
 
-class Attendance(Base):
-    """
-    Model representing an attendance record.
-
-    Attributes:
-        id (int): Primary Key of the model.
-        event_id (int): The ID of the associated event.
-        user_id (Optional[int]): The ID of the associated user.
-        is_planned (bool): Whether this is planned attendance (True) vs actual attendance (False).
-        meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
-        created (datetime): The timestamp when the record was created.
-        updated (datetime): The timestamp when the record was last updated.
-    """
-
-    __tablename__ = "attendance"
-    __table_args__ = (UniqueConstraint("event_id", "user_id", "is_planned"),)
-
-    id: Mapped[intpk]
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    is_planned: Mapped[bool]
-    meta: Mapped[Optional[Dict[str, Any]]]
-    created: Mapped[dt_create]
-    updated: Mapped[dt_update]
-
-
-class Attendance_x_AttenanceType(Base):
+class Attendance_x_AttendanceType(Base):
     """
     Model representing the association between attendance and attendance types.
 
     Attributes:
         attendance_id (int): The ID of the associated attendance.
         attendance_type_id (int): The ID of the associated attendance type.
+
+        attendance (Attendance): The associated attendance.
     """
 
     __tablename__ = "attendance_x_attendance_types"
@@ -610,6 +652,10 @@ class Attendance_x_AttenanceType(Base):
     )
     attendance_type_id: Mapped[int] = mapped_column(
         ForeignKey("attendance_types.id"), primary_key=True
+    )
+
+    attendance: Mapped["Attendance"] = relationship(
+        back_populates="attendance_x_attendance_types"
     )
 
 
@@ -685,7 +731,7 @@ class SlackUser(Base):
     is_bot: Mapped[bool]
     user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
     avatar_url: Mapped[Optional[str]]
-    slack_team_id: Mapped[str] = mapped_column(ForeignKey("slack_spaces.team_id"))
+    slack_team_id: Mapped[str]
     strava_access_token: Mapped[Optional[str]]
     strava_refresh_token: Mapped[Optional[str]]
     strava_expires_at: Mapped[Optional[datetime]]
@@ -694,6 +740,55 @@ class SlackUser(Base):
     slack_updated: Mapped[Optional[datetime]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
+
+
+class Attendance(Base):
+    """
+    Model representing an attendance record.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        event_id (int): The ID of the associated event.
+        user_id (Optional[int]): The ID of the associated user.
+        is_planned (bool): Whether this is planned attendance (True) vs actual attendance (False).
+        meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+
+        event (Event): The associated event.
+        user (User): The associated user.
+        slack_user (Optional[SlackUser]): The associated Slack user.
+        attendance_x_attendance_types (List[Attendance_x_AttendanceType]): The association between the attendance and attendance types.
+        attendance_types (List[AttendanceType]): The associated attendance types.
+    """
+
+    __tablename__ = "attendance"
+    __table_args__ = (UniqueConstraint("event_id", "user_id", "is_planned"),)
+
+    id: Mapped[intpk]
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    is_planned: Mapped[bool]
+    meta: Mapped[Optional[Dict[str, Any]]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+    event: Mapped[Event] = relationship(
+        innerjoin=True, cascade="expunge", viewonly=True
+    )
+    user: Mapped[User] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    slack_user: Mapped[Optional[SlackUser]] = relationship(
+        innerjoin=False, cascade="expunge", secondary="users", viewonly=True
+    )
+    attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = (
+        relationship(back_populates="attendance")
+    )
+    attendance_types: Mapped[List[AttendanceType]] = relationship(
+        secondary="attendance_x_attendance_types",
+        innerjoin=True,
+        cascade="expunge",
+        viewonly=True,
+    )
 
 
 class Achievement(Base):
@@ -898,3 +993,20 @@ class MagicLinkAuthSession(Base):
     session_token: Mapped[str]
     created: Mapped[dt_create]
     expiration: Mapped[dt_create]
+
+
+# class Org_x_SlackChannel(Base):
+#     """
+#     Model representing the association between organizations (specifically AOs) and Slack channels.
+
+#     Attributes:
+#         org_id (int): The ID of the associated organization.
+#         slack_channel_id (str): The Slack-internal ID of the associated Slack channel.
+#     """
+
+#     __tablename__ = "orgs_x_slack_channels"
+
+#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+#     slack_channel_id: Mapped[str] = mapped_column(
+#         primary_key=True
+#     )  # Do we need a slack channel table?

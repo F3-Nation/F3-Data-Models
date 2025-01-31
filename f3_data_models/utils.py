@@ -3,11 +3,11 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, TypeVar
 
 import sqlalchemy
-from sqlalchemy import and_, select
+from sqlalchemy import Select, and_, select
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, joinedload
 
 from f3_data_models.models import Base
 
@@ -56,7 +56,7 @@ def get_engine(echo=False) -> Engine:
     return engine
 
 
-def get_session(echo=False):
+def get_session(echo=os.environ.get("SQL_ECHO", "False") == "True"):
     if GLOBAL_SESSION:
         return GLOBAL_SESSION
 
@@ -76,30 +76,37 @@ def close_session(session):
 T = TypeVar("T")
 
 
+def _joinedloads(cls: T, query: Select, joinedloads: list | str) -> Select:
+    if joinedloads == "all":
+        joinedloads = [
+            getattr(cls, relationship.key)
+            for relationship in cls.__mapper__.relationships
+        ]
+    return query.options(*[joinedload(load) for load in joinedloads])
+
+
 class DbManager:
-    def get_record(cls: T, id) -> T:
+    def get(cls: T, id: int, joinedloads: list | str = []) -> T:
         session = get_session()
         try:
-            x = session.query(cls).filter(cls.get_id() == id).first()
-            if x:
-                session.expunge(x)
-            return x
+            query = select(cls).filter(cls.id == id)
+            query = _joinedloads(cls, query, joinedloads)
+            record = session.scalars(query).unique().one()
+            session.expunge(record)
+            return record
         finally:
             session.rollback()
             close_session(session)
 
-    def get(cls: T, id: int) -> T:
+    def find_records(
+        cls: T, filters: Optional[List], joinedloads: List | str = []
+    ) -> List[T]:
         session = get_session()
         try:
-            return session.scalars(select(cls).filter(cls.id == id)).one()
-        finally:
-            session.rollback()
-            close_session(session)
-
-    def find_records(cls: T, filters: Optional[List]) -> List[T]:
-        session = get_session()
-        try:
-            records = session.scalars(select(cls).filter(*filters)).all()
+            query = select(cls)
+            query = _joinedloads(cls, query, joinedloads)
+            query = query.filter(*filters)
+            records = session.scalars(query).unique().all()
             for r in records:
                 session.expunge(r)
             return records
@@ -107,10 +114,15 @@ class DbManager:
             session.rollback()
             close_session(session)
 
-    def find_first_record(cls: T, filters: Optional[List]) -> T:
+    def find_first_record(
+        cls: T, filters: Optional[List], joinedloads: List | str = []
+    ) -> T:
         session = get_session()
         try:
-            record = session.scalars(select(cls).filter(*filters)).first()
+            query = select(cls)
+            query = _joinedloads(cls, query, joinedloads)
+            query = query.filter(*filters)
+            record = session.scalars(query).unique().first()
             if record:
                 session.expunge(record)
             return record
@@ -155,7 +167,7 @@ class DbManager:
     def update_record(cls: T, id, fields):
         session = get_session()
         try:
-            session.query(cls).filter(cls.get_id() == id).update(
+            session.query(cls).filter(cls.id == id).update(
                 fields, synchronize_session="fetch"
             )
             session.flush()
@@ -238,16 +250,22 @@ class DbManager:
     def delete_record(cls: T, id):
         session = get_session()
         try:
-            session.query(cls).filter(cls.get_id() == id).delete()
+            session.query(cls).filter(cls.id == id).delete()
             session.flush()
         finally:
             session.commit()
             close_session(session)
 
-    def delete_records(cls: T, filters):
+    def delete_records(cls: T, filters, joinedloads: List | str = []):
         session = get_session()
         try:
-            session.query(cls).filter(and_(*filters)).delete()
+            query = select(cls)
+            query = _joinedloads(cls, query, joinedloads)
+            query = query.filter(*filters)
+            records = session.scalars(query).unique().all()
+            for r in records:
+                session.delete(r)
+            # session.query(cls).filter(and_(*filters)).delete()
             session.flush()
         finally:
             session.commit()
