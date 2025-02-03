@@ -508,9 +508,10 @@ class Location(Base):
     description: Mapped[Optional[text]]
     is_active: Mapped[bool]
     email: Mapped[Optional[str]]
-    lat: Mapped[Optional[float]]
-    lon: Mapped[Optional[float]]
+    latitude: Mapped[Optional[float]]
+    longitude: Mapped[Optional[float]]
     address_street: Mapped[Optional[str]]
+    address_street2: Mapped[Optional[str]]
     address_city: Mapped[Optional[str]]
     address_state: Mapped[Optional[str]]
     address_zip: Mapped[Optional[str]]
@@ -947,54 +948,6 @@ class Expansion_x_User(Base):
     notes: Mapped[Optional[text]]
 
 
-class MagicLinkAuthRecord(Base):
-    """
-    Model representing a Magic Link Auth Record.
-
-    Attributes:
-        id (int): Primary Key of the model.
-        email (str): The email of the user.
-        otp_hash (bytes): The hash of the OTP.
-        created (datetime): The timestamp when the record was created.
-        expiration (datetime): The timestamp when the record expires.
-        client_ip (str): The client IP address.
-        recent_attempts (int): The number of recent attempts.
-    """
-
-    __tablename__ = "magiclinkauthrecord"
-
-    id: Mapped[intpk]
-    email: Mapped[str]
-    otp_hash: Mapped[bytes]
-    created: Mapped[dt_create]
-    expiration: Mapped[dt_create]
-    client_ip: Mapped[str]
-    recent_attempts: Mapped[int]
-
-
-class MagicLinkAuthSession(Base):
-    """
-    Model representing a Magic Link Auth Session.
-
-    Attributes:
-        id (int): Primary Key of the model.
-        email (str): The email of the user.
-        persistent_id (str): The persistent ID.
-        session_token (str): The session token.
-        created (datetime): The timestamp when the record was created.
-        expiration (datetime): The timestamp when the record expires.
-    """
-
-    __tablename__ = "magiclinkauthsession"
-
-    id: Mapped[intpk]
-    email: Mapped[str]
-    persistent_id: Mapped[str]
-    session_token: Mapped[str]
-    created: Mapped[dt_create]
-    expiration: Mapped[dt_create]
-
-
 # class Org_x_SlackChannel(Base):
 #     """
 #     Model representing the association between organizations (specifically AOs) and Slack channels.
@@ -1010,3 +963,23 @@ class MagicLinkAuthSession(Base):
 #     slack_channel_id: Mapped[str] = mapped_column(
 #         primary_key=True
 #     )  # Do we need a slack channel table?
+
+# class SlackSpaceLog(Base):
+#     """
+#     Model representing a log of Slack space events.
+
+#     Attributes:
+#         id (int): Primary Key of the model.
+#         slack_space_id (int): The ID of the associated Slack space.
+#         event (str): The event that occurred.
+#         data (Optional[Dict[str, Any]]): Additional data for the log.
+#         created (datetime): The timestamp when the record was created.
+#     """
+
+#     __tablename__ = "slack_space_logs"
+
+#     id: Mapped[intpk]
+#     slack_space_id: Mapped[int] = mapped_column(ForeignKey("slack_spaces.id"))
+#     event: Mapped[str]
+#     data: Mapped[Optional[Dict[str, Any]]]
+#     created: Mapped[dt_create]
