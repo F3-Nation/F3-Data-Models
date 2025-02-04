@@ -692,6 +692,7 @@ class User(Base):
     home_region_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
+    email_verified_ts: Mapped[Optional[datetime]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
