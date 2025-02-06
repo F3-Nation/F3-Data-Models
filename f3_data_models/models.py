@@ -285,7 +285,6 @@ class Org(Base):
         event_tags (Optional[List[EventTag]]): The event tags associated with the organization. Used to control which event tags are available for selection at the region level.
         achievements (Optional[List[Achievement]]): The achievements available within the organization.
         parent_org (Optional[Org]): The parent organization.
-        event_tags_x_org (Optional[List[EventTag_x_Org]]): The association between event tags and organizations.
         slack_space (Optional[SlackSpace]): The associated Slack workspace.
     """
 
@@ -313,19 +312,22 @@ class Org(Base):
         "Location", cascade="expunge"
     )
     event_types: Mapped[Optional[List["EventType"]]] = relationship(
-        "EventType", secondary="event_types_x_org", cascade="expunge", viewonly=True
+        "EventType",
+        primaryjoin="or_(EventType.specific_org_id == Org.id, EventType.specific_org_id.is_(None))",
+        cascade="expunge",
+        viewonly=True,
     )
     event_tags: Mapped[Optional[List["EventTag"]]] = relationship(
-        "EventTag", secondary="event_tags_x_org", cascade="expunge", viewonly=True
+        "EventTag",
+        primaryjoin="or_(EventTag.specific_org_id == Org.id, EventTag.specific_org_id.is_(None))",
+        cascade="expunge",
+        viewonly=True,
     )
     achievements: Mapped[Optional[List["Achievement"]]] = relationship(
         "Achievement", secondary="achievements_x_org", cascade="expunge"
     )
     parent_org: Mapped[Optional["Org"]] = relationship(
         "Org", remote_side=[id], cascade="expunge"
-    )
-    event_tags_x_org: Mapped[Optional[List["EventTag_x_Org"]]] = relationship(
-        "EventTag_x_Org", cascade="expunge"
     )
     slack_space: Mapped[Optional["SlackSpace"]] = relationship(
         "SlackSpace", secondary="orgs_x_slack_spaces", cascade="expunge"
@@ -342,6 +344,7 @@ class EventType(Base):
         description (Optional[text]): A description of the event type.
         acronym (Optional[str]): Acronyms associated with the event type.
         category_id (int): The ID of the associated event category.
+        specific_org_id (Optional[int]): The ID of the specific organization.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
@@ -353,6 +356,7 @@ class EventType(Base):
     description: Mapped[Optional[text]]
     acronym: Mapped[Optional[str]]
     category_id: Mapped[int] = mapped_column(ForeignKey("event_categories.id"))
+    specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -378,23 +382,23 @@ class EventType_x_Event(Base):
     event: Mapped["Event"] = relationship(back_populates="event_x_event_types")
 
 
-class EventType_x_Org(Base):
-    """
-    Model representing the association between event types and organizations. This controls which event types are available for selection at the region level, as well as default types for each AO.
+# class EventType_x_Org(Base):
+#     """
+#     Model representing the association between event types and organizations. This controls which event types are available for selection at the region level, as well as default types for each AO.
 
-    Attributes:
-        event_type_id (int): The ID of the associated event type.
-        org_id (int): The ID of the associated organization.
-        is_default (bool): Whether this is the default event type for the organization. Default is False.
-    """
+#     Attributes:
+#         event_type_id (int): The ID of the associated event type.
+#         org_id (int): The ID of the associated organization.
+#         is_default (bool): Whether this is the default event type for the organization. Default is False.
+#     """
 
-    __tablename__ = "event_types_x_org"
+#     __tablename__ = "event_types_x_org"
 
-    event_type_id: Mapped[int] = mapped_column(
-        ForeignKey("event_types.id"), primary_key=True
-    )
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-    is_default: Mapped[bool] = mapped_column(Boolean, default=False)
+#     event_type_id: Mapped[int] = mapped_column(
+#         ForeignKey("event_types.id"), primary_key=True
+#     )
+#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+#     is_default: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class EventTag(Base):
@@ -406,6 +410,7 @@ class EventTag(Base):
         name (str): The name of the event tag.
         description (Optional[text]): A description of the event tag.
         color (Optional[str]): The color used for the calendar.
+        specific_org_id (Optional[int]): Used for custom tags for specific regions.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
@@ -416,6 +421,7 @@ class EventTag(Base):
     name: Mapped[str]
     description: Mapped[Optional[text]]
     color: Mapped[Optional[str]]
+    specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -441,23 +447,23 @@ class EventTag_x_Event(Base):
     event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
 
 
-class EventTag_x_Org(Base):
-    """
-    Model representing the association between event tags and organizations. Controls which event tags are available for selection at the region level.
+# class EventTag_x_Org(Base):
+#     """
+#     Model representing the association between event tags and organizations. Controls which event tags are available for selection at the region level.
 
-    Attributes:
-        event_tag_id (int): The ID of the associated event tag.
-        org_id (int): The ID of the associated organization.
-        color_override (Optional[str]): The calendar color override for the event tag (if the region wants to use something other than the default).
-    """
+#     Attributes:
+#         event_tag_id (int): The ID of the associated event tag.
+#         org_id (int): The ID of the associated organization.
+#         color_override (Optional[str]): The calendar color override for the event tag (if the region wants to use something other than the default).
+#     """
 
-    __tablename__ = "event_tags_x_org"
+#     __tablename__ = "event_tags_x_org"
 
-    event_tag_id: Mapped[int] = mapped_column(
-        ForeignKey("event_tags.id"), primary_key=True
-    )
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-    color_override: Mapped[Optional[str]]
+#     event_tag_id: Mapped[int] = mapped_column(
+#         ForeignKey("event_tags.id"), primary_key=True
+#     )
+#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
+#     color_override: Mapped[Optional[str]]
 
 
 class Org_x_SlackSpace(Base):
@@ -674,6 +680,7 @@ class User(Base):
         home_region_id (Optional[int]): The ID of the home region.
         avatar_url (Optional[str]): The URL of the user's avatar.
         meta (Optional[Dict[str, Any]]): Additional metadata for the user.
+        email_verified_ts (Optional[datetime]): The timestamp when the user's email was verified.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
