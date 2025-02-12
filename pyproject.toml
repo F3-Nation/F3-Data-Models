@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "f3-data-models"
-version = "0.2.5"
+version = "0.3.0"
 description = "The data schema and models for F3 Nation applications."
 authors = ["Evan Petzoldt <evan.petzoldt@protonmail.com>"]
 readme = "README.md"
@@ -24,6 +24,7 @@ sphinx-rtd-theme = "^3.0.2"
 sphinx-multiversion = "^0.2.4"
 psycopg2-binary = "^2.9.10"
 sqlmodel = "^0.0.22"
+alembic-postgresql-enum = "^1.6.1"
 
 
 [build-system]

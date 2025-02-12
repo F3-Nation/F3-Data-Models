@@ -1,16 +1,22 @@
 from datetime import datetime, date, time
 from typing import Any, Dict, List, Optional
+import uuid
 from sqlalchemy import (
+    ARRAY,
     JSON,
     TEXT,
     TIME,
+    UUID,
     VARCHAR,
     Boolean,
     DateTime,
+    Float,
     ForeignKey,
     Integer,
     func,
     UniqueConstraint,
+    Enum,
+    Uuid,
 )
 from typing_extensions import Annotated
 from sqlalchemy.orm import (
@@ -19,9 +25,11 @@ from sqlalchemy.orm import (
     Mapped,
     relationship,
 )
+import enum
 
 # Custom Annotations
-time_notz = Annotated[time, TIME]
+time_notz = Annotated[time, TIME(timezone=False)]
+time_with_tz = Annotated[time, TIME(timezone=True)]
 text = Annotated[str, TEXT]
 intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
 dt_create = Annotated[
@@ -35,6 +43,30 @@ dt_update = Annotated[
         server_onupdate=func.timezone("utc", func.now()),
     ),
 ]
+
+
+class UserStatus(enum.Enum):
+    active = 1
+    inactive = 2
+    deleted = 3
+
+
+class RegionRole(enum.Enum):
+    user = 1
+    editor = 2
+    admin = 3
+
+
+class UserRole(enum.Enum):
+    user = 1
+    editor = 2
+    admin = 3
+
+
+class UpdateRequestStatus(enum.Enum):
+    pending = 1
+    approved = 2
+    rejected = 3
 
 
 class Base(DeclarativeBase):
@@ -187,7 +219,7 @@ class Role(Base):
 
     Attributes:
         id (int): Primary Key of the model.
-        name (str): The name of the role.
+        name (RegionRole): The name of the role.
         description (Optional[text]): A description of the role.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -196,7 +228,7 @@ class Role(Base):
     __tablename__ = "roles"
 
     id: Mapped[intpk]
-    name: Mapped[str]
+    name: Mapped[RegionRole]
     description: Mapped[Optional[text]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
@@ -541,8 +573,8 @@ class Event(Base):
         highlight (bool): Whether the event is highlighted. Default is False.
         start_date (date): The start date of the event.
         end_date (Optional[date]): The end date of the event.
-        start_time (Optional[time_notz]): The start time of the event.
-        end_time (Optional[time_notz]): The end time of the event.
+        start_time (Optional[time_with_tz]): The start time of the event.
+        end_time (Optional[time_with_tz]): The end time of the event.
         day_of_week (Optional[int]): The day of the week of the event. (0=Monday, 6=Sunday)
         name (str): The name of the event.
         description (Optional[text]): A description of the event.
@@ -581,8 +613,8 @@ class Event(Base):
     highlight: Mapped[bool] = mapped_column(Boolean, default=False)
     start_date: Mapped[date]
     end_date: Mapped[Optional[date]]
-    start_time: Mapped[Optional[time_notz]]
-    end_time: Mapped[Optional[time_notz]]
+    start_time: Mapped[Optional[time_with_tz]]
+    end_time: Mapped[Optional[time_with_tz]]
     day_of_week: Mapped[Optional[int]]
     name: Mapped[str]
     description: Mapped[Optional[text]]
@@ -680,7 +712,8 @@ class User(Base):
         home_region_id (Optional[int]): The ID of the home region.
         avatar_url (Optional[str]): The URL of the user's avatar.
         meta (Optional[Dict[str, Any]]): Additional metadata for the user.
-        email_verified_ts (Optional[datetime]): The timestamp when the user's email was verified.
+        email_verified (Optional[datetime]): The timestamp when the user's email was verified.
+        status (UserStatus): The status of the user. Default is 'active'.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
@@ -699,7 +732,11 @@ class User(Base):
     home_region_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
-    email_verified_ts: Mapped[Optional[datetime]]
+    email_verified: Mapped[Optional[datetime]]
+    status: Mapped[UserStatus] = mapped_column(
+        Enum(UserStatus), default=UserStatus.active
+    )
+    role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.user)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -956,38 +993,187 @@ class Expansion_x_User(Base):
     notes: Mapped[Optional[text]]
 
 
-# class Org_x_SlackChannel(Base):
-#     """
-#     Model representing the association between organizations (specifically AOs) and Slack channels.
+class NextAuthAccount(Base):
+    """
+    Model representing an authentication account.
 
-#     Attributes:
-#         org_id (int): The ID of the associated organization.
-#         slack_channel_id (str): The Slack-internal ID of the associated Slack channel.
-#     """
+    Attributes:
+        user_id (int): The ID of the associated user.
+        type (text): The type of the account.
+        provider (text): The provider of the account.
+        provider_account_id (text): The provider account ID.
+        refresh_token (Optional[text]): The refresh token.
+        access_token (text): The access token.
+        expires_at (Optional[datetime]): The expiration time of the token.
+        token_type (Optional[text]): The token type.
+        scope (Optional[text]): The scope of the token.
+        id_token (Optional[text]): The ID token.
+        session_state (Optional[text]): The session state.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """
 
-#     __tablename__ = "orgs_x_slack_channels"
+    __tablename__ = "auth_accounts"
 
-#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-#     slack_channel_id: Mapped[str] = mapped_column(
-#         primary_key=True
-#     )  # Do we need a slack channel table?
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    type: Mapped[text]  # need adapter account_type?
+    provider: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
+    provider_account_id: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
+    refresh_token: Mapped[Optional[text]]
+    access_token: Mapped[text]
+    expires_at: Mapped[Optional[datetime]]
+    token_type: Mapped[Optional[text]]
+    scope: Mapped[Optional[text]]
+    id_token: Mapped[Optional[text]]
+    session_state: Mapped[Optional[text]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
 
-# class SlackSpaceLog(Base):
-#     """
-#     Model representing a log of Slack space events.
 
-#     Attributes:
-#         id (int): Primary Key of the model.
-#         slack_space_id (int): The ID of the associated Slack space.
-#         event (str): The event that occurred.
-#         data (Optional[Dict[str, Any]]): Additional data for the log.
-#         created (datetime): The timestamp when the record was created.
-#     """
+class NextAuthSession(Base):
+    """
+    Model representing an authentication session.
 
-#     __tablename__ = "slack_space_logs"
+    Attributes:
+        session_token (text): The session token.
+        user_id (int): The ID of the associated user.
+        expires (date): The expiration time of the session.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """
 
-#     id: Mapped[intpk]
-#     slack_space_id: Mapped[int] = mapped_column(ForeignKey("slack_spaces.id"))
-#     event: Mapped[str]
-#     data: Mapped[Optional[Dict[str, Any]]]
-#     created: Mapped[dt_create]
+    __tablename__ = "auth_sessions"
+
+    session_token: Mapped[text] = mapped_column(TEXT, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    expires: Mapped[date]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+
+class NextAuthVerificationToken(Base):
+    """
+    Model representing an authentication verification token.
+
+    Attributes:
+        identifier (text): The identifier of the token.
+        token (text): The token.
+        expires (date): The expiration time of the token.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """
+
+    __tablename__ = "auth_verification_tokens"
+
+    identifier: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
+    token: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
+    expires: Mapped[date]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+
+class UpdateRequest(Base):
+    """
+    Model representing an update request.
+
+    Attributes:
+        id (UUID): The ID of the update request.
+        token (UUID): The token of the update request.
+        region_id (int): The ID of the associated region.
+        event_id (Optional[int]): The ID of the associated event.
+        event_type_ids (Optional[List[int]]): The associated event type IDs.
+        event_tag (Optional[str]): The associated event tag.
+        event_series_id (Optional[int]): The ID of the associated event series.
+        event_is_series (Optional[bool]): Whether the event is a series.
+        event_is_active (Optional[bool]): Whether the event is active.
+        event_highlight (Optional[bool]): Whether the event is highlighted.
+        event_start_date (Optional[date]): The start date of the event.
+        event_end_date (Optional[date]): The end date of the event.
+        event_start_time (Optional[time_notz]): The start time of the event.
+        event_end_time (Optional[time_notz]): The end time of the event.
+        event_day_of_week (Optional[int]): The day of the week of the event.
+        event_name (str): The name of the event.
+        event_description (Optional[text]): A description of the event.
+        event_recurrence_pattern (Optional[str]): The recurrence pattern of the event.
+        event_recurrence_interval (Optional[int]): The recurrence interval of the event.
+        event_index_within_interval (Optional[int]): The index within the recurrence interval.
+        event_meta (Optional[Dict[str, Any]]): Additional metadata for the event.
+        event_contact_email (Optional[str]): The contact email of the event.
+        location_name (Optional[text]): The name of the location.
+        location_description (Optional[text]): A description of the location.
+        location_address (Optional[text]): The address of the location.
+        location_address2 (Optional[text]): The second address line of the location.
+        location_city (Optional[text]): The city of the location.
+        location_state (Optional[str]): The state of the location.
+        location_zip (Optional[str]): The ZIP code of the location.
+        location_country (Optional[str]): The country of the location.
+        location_lat (Optional[float]): The latitude of the location.
+        location_lng (Optional[float]): The longitude of the location.
+        location_id (Optional[int]): The ID of the location.
+        location_contact_email (Optional[str]): The contact email of the location.
+        ao_logo (Optional[text]): The URL of the AO logo.
+        submitted_by (str): The user who submitted the request.
+        submitter_validated (Optional[bool]): Whether the submitter has validated the request. Default is False.
+        reviewed_by (Optional[str]): The user who reviewed the request.
+        reviewed_at (Optional[datetime]): The timestamp when the request was reviewed.
+        status (UpdateRequestStatus): The status of the request. Default is 'pending'.
+        meta (Optional[Dict[str, Any]]): Additional metadata for the request.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """
+
+    __tablename__ = "update_requests"
+
+    id: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    token: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), default=uuid.uuid4)
+    region_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
+    event_type_ids: Mapped[Optional[List[int]]] = mapped_column(ARRAY(Integer))
+    event_tag: Mapped[Optional[str]]
+    event_series_id: Mapped[Optional[int]]
+    event_is_series: Mapped[Optional[bool]]
+    event_is_active: Mapped[Optional[bool]]
+    event_highlight: Mapped[Optional[bool]]
+    event_start_date: Mapped[Optional[date]]
+    event_end_date: Mapped[Optional[date]]
+    event_start_time: Mapped[Optional[time_notz]]
+    event_end_time: Mapped[Optional[time_notz]]
+    event_day_of_week: Mapped[Optional[str]] = mapped_column(VARCHAR(length=30))
+    event_name: Mapped[str]
+    event_description: Mapped[Optional[text]]
+    event_recurrence_pattern: Mapped[Optional[str]] = mapped_column(VARCHAR(length=30))
+    event_recurrence_interval: Mapped[Optional[int]]
+    event_index_within_interval: Mapped[Optional[int]]
+    event_meta: Mapped[Optional[Dict[str, Any]]]
+    event_contact_email: Mapped[Optional[str]]
+
+    location_name: Mapped[Optional[text]]
+    location_description: Mapped[Optional[text]]
+    location_address: Mapped[Optional[text]]
+    location_address2: Mapped[Optional[text]]
+    location_city: Mapped[Optional[text]]
+    location_state: Mapped[Optional[str]]
+    location_zip: Mapped[Optional[str]]
+    location_country: Mapped[Optional[str]]
+    location_lat: Mapped[Optional[float]] = mapped_column(
+        Float(precision=8, decimal_return_scale=5)
+    )
+    location_lng: Mapped[Optional[float]] = mapped_column(
+        Float(precision=8, decimal_return_scale=5)
+    )
+    location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
+    location_contact_email: Mapped[Optional[str]]
+
+    ao_logo: Mapped[Optional[text]]
+
+    submitted_by: Mapped[text]
+    submitter_validated: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
+    reviewed_by: Mapped[Optional[text]]
+    reviewed_at: Mapped[Optional[datetime]]
+    status: Mapped[UpdateRequestStatus] = mapped_column(
+        Enum(UpdateRequestStatus), default=UpdateRequestStatus.pending
+    )
+    meta: Mapped[Optional[Dict[str, Any]]]
+
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]

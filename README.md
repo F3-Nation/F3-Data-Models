@@ -40,7 +40,8 @@ poetry version patch[minor][major]
 git tag <new_version> -a -m "Your message here"
 git push origin --tags
 ```
-> [!NOTE] The github pages documentation will be updated when you push to `main`, but if you would like to preview locally, run:
+> [!NOTE]
+> The github pages documentation will be updated when you push to `main`, but if you would like to preview locally, run:
 
 ```sh
 poetry run sphinx-build -b html docs docs/_build/html
