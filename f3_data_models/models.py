@@ -80,8 +80,8 @@ class Day_Of_Week(enum.Enum):
 
 
 class Event_Cadence(enum.Enum):
-    Weekly = 1
-    Monthly = 2
+    weekly = 1
+    monthly = 2
 
 
 class Org_Type(enum.Enum):
