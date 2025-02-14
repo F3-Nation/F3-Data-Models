@@ -79,6 +79,25 @@ class Day_Of_Week(enum.Enum):
     sunday = 6
 
 
+class Event_Cadence(enum.Enum):
+    Weekly = 1
+    Monthly = 2
+
+
+class Org_Type(enum.Enum):
+    ao = 1
+    region = 2
+    area = 3
+    sector = 4
+    nation = 5
+
+
+class Event_Category(enum.Enum):
+    first_f = 1
+    second_f = 2
+    third_f = 3
+
+
 class Base(DeclarativeBase):
     """
     Base class for all models, providing common methods.
@@ -181,48 +200,6 @@ class SlackSpace(Base):
     updated: Mapped[dt_update]
 
 
-class OrgType(Base):
-    """
-    Model representing an organization type / level. 1=AO, 2=Region, 3=Area, 4=Sector
-
-    Attributes:
-        id (int): Primary Key of the model.
-        name (str): The name of the organization type.
-        description (Optional[text]): A description of the organization type.
-        created (datetime): The timestamp when the record was created.
-        updated (datetime): The timestamp when the record was last updated.
-    """
-
-    __tablename__ = "org_types"
-
-    id: Mapped[intpk]
-    name: Mapped[str]
-    description: Mapped[Optional[text]]
-    created: Mapped[dt_create]
-    updated: Mapped[dt_update]
-
-
-class EventCategory(Base):
-    """
-    Model representing an event category. These are immutable cateogies that we will define at the Nation level.
-
-    Attributes:
-        id (int): Primary Key of the model.
-        name (str): The name of the event category.
-        description (Optional[text]): A description of the event category.
-        created (datetime): The timestamp when the record was created.
-        updated (datetime): The timestamp when the record was last updated.
-    """
-
-    __tablename__ = "event_categories"
-
-    id: Mapped[intpk]
-    name: Mapped[str]
-    description: Mapped[Optional[text]]
-    created: Mapped[dt_create]
-    updated: Mapped[dt_update]
-
-
 class Role(Base):
     """
     Model representing a role. A role is a set of permissions that can be assigned to users.
@@ -306,7 +283,7 @@ class Org(Base):
     Attributes:
         id (int): Primary Key of the model.
         parent_id (Optional[int]): The ID of the parent organization.
-        org_type_id (int): The ID of the organization type.
+        org_type (Org_Type): The type of the organization.
         default_location_id (Optional[int]): The ID of the default location.
         name (str): The name of the organization.
         description (Optional[text]): A description of the organization.
@@ -334,7 +311,7 @@ class Org(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
-    org_type_id: Mapped[int] = mapped_column(ForeignKey("org_types.id"))
+    org_type: Mapped[Org_Type]
     default_location_id: Mapped[Optional[int]]
     name: Mapped[str]
     description: Mapped[Optional[text]]
@@ -366,7 +343,9 @@ class Org(Base):
         viewonly=True,
     )
     achievements: Mapped[Optional[List["Achievement"]]] = relationship(
-        "Achievement", secondary="achievements_x_org", cascade="expunge"
+        "Achievement",
+        cascade="expunge",
+        primaryjoin="or_(Achievement.specific_org_id == Org.id, Achievement.specific_org_id.is_(None))",
     )
     parent_org: Mapped[Optional["Org"]] = relationship(
         "Org", remote_side=[id], cascade="expunge"
@@ -385,7 +364,7 @@ class EventType(Base):
         name (str): The name of the event type.
         description (Optional[text]): A description of the event type.
         acronym (Optional[str]): Acronyms associated with the event type.
-        category_id (int): The ID of the associated event category.
+        event_category (Event_Category): The category of the event type (first_f, second_f, third_f).
         specific_org_id (Optional[int]): The ID of the specific organization.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -397,7 +376,7 @@ class EventType(Base):
     name: Mapped[str]
     description: Mapped[Optional[text]]
     acronym: Mapped[Optional[str]]
-    category_id: Mapped[int] = mapped_column(ForeignKey("event_categories.id"))
+    event_category: Mapped[Event_Category]
     specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
@@ -593,7 +572,7 @@ class Event(Base):
         name (str): The name of the event.
         description (Optional[text]): A description of the event.
         email (Optional[str]): A contact email address associated with the event.
-        recurrence_pattern (Optional[str]): The recurrence pattern of the event. Current options are 'weekly' or 'monthly'.
+        recurrence_pattern (Optional[Event_Cadence]): The recurrence pattern of the event. Current options are 'weekly' or 'monthly'.
         recurrence_interval (Optional[int]): The recurrence interval of the event (e.g. every 2 weeks).
         index_within_interval (Optional[int]): The index within the recurrence interval. (e.g. 2nd Tuesday of the month).
         pax_count (Optional[int]): The number of participants.
@@ -633,7 +612,7 @@ class Event(Base):
     name: Mapped[str]
     description: Mapped[Optional[text]]
     email: Mapped[Optional[str]]
-    recurrence_pattern: Mapped[Optional[str]]
+    recurrence_pattern: Mapped[Optional[Event_Cadence]]
     recurrence_interval: Mapped[Optional[int]]
     index_within_interval: Mapped[Optional[int]]
     pax_count: Mapped[Optional[int]]
@@ -860,6 +839,7 @@ class Achievement(Base):
         description (Optional[str]): A description of the achievement.
         verb (str): The verb associated with the achievement.
         image_url (Optional[str]): The URL of the achievement's image.
+        specific_org_id (Optional[int]): The ID of the specific region if a custom achievement. If null, the achievement is available to all regions.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
@@ -871,6 +851,7 @@ class Achievement(Base):
     description: Mapped[Optional[str]]
     verb: Mapped[str]
     image_url: Mapped[Optional[str]]
+    specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -896,23 +877,6 @@ class Achievement_x_User(Base):
     )
 
 
-class Achievement_x_Org(Base):
-    """
-    Model representing the association between achievements and organizations.
-
-    Attributes:
-        achievement_id (int): The ID of the associated achievement.
-        org_id (int): The ID of the associated organization.
-    """
-
-    __tablename__ = "achievements_x_org"
-
-    achievement_id: Mapped[int] = mapped_column(
-        ForeignKey("achievements.id"), primary_key=True
-    )
-    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-
-
 class Position(Base):
     """
     Model representing a position.
@@ -920,7 +884,7 @@ class Position(Base):
     Attributes:
         name (str): The name of the position.
         description (Optional[str]): A description of the position.
-        org_type_id (Optional[int]): The ID of the associated organization type. This is used to limit the positions available to certain types of organizations. If null, the position is available to all organization types.
+        org_type (Optional[Org_Type]): The associated organization type. This is used to limit the positions available to certain types of organizations. If null, the position is available to all organization types.
         org_id (Optional[int]): The ID of the associated organization. This is used to limit the positions available to certain organizations. If null, the position is available to all organizations.
     """
 
@@ -929,7 +893,7 @@ class Position(Base):
     id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[str]]
-    org_type_id: Mapped[Optional[int]] = mapped_column(ForeignKey("org_types.id"))
+    org_type: Mapped[Optional[Org_Type]]
     org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
