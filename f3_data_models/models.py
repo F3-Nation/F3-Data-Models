@@ -566,8 +566,8 @@ class Event(Base):
         highlight (bool): Whether the event is highlighted. Default is False.
         start_date (date): The start date of the event.
         end_date (Optional[date]): The end date of the event.
-        start_time (Optional[time_with_tz]): The start time of the event.
-        end_time (Optional[time_with_tz]): The end time of the event.
+        start_time (Optional[str]): The start time of the event. Format is 'HHMM', 24-hour time, timezone naive.
+        end_time (Optional[str]): The end time of the event. Format is 'HHMM', 24-hour time, timezone naive.
         day_of_week (Optional[Day_Of_Week]): The day of the week of the event.
         name (str): The name of the event.
         description (Optional[text]): A description of the event.
@@ -606,8 +606,8 @@ class Event(Base):
     highlight: Mapped[bool] = mapped_column(Boolean, default=False)
     start_date: Mapped[date]
     end_date: Mapped[Optional[date]]
-    start_time: Mapped[Optional[time_notz]]
-    end_time: Mapped[Optional[time_notz]]
+    start_time: Mapped[Optional[str]]
+    end_time: Mapped[Optional[str]]
     day_of_week: Mapped[Optional[Day_Of_Week]]
     name: Mapped[str]
     description: Mapped[Optional[text]]
@@ -1066,8 +1066,8 @@ class UpdateRequest(Base):
         event_highlight (Optional[bool]): Whether the event is highlighted.
         event_start_date (Optional[date]): The start date of the event.
         event_end_date (Optional[date]): The end date of the event.
-        event_start_time (Optional[time_notz]): The start time of the event.
-        event_end_time (Optional[time_notz]): The end time of the event.
+        event_start_time (Optional[str]): The start time of the event. Format is 'HHMM', 24-hour time, timezone naive.
+        event_end_time (Optional[str]): The end time of the event. Format is 'HHMM', 24-hour time, timezone naive.
         event_day_of_week (Optional[Day_Of_Week]): The day of the week of the event.
         event_name (str): The name of the event.
         event_description (Optional[text]): A description of the event.
@@ -1113,8 +1113,8 @@ class UpdateRequest(Base):
     event_highlight: Mapped[Optional[bool]]
     event_start_date: Mapped[Optional[date]]
     event_end_date: Mapped[Optional[date]]
-    event_start_time: Mapped[Optional[time_notz]]
-    event_end_time: Mapped[Optional[time_notz]]
+    event_start_time: Mapped[Optional[str]]
+    event_end_time: Mapped[Optional[str]]
     event_day_of_week: Mapped[Optional[Day_Of_Week]]
     event_name: Mapped[str]
     event_description: Mapped[Optional[text]]
