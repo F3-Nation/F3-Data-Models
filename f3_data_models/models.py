@@ -45,28 +45,38 @@ dt_update = Annotated[
 ]
 
 
-class UserStatus(enum.Enum):
+class User_Status(enum.Enum):
     active = 1
     inactive = 2
     deleted = 3
 
 
-class RegionRole(enum.Enum):
+class Region_Role(enum.Enum):
     user = 1
     editor = 2
     admin = 3
 
 
-class UserRole(enum.Enum):
+class User_Role(enum.Enum):
     user = 1
     editor = 2
     admin = 3
 
 
-class UpdateRequestStatus(enum.Enum):
+class Update_Request_Status(enum.Enum):
     pending = 1
     approved = 2
     rejected = 3
+
+
+class Day_Of_Week(enum.Enum):
+    monday = 0
+    tuesday = 1
+    wednesday = 2
+    thursday = 3
+    friday = 4
+    saturday = 5
+    sunday = 6
 
 
 class Base(DeclarativeBase):
@@ -219,7 +229,7 @@ class Role(Base):
 
     Attributes:
         id (int): Primary Key of the model.
-        name (RegionRole): The name of the role.
+        name (Region_Role): The name of the role.
         description (Optional[text]): A description of the role.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -228,7 +238,7 @@ class Role(Base):
     __tablename__ = "roles"
 
     id: Mapped[intpk]
-    name: Mapped[RegionRole]
+    name: Mapped[Region_Role]
     description: Mapped[Optional[text]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
@@ -546,8 +556,12 @@ class Location(Base):
     description: Mapped[Optional[text]]
     is_active: Mapped[bool]
     email: Mapped[Optional[str]]
-    latitude: Mapped[Optional[float]]
-    longitude: Mapped[Optional[float]]
+    latitude: Mapped[Optional[float]] = mapped_column(
+        Float(precision=8, decimal_return_scale=5)
+    )
+    longitude: Mapped[Optional[float]] = mapped_column(
+        Float(precision=8, decimal_return_scale=5)
+    )
     address_street: Mapped[Optional[str]]
     address_street2: Mapped[Optional[str]]
     address_city: Mapped[Optional[str]]
@@ -575,7 +589,7 @@ class Event(Base):
         end_date (Optional[date]): The end date of the event.
         start_time (Optional[time_with_tz]): The start time of the event.
         end_time (Optional[time_with_tz]): The end time of the event.
-        day_of_week (Optional[int]): The day of the week of the event. (0=Monday, 6=Sunday)
+        day_of_week (Optional[Day_Of_Week]): The day of the week of the event.
         name (str): The name of the event.
         description (Optional[text]): A description of the event.
         email (Optional[str]): A contact email address associated with the event.
@@ -613,9 +627,9 @@ class Event(Base):
     highlight: Mapped[bool] = mapped_column(Boolean, default=False)
     start_date: Mapped[date]
     end_date: Mapped[Optional[date]]
-    start_time: Mapped[Optional[time_with_tz]]
-    end_time: Mapped[Optional[time_with_tz]]
-    day_of_week: Mapped[Optional[int]]
+    start_time: Mapped[Optional[time_notz]]
+    end_time: Mapped[Optional[time_notz]]
+    day_of_week: Mapped[Optional[Day_Of_Week]]
     name: Mapped[str]
     description: Mapped[Optional[text]]
     email: Mapped[Optional[str]]
@@ -733,10 +747,9 @@ class User(Base):
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
     email_verified: Mapped[Optional[datetime]]
-    status: Mapped[UserStatus] = mapped_column(
-        Enum(UserStatus), default=UserStatus.active
+    status: Mapped[User_Status] = mapped_column(
+        Enum(User_Status), default=User_Status.active
     )
-    role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.user)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -1091,7 +1104,7 @@ class UpdateRequest(Base):
         event_end_date (Optional[date]): The end date of the event.
         event_start_time (Optional[time_notz]): The start time of the event.
         event_end_time (Optional[time_notz]): The end time of the event.
-        event_day_of_week (Optional[int]): The day of the week of the event.
+        event_day_of_week (Optional[Day_Of_Week]): The day of the week of the event.
         event_name (str): The name of the event.
         event_description (Optional[text]): A description of the event.
         event_recurrence_pattern (Optional[str]): The recurrence pattern of the event.
@@ -1116,7 +1129,7 @@ class UpdateRequest(Base):
         submitter_validated (Optional[bool]): Whether the submitter has validated the request. Default is False.
         reviewed_by (Optional[str]): The user who reviewed the request.
         reviewed_at (Optional[datetime]): The timestamp when the request was reviewed.
-        status (UpdateRequestStatus): The status of the request. Default is 'pending'.
+        status (Update_Request_Status): The status of the request. Default is 'pending'.
         meta (Optional[Dict[str, Any]]): Additional metadata for the request.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -1138,7 +1151,7 @@ class UpdateRequest(Base):
     event_end_date: Mapped[Optional[date]]
     event_start_time: Mapped[Optional[time_notz]]
     event_end_time: Mapped[Optional[time_notz]]
-    event_day_of_week: Mapped[Optional[str]] = mapped_column(VARCHAR(length=30))
+    event_day_of_week: Mapped[Optional[Day_Of_Week]]
     event_name: Mapped[str]
     event_description: Mapped[Optional[text]]
     event_recurrence_pattern: Mapped[Optional[str]] = mapped_column(VARCHAR(length=30))
@@ -1170,8 +1183,8 @@ class UpdateRequest(Base):
     submitter_validated: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
     reviewed_by: Mapped[Optional[text]]
     reviewed_at: Mapped[Optional[datetime]]
-    status: Mapped[UpdateRequestStatus] = mapped_column(
-        Enum(UpdateRequestStatus), default=UpdateRequestStatus.pending
+    status: Mapped[Update_Request_Status] = mapped_column(
+        Enum(Update_Request_Status), default=Update_Request_Status.pending
     )
     meta: Mapped[Optional[Dict[str, Any]]]
 
