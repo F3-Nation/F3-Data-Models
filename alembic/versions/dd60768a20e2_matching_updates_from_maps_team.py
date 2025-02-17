@@ -184,6 +184,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
     )
+    op.execute("UPDATE roles SET name = 'admin' WHERE name = 'Admin';")
     op.alter_column(
         "roles",
         "name",
