@@ -3,11 +3,13 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, TypeVar
 
 import sqlalchemy
-from sqlalchemy import Select, and_, select
+from sqlalchemy import Select, and_, select, inspect
 
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy.orm.collections import InstrumentedList
+from sqlalchemy.orm.attributes import flag_modified
 
 from f3_data_models.models import Base
 
@@ -166,21 +168,61 @@ class DbManager:
 
     def update_record(cls: T, id, fields):
         session = get_session()
-        try:
-            session.query(cls).filter(cls.id == id).update(
-                fields, synchronize_session="fetch"
-            )
-            session.flush()
-        finally:
-            session.commit()
-            close_session(session)
+        # Fetch the object to be updated
+        obj = session.query(cls).get(id)
+        if not obj:
+            raise ValueError(f"Object with id {id} not found")
 
-    def update_records(cls: T, filters, fields):
+        # Get the list of valid attributes for the class
+        valid_attributes = {attr.key for attr in inspect(cls).mapper.column_attrs}
+        valid_relationships = {rel.key for rel in inspect(cls).mapper.relationships}
+
+        # Update simple fields
+        for key, value in fields.items():
+            if key in valid_attributes and not isinstance(value, InstrumentedList):
+                setattr(obj, key, value)
+
+        # Update relationships
+        for key, value in fields.items():
+            if key in valid_relationships and isinstance(value, InstrumentedList):
+                related_objects = getattr(obj, key)
+                related_objects.clear()
+                related_objects.extend(value)
+
+        # Flag the object as modified to ensure changes are detected
+        flag_modified(obj, key)
+
+        # Commit the changes
+        session.commit()
+
+    def update_records(cls, filters, fields):
         session = get_session()
         try:
-            session.query(cls).filter(and_(*filters)).update(
-                fields, synchronize_session="fetch"
-            )
+            # Fetch the objects to be updated
+            objects = session.query(cls).filter(and_(*filters)).all()
+
+            # Get the list of valid attributes for the class
+            valid_attributes = {attr.key for attr in inspect(cls).mapper.column_attrs}
+            valid_relationships = {rel.key for rel in inspect(cls).mapper.relationships}
+
+            for obj in objects:
+                # Update simple fields
+                for key, value in fields.items():
+                    if key in valid_attributes and not isinstance(
+                        value, InstrumentedList
+                    ):
+                        setattr(obj, key, value)
+
+                # Update relationships
+                for key, value in fields.items():
+                    if key in valid_relationships and isinstance(
+                        value, InstrumentedList
+                    ):
+                        related_objects = getattr(obj, key)
+                        related_objects.clear()
+                        related_objects.extend(value)
+                        flag_modified(obj, key)
+
             session.flush()
         finally:
             session.commit()
