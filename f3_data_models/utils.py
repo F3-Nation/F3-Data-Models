@@ -9,7 +9,6 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy.orm.collections import InstrumentedList
-from sqlalchemy.orm.attributes import flag_modified
 
 from f3_data_models.models import Base
 
@@ -17,6 +16,8 @@ from pydot import Dot
 from sqlalchemy_schemadisplay import create_schema_graph
 from google.cloud.sql.connector import Connector, IPTypes
 import pg8000
+from sqlalchemy.orm import class_mapper
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 
 @dataclass
@@ -167,33 +168,57 @@ class DbManager:
             close_session(session)
 
     def update_record(cls: T, id, fields):
-        session = get_session()
-        # Fetch the object to be updated
-        obj = session.query(cls).get(id)
-        if not obj:
-            raise ValueError(f"Object with id {id} not found")
+        with get_session() as session:
+            record = session.query(cls).get(id)
+            if not record:
+                raise ValueError(f"Record with id {id} not found in {cls.__name__}")
 
-        # Get the list of valid attributes for the class
-        valid_attributes = {attr.key for attr in inspect(cls).mapper.column_attrs}
-        valid_relationships = {rel.key for rel in inspect(cls).mapper.relationships}
+            mapper = class_mapper(cls)
+            relationships = mapper.relationships.keys()
+            for key, value in fields.items():
+                if hasattr(cls, key) and key not in relationships:
+                    attr = getattr(cls, key)
+                    if isinstance(attr, InstrumentedAttribute):
+                        setattr(record, key, value)
+                elif key in relationships:
+                    # Handle relationships separately
+                    relationship = mapper.relationships[key]
+                    related_class = relationship.mapper.class_
+                    # find mapping of related_class
+                    og_primary_key = None
+                    for k in related_class.__table__.foreign_keys:
+                        if k.references(cls.__table__):
+                            og_primary_key = k.constraint.columns[0].name
+                            break
 
-        # Update simple fields
-        for key, value in fields.items():
-            if key in valid_attributes and not isinstance(value, InstrumentedList):
-                setattr(obj, key, value)
+                    if isinstance(value, list) and og_primary_key:
+                        # Delete existing related records
+                        related_class = relationship.mapper.class_
+                        related_relationships = class_mapper(
+                            related_class
+                        ).relationships.keys()
+                        session.query(related_class).filter(
+                            getattr(related_class, og_primary_key) == id
+                        ).delete()
+                        # Add new related records
+                        items = [item.__dict__ for item in value]
+                        for related_item in items:
+                            update_dict = {
+                                k: v
+                                for k, v in related_item.items()
+                                if hasattr(related_class, k)
+                                and k not in related_relationships
+                            }
+                            related_record = related_class(
+                                **{og_primary_key: id, **update_dict}
+                            )
+                            session.add(related_record)
 
-        # Update relationships
-        for key, value in fields.items():
-            if key in valid_relationships and isinstance(value, InstrumentedList):
-                related_objects = getattr(obj, key)
-                related_objects.clear()
-                related_objects.extend(value)
-
-        # Flag the object as modified to ensure changes are detected
-        flag_modified(obj, key)
-
-        # Commit the changes
-        session.commit()
+            try:
+                session.commit()
+            except pg8000.IntegrityError as e:
+                session.rollback()
+                raise e
 
     def update_records(cls, filters, fields):
         session = get_session()
@@ -213,15 +238,41 @@ class DbManager:
                     ):
                         setattr(obj, key, value)
 
-                # Update relationships
+                # Update relationships separately
                 for key, value in fields.items():
-                    if key in valid_relationships and isinstance(
-                        value, InstrumentedList
-                    ):
-                        related_objects = getattr(obj, key)
-                        related_objects.clear()
-                        related_objects.extend(value)
-                        flag_modified(obj, key)
+                    if key in valid_relationships:
+                        # Handle relationships separately
+                        relationship = inspect(cls).mapper.relationships[key]
+                        related_class = relationship.mapper.class_
+                        # find mapping of related_class
+                        og_primary_key = None
+                        for k in related_class.__table__.foreign_keys:
+                            if k.references(cls.__table__):
+                                og_primary_key = k.constraint.columns[0].name
+                                break
+
+                        if isinstance(value, list) and og_primary_key:
+                            # Delete existing related records
+                            related_class = relationship.mapper.class_
+                            related_relationships = class_mapper(
+                                related_class
+                            ).relationships.keys()
+                            session.query(related_class).filter(
+                                getattr(related_class, og_primary_key) == obj.id
+                            ).delete()
+                            # Add new related records
+                            items = [item.__dict__ for item in value]
+                            for related_item in items:
+                                update_dict = {
+                                    k: v
+                                    for k, v in related_item.items()
+                                    if hasattr(related_class, k)
+                                    and k not in related_relationships
+                                }
+                                related_record = related_class(
+                                    **{og_primary_key: obj.id, **update_dict}
+                                )
+                                session.add(related_record)
 
             session.flush()
         finally:
