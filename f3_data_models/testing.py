@@ -15,7 +15,7 @@ def test_update_event():
         start_time="0500",
         end_time="0600",
         event_x_event_types=[
-            EventType_x_Event(event_type_id=4),
+            EventType_x_Event(event_type_id=3),
         ],
         recurrence_pattern=Event_Cadence.weekly,
         day_of_week=Day_Of_Week.monday,
@@ -23,17 +23,10 @@ def test_update_event():
         index_within_interval=1,
         name="Test Event",
     )
-    update_dict = event.__dict__
+    update_dict = event.to_update_dict()
     DbManager.update_records(Event, [Event.id == 3], update_dict)
 
-    # with get_session() as session:
-    #     # delete event_x_event_types
-    #     session.query(EventType_x_Event).filter(
-    #         EventType_x_Event.event_id == 3
-    #     ).delete()
-    #     # add event_x_event_types
-    #     session.add(EventType_x_Event(event_id=3, event_type_id=4))
-    #     session.commit()
+    event = DbManager.get(Event, 3)
 
 
 if __name__ == "__main__":

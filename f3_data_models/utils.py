@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, TypeVar
+from typing import List, Optional, Tuple, TypeVar, Type, Generic  # noqa
 
 import sqlalchemy
 from sqlalchemy import Select, and_, select, inspect
@@ -89,7 +89,7 @@ def _joinedloads(cls: T, query: Select, joinedloads: list | str) -> Select:
 
 
 class DbManager:
-    def get(cls: T, id: int, joinedloads: list | str = []) -> T:
+    def get(cls: Type[T], id: int, joinedloads: list | str = []) -> T:
         session = get_session()
         try:
             query = select(cls).filter(cls.id == id)
@@ -175,9 +175,9 @@ class DbManager:
 
             mapper = class_mapper(cls)
             relationships = mapper.relationships.keys()
-            for key, value in fields.items():
+            for attr, value in fields.items():
+                key = attr.key
                 if hasattr(cls, key) and key not in relationships:
-                    attr = getattr(cls, key)
                     if isinstance(attr, InstrumentedAttribute):
                         setattr(record, key, value)
                 elif key in relationships:
@@ -232,14 +232,16 @@ class DbManager:
 
             for obj in objects:
                 # Update simple fields
-                for key, value in fields.items():
+                for attr, value in fields.items():
+                    key = attr.key
                     if key in valid_attributes and not isinstance(
                         value, InstrumentedList
                     ):
                         setattr(obj, key, value)
 
                 # Update relationships separately
-                for key, value in fields.items():
+                for attr, value in fields.items():
+                    key = attr.key
                     if key in valid_relationships:
                         # Handle relationships separately
                         relationship = inspect(cls).mapper.relationships[key]

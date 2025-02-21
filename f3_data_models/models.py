@@ -17,6 +17,7 @@ from sqlalchemy import (
     UniqueConstraint,
     Enum,
     Uuid,
+    inspect,
 )
 from typing_extensions import Annotated
 from sqlalchemy.orm import (
@@ -25,6 +26,7 @@ from sqlalchemy.orm import (
     Mapped,
     relationship,
 )
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 import enum
 
 # Custom Annotations
@@ -149,6 +151,26 @@ class Base(DeclarativeBase):
             for c in self.__table__.columns
             if c.key not in ["created", "updated"]
         }
+
+    def to_update_dict(self) -> Dict[InstrumentedAttribute, Any]:
+        update_dict = {}
+        mapper = inspect(self).mapper
+
+        # Add simple attributes
+        for attr in mapper.column_attrs:
+            if attr.key not in ["created", "updated", "id"]:
+                update_dict[attr] = getattr(self, attr.key)
+
+        # Add relationships
+        for rel in mapper.relationships:
+            related_value = getattr(self, rel.key)
+            if related_value is not None:
+                if rel.uselist:
+                    update_dict[rel] = [item for item in related_value]
+                    print(rel, update_dict[rel])
+                else:
+                    update_dict[rel] = related_value
+        return update_dict
 
     def __repr__(self):
         """
