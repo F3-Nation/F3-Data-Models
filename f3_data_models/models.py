@@ -1,6 +1,5 @@
 from datetime import datetime, date, time
 from typing import Any, Dict, List, Optional
-import uuid
 from sqlalchemy import (
     ARRAY,
     JSON,
@@ -32,6 +31,7 @@ import enum
 # Custom Annotations
 time_notz = Annotated[time, TIME(timezone=False)]
 time_with_tz = Annotated[time, TIME(timezone=True)]
+ts_notz = Annotated[datetime, DateTime(timezone=False)]
 text = Annotated[str, TEXT]
 intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
 dt_create = Annotated[
@@ -663,10 +663,13 @@ class Event(Base):
         secondary="event_tags_x_events", cascade="expunge", viewonly=True
     )
     event_x_event_types: Mapped[List[EventType_x_Event]] = relationship(
-        back_populates="event"
+        back_populates="event", cascade="save-update, merge, delete"
     )
     event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
-        back_populates="event"
+        back_populates="event", cascade="save-update, merge, delete"
+    )
+    attendance: Mapped[List["Attendance"]] = relationship(
+        back_populates="event", cascade="expunge, delete"
     )
 
 
@@ -841,7 +844,7 @@ class Attendance(Base):
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
     attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = (
-        relationship(back_populates="attendance")
+        relationship(back_populates="attendance", cascade="save-update, merge, delete")
     )
     attendance_types: Mapped[List[AttendanceType]] = relationship(
         secondary="attendance_x_attendance_types",
@@ -1002,7 +1005,7 @@ class NextAuthAccount(Base):
         provider (text): The provider of the account.
         provider_account_id (text): The provider account ID.
         refresh_token (Optional[text]): The refresh token.
-        access_token (text): The access token.
+        access_token (Optional[text]): The access token.
         expires_at (Optional[datetime]): The expiration time of the token.
         token_type (Optional[text]): The token type.
         scope (Optional[text]): The scope of the token.
@@ -1019,7 +1022,7 @@ class NextAuthAccount(Base):
     provider: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
     provider_account_id: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
     refresh_token: Mapped[Optional[text]]
-    access_token: Mapped[text]
+    access_token: Mapped[Optional[text]]
     expires_at: Mapped[Optional[datetime]]
     token_type: Mapped[Optional[text]]
     scope: Mapped[Optional[text]]
@@ -1036,7 +1039,7 @@ class NextAuthSession(Base):
     Attributes:
         session_token (text): The session token.
         user_id (int): The ID of the associated user.
-        expires (date): The expiration time of the session.
+        expires (ts_notz): The expiration time of the session.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
@@ -1044,8 +1047,8 @@ class NextAuthSession(Base):
     __tablename__ = "auth_sessions"
 
     session_token: Mapped[text] = mapped_column(TEXT, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    expires: Mapped[date]
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    expires: Mapped[ts_notz]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -1057,7 +1060,7 @@ class NextAuthVerificationToken(Base):
     Attributes:
         identifier (text): The identifier of the token.
         token (text): The token.
-        expires (date): The expiration time of the token.
+        expires (ts_notz): The expiration time of the token.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
@@ -1066,7 +1069,7 @@ class NextAuthVerificationToken(Base):
 
     identifier: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
     token: Mapped[text] = mapped_column(VARCHAR, primary_key=True)
-    expires: Mapped[date]
+    expires: Mapped[ts_notz]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -1093,7 +1096,7 @@ class UpdateRequest(Base):
         event_day_of_week (Optional[Day_Of_Week]): The day of the week of the event.
         event_name (str): The name of the event.
         event_description (Optional[text]): A description of the event.
-        event_recurrence_pattern (Optional[str]): The recurrence pattern of the event.
+        event_recurrence_pattern (Optional[Event_Cadence]): The recurrence pattern of the event.
         event_recurrence_interval (Optional[int]): The recurrence interval of the event.
         event_index_within_interval (Optional[int]): The index within the recurrence interval.
         event_meta (Optional[Dict[str, Any]]): Additional metadata for the event.
@@ -1124,7 +1127,9 @@ class UpdateRequest(Base):
     __tablename__ = "update_requests"
 
     id: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), primary_key=True)
-    token: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), default=uuid.uuid4)
+    token: Mapped[Uuid] = mapped_column(
+        UUID(as_uuid=True), server_default=func.gen_random_uuid()
+    )
     region_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
     event_type_ids: Mapped[Optional[List[int]]] = mapped_column(ARRAY(Integer))
@@ -1140,7 +1145,7 @@ class UpdateRequest(Base):
     event_day_of_week: Mapped[Optional[Day_Of_Week]]
     event_name: Mapped[str]
     event_description: Mapped[Optional[text]]
-    event_recurrence_pattern: Mapped[Optional[str]] = mapped_column(VARCHAR(length=30))
+    event_recurrence_pattern: Mapped[Optional[Event_Cadence]]
     event_recurrence_interval: Mapped[Optional[int]]
     event_index_within_interval: Mapped[Optional[int]]
     event_meta: Mapped[Optional[Dict[str, Any]]]

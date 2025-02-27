@@ -12,7 +12,7 @@ def test_update_event():
         highlight=True,
         start_date=datetime.date(2025, 2, 17),
         end_date=datetime.date(2026, 2, 17),
-        start_time="0500",
+        start_time="0400",
         end_time="0600",
         event_x_event_types=[
             EventType_x_Event(event_type_id=3),
@@ -24,9 +24,10 @@ def test_update_event():
         name="Test Event",
     )
     update_dict = event.to_update_dict()
-    DbManager.update_records(Event, [Event.id == 3], update_dict)
+    DbManager.update_record(Event, 3, update_dict)
 
-    event = DbManager.get(Event, 3)
+    # event = DbManager.get(Event, 3)
+    DbManager.delete_records(Event, [Event.series_id == 3])
 
 
 if __name__ == "__main__":
