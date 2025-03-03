@@ -100,6 +100,13 @@ class Event_Category(enum.Enum):
     third_f = 3
 
 
+class Request_Type(enum.Enum):
+    create_location = 1
+    create_event = 2
+    edit = 3
+    delete_event = 4
+
+
 class Base(DeclarativeBase):
     """
     Base class for all models, providing common methods.
@@ -1120,13 +1127,16 @@ class UpdateRequest(Base):
         reviewed_at (Optional[datetime]): The timestamp when the request was reviewed.
         status (Update_Request_Status): The status of the request. Default is 'pending'.
         meta (Optional[Dict[str, Any]]): Additional metadata for the request.
+        request_type (Request_Type): The type of the request.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """
 
     __tablename__ = "update_requests"
 
-    id: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), primary_key=True)
+    id: Mapped[Uuid] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
+    )
     token: Mapped[Uuid] = mapped_column(
         UUID(as_uuid=True), server_default=func.gen_random_uuid()
     )
@@ -1178,6 +1188,6 @@ class UpdateRequest(Base):
         Enum(Update_Request_Status), default=Update_Request_Status.pending
     )
     meta: Mapped[Optional[Dict[str, Any]]]
-
+    request_type: Mapped[Request_Type]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]

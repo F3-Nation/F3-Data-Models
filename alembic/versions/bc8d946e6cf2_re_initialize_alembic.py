@@ -775,7 +775,7 @@ def upgrade() -> None:
             {"name": "Bike", "category_id": 1, "acronym": "BI"},
             {"name": "Gear", "category_id": 1, "acronym": "GE"},
             {"name": "Wild Card", "category_id": 1, "acronym": "WC"},
-            {"name": "Sport", "category_id": 1, "acronym": "SP"},
+            {"name": "Sports", "category_id": 1, "acronym": "SP"},
         ],
     )
     op.bulk_insert(
