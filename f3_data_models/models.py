@@ -11,6 +11,7 @@ from sqlalchemy import (
     DateTime,
     Float,
     ForeignKey,
+    Index,
     Integer,
     func,
     UniqueConstraint,
@@ -356,6 +357,12 @@ class Org(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
+    __table_args__ = (
+        Index("idx_orgs_parent_id", "parent_id"),
+        Index("idx_orgs_org_type", "org_type"),
+        Index("idx_orgs_is_active", "is_active"),
+    )
+
     locations: Mapped[Optional[List["Location"]]] = relationship(
         "Location", cascade="expunge"
     )
@@ -427,6 +434,10 @@ class EventType_x_Event(Base):
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
     event_type_id: Mapped[int] = mapped_column(
         ForeignKey("event_types.id"), primary_key=True
+    )
+    __table_args__ = (
+        Index("idx_events_x_event_types_event_id", "event_id"),
+        Index("idx_events_x_event_types_event_type_id", "event_type_id"),
     )
 
     event: Mapped["Event"] = relationship(back_populates="event_x_event_types")
@@ -580,6 +591,12 @@ class Location(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
+    __table_args__ = (
+        Index("idx_locations_org_id", "org_id"),
+        Index("idx_locations_name", "name"),
+        Index("idx_locations_is_active", "is_active"),
+    )
+
 
 class Event(Base):
     """
@@ -655,6 +672,12 @@ class Event(Base):
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
+
+    __table_args__ = (
+        Index("idx_events_org_id", "org_id"),
+        Index("idx_events_location_id", "location_id"),
+        Index("idx_events_is_active", "is_active"),
+    )
 
     org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     location: Mapped[Location] = relationship(

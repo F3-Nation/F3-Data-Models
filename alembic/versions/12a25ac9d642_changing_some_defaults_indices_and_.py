@@ -38,7 +38,23 @@ def upgrade() -> None:
                 create_type=False,
             ),
             nullable=False,
+            server_default="edit",
         ),
+    )
+    # drop default for request_type
+    op.alter_column(
+        "update_requests",
+        "request_type",
+        existing_type=sa.Enum(
+            "create_location",
+            "create_event",
+            "edit",
+            "delete_event",
+            name="request_type",
+            create_type=False,
+        ),
+        nullable=False,
+        server_default=None,
     )
     op.alter_column(
         "update_requests",
@@ -52,44 +68,83 @@ def upgrade() -> None:
         existing_type=sa.UUID(),
         server_default=func.gen_random_uuid(),
     )
-    # op.execute("""
-    #     CREATE INDEX "idx_events_location_id" ON "events" USING btree ("location_id");--> statement-breakpoint
-    #     CREATE INDEX "idx_events_org_id" ON "events" USING btree ("org_id");--> statement-breakpoint
-    #     CREATE INDEX "idx_events_is_active" ON "events" USING btree ("is_active");--> statement-breakpoint
-    #     CREATE INDEX "idx_events_x_event_types_event_id" ON "events_x_event_types" USING btree ("event_id");--> statement-breakpoint
-    #     CREATE INDEX "idx_events_x_event_types_event_type_id" ON "events_x_event_types" USING btree ("event_type_id");--> statement-breakpoint
-    #     CREATE INDEX "idx_locations_org_id" ON "locations" USING btree ("org_id");--> statement-breakpoint
-    #     CREATE INDEX "idx_locations_name" ON "locations" USING btree ("name");--> statement-breakpoint
-    #     CREATE INDEX "idx_locations_is_active" ON "locations" USING btree ("is_active");--> statement-breakpoint
-    #     CREATE INDEX "idx_orgs_parent_id" ON "orgs" USING btree ("parent_id");--> statement-breakpoint
-    #     CREATE INDEX "idx_orgs_org_type" ON "orgs" USING btree ("org_type");--> statement-breakpoint
-    #     CREATE INDEX "idx_orgs_is_active" ON "orgs" USING btree ("is_active");--> statement-breakpoint
-    # """)
     op.create_index(
-        op.f("idx_events_location_id"), "events", ["location_id"], unique=False
+        op.f("idx_events_location_id"),
+        "events",
+        ["location_id"],
+        unique=False,
+        if_not_exists=True,
     )
-    op.create_index(op.f("idx_events_org_id"), "events", ["org_id"], unique=False)
-    op.create_index(op.f("idx_events_is_active"), "events", ["is_active"], unique=False)
+    op.create_index(
+        op.f("idx_events_org_id"),
+        "events",
+        ["org_id"],
+        unique=False,
+        if_not_exists=True,
+    )
+    op.create_index(
+        op.f("idx_events_is_active"),
+        "events",
+        ["is_active"],
+        unique=False,
+        if_not_exists=True,
+    )
     op.create_index(
         op.f("idx_events_x_event_types_event_id"),
         "events_x_event_types",
         ["event_id"],
         unique=False,
+        if_not_exists=True,
     )
     op.create_index(
         op.f("idx_events_x_event_types_event_type_id"),
         "events_x_event_types",
         ["event_type_id"],
         unique=False,
+        if_not_exists=True,
     )
-    op.create_index(op.f("idx_locations_org_id"), "locations", ["org_id"], unique=False)
-    op.create_index(op.f("idx_locations_name"), "locations", ["name"], unique=False)
     op.create_index(
-        op.f("idx_locations_is_active"), "locations", ["is_active"], unique=False
+        op.f("idx_locations_org_id"),
+        "locations",
+        ["org_id"],
+        unique=False,
+        if_not_exists=True,
     )
-    op.create_index(op.f("idx_orgs_parent_id"), "orgs", ["parent_id"], unique=False)
-    op.create_index(op.f("idx_orgs_org_type"), "orgs", ["org_type"], unique=False)
-    op.create_index(op.f("idx_orgs_is_active"), "orgs", ["is_active"], unique=False)
+    op.create_index(
+        op.f("idx_locations_name"),
+        "locations",
+        ["name"],
+        unique=False,
+        if_not_exists=True,
+    )
+    op.create_index(
+        op.f("idx_locations_is_active"),
+        "locations",
+        ["is_active"],
+        unique=False,
+        if_not_exists=True,
+    )
+    op.create_index(
+        op.f("idx_orgs_parent_id"),
+        "orgs",
+        ["parent_id"],
+        unique=False,
+        if_not_exists=True,
+    )
+    op.create_index(
+        op.f("idx_orgs_org_type"),
+        "orgs",
+        ["org_type"],
+        unique=False,
+        if_not_exists=True,
+    )
+    op.create_index(
+        op.f("idx_orgs_is_active"),
+        "orgs",
+        ["is_active"],
+        unique=False,
+        if_not_exists=True,
+    )
     # ### end Alembic commands ###
 
 
