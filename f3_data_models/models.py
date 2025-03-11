@@ -1143,6 +1143,7 @@ class UpdateRequest(Base):
         location_lng (Optional[float]): The longitude of the location.
         location_id (Optional[int]): The ID of the location.
         location_contact_email (Optional[str]): The contact email of the location.
+        ao_name (Optional[text]): The name of the AO.
         ao_logo (Optional[text]): The URL of the AO logo.
         submitted_by (str): The user who submitted the request.
         submitter_validated (Optional[bool]): Whether the submitter has validated the request. Default is False.
@@ -1201,6 +1202,7 @@ class UpdateRequest(Base):
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
     location_contact_email: Mapped[Optional[str]]
 
+    ao_name: Mapped[Optional[text]]
     ao_logo: Mapped[Optional[text]]
 
     submitted_by: Mapped[text]
