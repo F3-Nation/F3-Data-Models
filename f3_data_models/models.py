@@ -1,5 +1,8 @@
-from datetime import datetime, date, time
+import enum
+from datetime import date, datetime, time
 from typing import Any, Dict, List, Optional
+
+from citext import CIText
 from sqlalchemy import (
     ARRAY,
     JSON,
@@ -9,25 +12,24 @@ from sqlalchemy import (
     VARCHAR,
     Boolean,
     DateTime,
+    Enum,
     Float,
     ForeignKey,
     Index,
     Integer,
-    func,
     UniqueConstraint,
-    Enum,
     Uuid,
+    func,
     inspect,
 )
-from typing_extensions import Annotated
 from sqlalchemy.orm import (
     DeclarativeBase,
-    mapped_column,
     Mapped,
+    mapped_column,
     relationship,
 )
 from sqlalchemy.orm.attributes import InstrumentedAttribute
-import enum
+from typing_extensions import Annotated
 
 # Custom Annotations
 time_notz = Annotated[time, TIME(timezone=False)]
@@ -35,9 +37,7 @@ time_with_tz = Annotated[time, TIME(timezone=True)]
 ts_notz = Annotated[datetime, DateTime(timezone=False)]
 text = Annotated[str, TEXT]
 intpk = Annotated[int, mapped_column(Integer, primary_key=True, autoincrement=True)]
-dt_create = Annotated[
-    datetime, mapped_column(DateTime, server_default=func.timezone("utc", func.now()))
-]
+dt_create = Annotated[datetime, mapped_column(DateTime, server_default=func.timezone("utc", func.now()))]
 dt_update = Annotated[
     datetime,
     mapped_column(
@@ -49,30 +49,70 @@ dt_update = Annotated[
 
 
 class User_Status(enum.Enum):
+    """
+    Enum representing the status of a user.
+
+    Attributes:
+        active
+        inactive
+        deleted
+    """
+
     active = 1
     inactive = 2
     deleted = 3
 
 
 class Region_Role(enum.Enum):
+    """
+    Enum representing the roles within a region.
+
+    Attributes:
+        user
+        editor
+        admin
+    """
+
     user = 1
     editor = 2
     admin = 3
 
 
 class User_Role(enum.Enum):
+    """
+    Enum representing the roles of a user.
+
+    Attributes:
+        user
+        editor
+        admin
+    """
+
     user = 1
     editor = 2
     admin = 3
 
 
 class Update_Request_Status(enum.Enum):
+    """
+    Enum representing the status of an update request.
+
+    Attributes:
+        pending
+        approved
+        rejected
+    """
+
     pending = 1
     approved = 2
     rejected = 3
 
 
 class Day_Of_Week(enum.Enum):
+    """
+    Enum representing the days of the week.
+    """
+
     monday = 0
     tuesday = 1
     wednesday = 2
@@ -83,11 +123,30 @@ class Day_Of_Week(enum.Enum):
 
 
 class Event_Cadence(enum.Enum):
+    """
+    Enum representing the cadence of an event.
+
+    Attributes:
+        weekly
+        monthly
+    """
+
     weekly = 1
     monthly = 2
 
 
 class Org_Type(enum.Enum):
+    """
+    Enum representing the type of organization.
+
+    Attributes:
+        ao
+        region
+        area
+        sector
+        nation
+    """
+
     ao = 1
     region = 2
     area = 3
@@ -96,12 +155,31 @@ class Org_Type(enum.Enum):
 
 
 class Event_Category(enum.Enum):
+    """
+    Enum representing the category of an event.
+
+    Attributes:
+        first_f
+        second_f
+        third_f
+    """
+
     first_f = 1
     second_f = 2
     third_f = 3
 
 
 class Request_Type(enum.Enum):
+    """
+    Enum representing the type of request.
+
+    Attributes:
+        create_location
+        create_event
+        edit
+        delete_event
+    """
+
     create_location = 1
     create_event = 2
     edit = 3
@@ -154,11 +232,7 @@ class Base(DeclarativeBase):
         Returns:
             dict: A dictionary representation of the model instance.
         """
-        return {
-            c.key: self.get(c.key)
-            for c in self.__table__.columns
-            if c.key not in ["created", "updated"]
-        }
+        return {c.key: self.get(c.key) for c in self.__table__.columns if c.key not in ["created", "updated"]}
 
     def to_update_dict(self) -> Dict[InstrumentedAttribute, Any]:
         update_dict = {}
@@ -174,7 +248,7 @@ class Base(DeclarativeBase):
             related_value = getattr(self, rel.key)
             if related_value is not None:
                 if rel.uselist:
-                    update_dict[rel] = [item for item in related_value]
+                    update_dict[rel] = list(related_value)
                     print(rel, update_dict[rel])
                 else:
                     update_dict[rel] = related_value
@@ -284,9 +358,7 @@ class Role_x_Permission(Base):
     __tablename__ = "roles_x_permissions"
 
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), primary_key=True)
-    permission_id: Mapped[int] = mapped_column(
-        ForeignKey("permissions.id"), primary_key=True
-    )
+    permission_id: Mapped[int] = mapped_column(ForeignKey("permissions.id"), primary_key=True)
 
 
 class Role_x_User_x_Org(Base):
@@ -335,7 +407,7 @@ class Org(Base):
         achievements (Optional[List[Achievement]]): The achievements available within the organization.
         parent_org (Optional[Org]): The parent organization.
         slack_space (Optional[SlackSpace]): The associated Slack workspace.
-    """
+    """  # noqa: E501
 
     __tablename__ = "orgs"
 
@@ -363,9 +435,7 @@ class Org(Base):
         Index("idx_orgs_is_active", "is_active"),
     )
 
-    locations: Mapped[Optional[List["Location"]]] = relationship(
-        "Location", cascade="expunge"
-    )
+    locations: Mapped[Optional[List["Location"]]] = relationship("Location", cascade="expunge")
     event_types: Mapped[Optional[List["EventType"]]] = relationship(
         "EventType",
         primaryjoin="or_(EventType.specific_org_id == Org.id, EventType.specific_org_id.is_(None))",
@@ -383,9 +453,7 @@ class Org(Base):
         cascade="expunge",
         primaryjoin="or_(Achievement.specific_org_id == Org.id, Achievement.specific_org_id.is_(None))",
     )
-    parent_org: Mapped[Optional["Org"]] = relationship(
-        "Org", remote_side=[id], cascade="expunge"
-    )
+    parent_org: Mapped[Optional["Org"]] = relationship("Org", remote_side=[id], cascade="expunge")
     slack_space: Mapped[Optional["SlackSpace"]] = relationship(
         "SlackSpace", secondary="orgs_x_slack_spaces", cascade="expunge"
     )
@@ -404,7 +472,7 @@ class EventType(Base):
         specific_org_id (Optional[int]): The ID of the specific organization.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "event_types"
 
@@ -427,39 +495,18 @@ class EventType_x_Event(Base):
         event_type_id (int): The ID of the associated event type.
 
         event (Event): The associated event.
-    """
+    """  # noqa: E501
 
     __tablename__ = "events_x_event_types"
 
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
-    event_type_id: Mapped[int] = mapped_column(
-        ForeignKey("event_types.id"), primary_key=True
-    )
+    event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"), primary_key=True)
     __table_args__ = (
         Index("idx_events_x_event_types_event_id", "event_id"),
         Index("idx_events_x_event_types_event_type_id", "event_type_id"),
     )
 
     event: Mapped["Event"] = relationship(back_populates="event_x_event_types")
-
-
-# class EventType_x_Org(Base):
-#     """
-#     Model representing the association between event types and organizations. This controls which event types are available for selection at the region level, as well as default types for each AO.
-
-#     Attributes:
-#         event_type_id (int): The ID of the associated event type.
-#         org_id (int): The ID of the associated organization.
-#         is_default (bool): Whether this is the default event type for the organization. Default is False.
-#     """
-
-#     __tablename__ = "event_types_x_org"
-
-#     event_type_id: Mapped[int] = mapped_column(
-#         ForeignKey("event_types.id"), primary_key=True
-#     )
-#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-#     is_default: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class EventTag(Base):
@@ -496,35 +543,14 @@ class EventTag_x_Event(Base):
         event_tag_id (int): The ID of the associated event tag.
 
         event (Event): The associated event.
-    """
+    """  # noqa: E501
 
     __tablename__ = "event_tags_x_events"
 
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
-    event_tag_id: Mapped[int] = mapped_column(
-        ForeignKey("event_tags.id"), primary_key=True
-    )
+    event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"), primary_key=True)
 
     event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
-
-
-# class EventTag_x_Org(Base):
-#     """
-#     Model representing the association between event tags and organizations. Controls which event tags are available for selection at the region level.
-
-#     Attributes:
-#         event_tag_id (int): The ID of the associated event tag.
-#         org_id (int): The ID of the associated organization.
-#         color_override (Optional[str]): The calendar color override for the event tag (if the region wants to use something other than the default).
-#     """
-
-#     __tablename__ = "event_tags_x_org"
-
-#     event_tag_id: Mapped[int] = mapped_column(
-#         ForeignKey("event_tags.id"), primary_key=True
-#     )
-#     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-#     color_override: Mapped[Optional[str]]
 
 
 class Org_x_SlackSpace(Base):
@@ -534,14 +560,12 @@ class Org_x_SlackSpace(Base):
     Attributes:
         org_id (int): The ID of the associated organization.
         slack_space_id (str): The ID of the associated Slack workspace.
-    """
+    """  # noqa: E501
 
     __tablename__ = "orgs_x_slack_spaces"
 
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
-    slack_space_id: Mapped[int] = mapped_column(
-        ForeignKey("slack_spaces.id"), primary_key=True
-    )
+    slack_space_id: Mapped[int] = mapped_column(ForeignKey("slack_spaces.id"), primary_key=True)
 
 
 class Location(Base):
@@ -565,7 +589,7 @@ class Location(Base):
         meta (Optional[Dict[str, Any]]): Additional metadata for the location.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "locations"
 
@@ -575,12 +599,8 @@ class Location(Base):
     description: Mapped[Optional[text]]
     is_active: Mapped[bool]
     email: Mapped[Optional[str]]
-    latitude: Mapped[Optional[float]] = mapped_column(
-        Float(precision=8, decimal_return_scale=5)
-    )
-    longitude: Mapped[Optional[float]] = mapped_column(
-        Float(precision=8, decimal_return_scale=5)
-    )
+    latitude: Mapped[Optional[float]] = mapped_column(Float(precision=8, decimal_return_scale=5))
+    longitude: Mapped[Optional[float]] = mapped_column(Float(precision=8, decimal_return_scale=5))
     address_street: Mapped[Optional[str]]
     address_street2: Mapped[Optional[str]]
     address_city: Mapped[Optional[str]]
@@ -639,7 +659,7 @@ class Event(Base):
         event_tags (Optional[List[EventTag]]): The associated event tags.
         event_x_event_types (List[EventType_x_Event]): The association between the event and event types.
         event_x_event_tags (Optional[List[EventTag_x_Event]]): The association between the event and event tags.
-    """
+    """  # noqa: E501
 
     __tablename__ = "events"
 
@@ -680,9 +700,7 @@ class Event(Base):
     )
 
     org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
-    location: Mapped[Location] = relationship(
-        innerjoin=True, cascade="expunge", viewonly=True
-    )
+    location: Mapped[Location] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     event_types: Mapped[List[EventType]] = relationship(
         secondary="events_x_event_types",
         innerjoin=True,
@@ -698,9 +716,7 @@ class Event(Base):
     event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
         back_populates="event", cascade="save-update, merge, delete"
     )
-    attendance: Mapped[List["Attendance"]] = relationship(
-        back_populates="event", cascade="expunge, delete"
-    )
+    attendance: Mapped[List["Attendance"]] = relationship(back_populates="event", cascade="expunge, delete")
 
 
 class AttendanceType(Base):
@@ -710,7 +726,7 @@ class AttendanceType(Base):
     Attributes:
         type (str): The type of attendance.
         description (Optional[str]): A description of the attendance type.
-    """
+    """  # noqa: E501
 
     __tablename__ = "attendance_types"
 
@@ -730,20 +746,14 @@ class Attendance_x_AttendanceType(Base):
         attendance_type_id (int): The ID of the associated attendance type.
 
         attendance (Attendance): The associated attendance.
-    """
+    """  # noqa: E501
 
     __tablename__ = "attendance_x_attendance_types"
 
-    attendance_id: Mapped[int] = mapped_column(
-        ForeignKey("attendance.id"), primary_key=True
-    )
-    attendance_type_id: Mapped[int] = mapped_column(
-        ForeignKey("attendance_types.id"), primary_key=True
-    )
+    attendance_id: Mapped[int] = mapped_column(ForeignKey("attendance.id"), primary_key=True)
+    attendance_type_id: Mapped[int] = mapped_column(ForeignKey("attendance_types.id"), primary_key=True)
 
-    attendance: Mapped["Attendance"] = relationship(
-        back_populates="attendance_x_attendance_types"
-    )
+    attendance: Mapped["Attendance"] = relationship(back_populates="attendance_x_attendance_types")
 
 
 class User(Base):
@@ -764,15 +774,16 @@ class User(Base):
         status (UserStatus): The status of the user. Default is 'active'.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "users"
+    __table_args__ = (Index("idx_users_email", func.lower("email"), unique=True),)
 
     id: Mapped[intpk]
     f3_name: Mapped[Optional[str]]
     first_name: Mapped[Optional[str]]
     last_name: Mapped[Optional[str]]
-    email: Mapped[str] = mapped_column(VARCHAR, unique=True)
+    email: Mapped[str] = mapped_column(CIText)
     phone: Mapped[Optional[str]]
     emergency_contact: Mapped[Optional[str]]
     emergency_phone: Mapped[Optional[str]]
@@ -781,9 +792,7 @@ class User(Base):
     avatar_url: Mapped[Optional[str]]
     meta: Mapped[Optional[Dict[str, Any]]]
     email_verified: Mapped[Optional[datetime]]
-    status: Mapped[User_Status] = mapped_column(
-        Enum(User_Status), default=User_Status.active
-    )
+    status: Mapped[User_Status] = mapped_column(Enum(User_Status), default=User_Status.active)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -811,7 +820,7 @@ class SlackUser(Base):
         slack_updated (Optional[datetime]): The last update time of the Slack user.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "slack_users"
 
@@ -853,7 +862,7 @@ class Attendance(Base):
         slack_user (Optional[SlackUser]): The associated Slack user.
         attendance_x_attendance_types (List[Attendance_x_AttendanceType]): The association between the attendance and attendance types.
         attendance_types (List[AttendanceType]): The associated attendance types.
-    """
+    """  # noqa: E501
 
     __tablename__ = "attendance"
     __table_args__ = (UniqueConstraint("event_id", "user_id", "is_planned"),)
@@ -866,15 +875,13 @@ class Attendance(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
-    event: Mapped[Event] = relationship(
-        innerjoin=True, cascade="expunge", viewonly=True
-    )
+    event: Mapped[Event] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     user: Mapped[User] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     slack_user: Mapped[Optional[SlackUser]] = relationship(
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
-    attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = (
-        relationship(back_populates="attendance", cascade="save-update, merge, delete")
+    attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = relationship(
+        back_populates="attendance", cascade="save-update, merge, delete"
     )
     attendance_types: Mapped[List[AttendanceType]] = relationship(
         secondary="attendance_x_attendance_types",
@@ -897,7 +904,7 @@ class Achievement(Base):
         specific_org_id (Optional[int]): The ID of the specific region if a custom achievement. If null, the achievement is available to all regions.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "achievements"
 
@@ -919,17 +926,13 @@ class Achievement_x_User(Base):
         achievement_id (int): The ID of the associated achievement.
         user_id (int): The ID of the associated user.
         date_awarded (date): The date the achievement was awarded. Default is the current date.
-    """
+    """  # noqa: E501
 
     __tablename__ = "achievements_x_users"
 
-    achievement_id: Mapped[int] = mapped_column(
-        ForeignKey("achievements.id"), primary_key=True
-    )
+    achievement_id: Mapped[int] = mapped_column(ForeignKey("achievements.id"), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    date_awarded: Mapped[date] = mapped_column(
-        DateTime, server_default=func.timezone("utc", func.now())
-    )
+    date_awarded: Mapped[date] = mapped_column(DateTime, server_default=func.timezone("utc", func.now()))
 
 
 class Position(Base):
@@ -941,7 +944,7 @@ class Position(Base):
         description (Optional[str]): A description of the position.
         org_type (Optional[Org_Type]): The associated organization type. This is used to limit the positions available to certain types of organizations. If null, the position is available to all organization types.
         org_id (Optional[int]): The ID of the associated organization. This is used to limit the positions available to certain organizations. If null, the position is available to all organizations.
-    """
+    """  # noqa: E501
 
     __tablename__ = "positions"
 
@@ -962,13 +965,11 @@ class Position_x_Org_x_User(Base):
         position_id (int): The ID of the associated position.
         org_id (int): The ID of the associated organization.
         user_id (int): The ID of the associated user.
-    """
+    """  # noqa: E501
 
     __tablename__ = "positions_x_orgs_x_users"
 
-    position_id: Mapped[int] = mapped_column(
-        ForeignKey("positions.id"), primary_key=True
-    )
+    position_id: Mapped[int] = mapped_column(ForeignKey("positions.id"), primary_key=True)
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
 
@@ -987,7 +988,7 @@ class Expansion(Base):
         interested_in_organizing (bool): Whether the user is interested in organizing.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "expansions"
 
@@ -1011,17 +1012,13 @@ class Expansion_x_User(Base):
         user_id (int): The ID of the associated user.
         requst_date (date): The date of the request. Default is the current date.
         notes (Optional[text]): Additional notes for the association.
-    """
+    """  # noqa: E501
 
     __tablename__ = "expansions_x_users"
 
-    expansion_id: Mapped[int] = mapped_column(
-        ForeignKey("expansions.id"), primary_key=True
-    )
+    expansion_id: Mapped[int] = mapped_column(ForeignKey("expansions.id"), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    request_date: Mapped[date] = mapped_column(
-        DateTime, server_default=func.timezone("utc", func.now())
-    )
+    request_date: Mapped[date] = mapped_column(DateTime, server_default=func.timezone("utc", func.now()))
     notes: Mapped[Optional[text]]
 
 
@@ -1043,7 +1040,7 @@ class NextAuthAccount(Base):
         session_state (Optional[text]): The session state.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "auth_accounts"
 
@@ -1072,7 +1069,7 @@ class NextAuthSession(Base):
         expires (ts_notz): The expiration time of the session.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "auth_sessions"
 
@@ -1093,7 +1090,7 @@ class NextAuthVerificationToken(Base):
         expires (ts_notz): The expiration time of the token.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "auth_verification_tokens"
 
@@ -1154,16 +1151,12 @@ class UpdateRequest(Base):
         request_type (Request_Type): The type of the request.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
-    """
+    """  # noqa: E501
 
     __tablename__ = "update_requests"
 
-    id: Mapped[Uuid] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
-    )
-    token: Mapped[Uuid] = mapped_column(
-        UUID(as_uuid=True), server_default=func.gen_random_uuid()
-    )
+    id: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
+    token: Mapped[Uuid] = mapped_column(UUID(as_uuid=True), server_default=func.gen_random_uuid())
     region_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     event_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
     event_type_ids: Mapped[Optional[List[int]]] = mapped_column(ARRAY(Integer))
@@ -1193,12 +1186,8 @@ class UpdateRequest(Base):
     location_state: Mapped[Optional[str]]
     location_zip: Mapped[Optional[str]]
     location_country: Mapped[Optional[str]]
-    location_lat: Mapped[Optional[float]] = mapped_column(
-        Float(precision=8, decimal_return_scale=5)
-    )
-    location_lng: Mapped[Optional[float]] = mapped_column(
-        Float(precision=8, decimal_return_scale=5)
-    )
+    location_lat: Mapped[Optional[float]] = mapped_column(Float(precision=8, decimal_return_scale=5))
+    location_lng: Mapped[Optional[float]] = mapped_column(Float(precision=8, decimal_return_scale=5))
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
     location_contact_email: Mapped[Optional[str]]
 

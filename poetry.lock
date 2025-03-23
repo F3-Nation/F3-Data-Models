@@ -1913,6 +1913,19 @@ pymysql = ["pymysql"]
 sqlcipher = ["sqlcipher3_binary"]
 
 [[package]]
+name = "sqlalchemy-citext"
+version = "1.8.0"
+description = "A sqlalchemy plugin that allows postgres use of CITEXT."
+optional = false
+python-versions = "*"
+files = [
+    {file = "sqlalchemy-citext-1.8.0.tar.gz", hash = "sha256:a1740e693a9a334e7c8f60ae731083fe75ce6c1605bb9ca6644a6f1f63b15b77"},
+]
+
+[package.dependencies]
+SQLAlchemy = ">=0.6"
+
+[[package]]
 name = "sqlalchemy-schemadisplay"
 version = "2.0"
 description = "Package for the generation of diagrams based on SQLAlchemy ORM models and or the database itself"
@@ -2075,4 +2088,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "78144247c4d7d01b71b80d3b76edff1ecc21ba7a0e0467530fc09a14eea9b425"
+content-hash = "e5ebf999607ab171754a85f5b55e77a49dd2c40d32e5e50c91f9dc198cbfc7e9"
