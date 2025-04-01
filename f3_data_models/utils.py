@@ -1,23 +1,20 @@
 import os
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, TypeVar, Type, Generic  # noqa
+from typing import Generic, List, Optional, Tuple, Type, TypeVar  # noqa
 
+import pg8000
 import sqlalchemy
-from sqlalchemy import Select, and_, select, inspect
-
+from google.cloud.sql.connector import Connector, IPTypes
+from pydot import Dot
+from sqlalchemy import Select, and_, inspect, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy.orm import class_mapper, joinedload, sessionmaker
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.orm.collections import InstrumentedList
+from sqlalchemy_schemadisplay import create_schema_graph
 
 from f3_data_models.models import Base
-
-from pydot import Dot
-from sqlalchemy_schemadisplay import create_schema_graph
-from google.cloud.sql.connector import Connector, IPTypes
-import pg8000
-from sqlalchemy.orm import class_mapper
-from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 
 @dataclass
@@ -53,9 +50,7 @@ def get_engine(echo=False) -> Engine:
             )
             return conn
 
-        engine = sqlalchemy.create_engine(
-            "postgresql+pg8000://", creator=get_connection, echo=echo
-        )
+        engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_connection, echo=echo)
     return engine
 
 
@@ -81,10 +76,7 @@ T = TypeVar("T")
 
 def _joinedloads(cls: T, query: Select, joinedloads: list | str) -> Select:
     if joinedloads == "all":
-        joinedloads = [
-            getattr(cls, relationship.key)
-            for relationship in cls.__mapper__.relationships
-        ]
+        joinedloads = [getattr(cls, relationship.key) for relationship in cls.__mapper__.relationships]
     return query.options(*[joinedload(load) for load in joinedloads])
 
 
@@ -101,9 +93,7 @@ class DbManager:
             session.rollback()
             close_session(session)
 
-    def find_records(
-        cls: T, filters: Optional[List], joinedloads: List | str = []
-    ) -> List[T]:
+    def find_records(cls: T, filters: Optional[List], joinedloads: List | str = []) -> List[T]:
         session = get_session()
         try:
             query = select(cls)
@@ -117,9 +107,7 @@ class DbManager:
             session.rollback()
             close_session(session)
 
-    def find_first_record(
-        cls: T, filters: Optional[List], joinedloads: List | str = []
-    ) -> T:
+    def find_first_record(cls: T, filters: Optional[List], joinedloads: List | str = []) -> T:
         session = get_session()
         try:
             query = select(cls)
@@ -136,21 +124,14 @@ class DbManager:
     def find_join_records2(left_cls: T, right_cls: T, filters) -> List[Tuple[T]]:
         session = get_session()
         try:
-            records = (
-                session.query(left_cls, right_cls)
-                .join(right_cls)
-                .filter(and_(*filters))
-                .all()
-            )
+            records = session.query(left_cls, right_cls).join(right_cls).filter(and_(*filters)).all()
             session.expunge_all()
             return records
         finally:
             session.rollback()
             close_session(session)
 
-    def find_join_records3(
-        left_cls: T, right_cls1: T, right_cls2: T, filters, left_join=False
-    ) -> List[Tuple[T]]:
+    def find_join_records3(left_cls: T, right_cls1: T, right_cls2: T, filters, left_join=False) -> List[Tuple[T]]:
         session = get_session()
         try:
             records = (
@@ -176,7 +157,7 @@ class DbManager:
             mapper = class_mapper(cls)
             relationships = mapper.relationships.keys()
             for attr, value in fields.items():
-                key = attr.key
+                key = attr if isinstance(attr, str) else attr.key
                 if hasattr(cls, key) and key not in relationships:
                     if isinstance(attr, InstrumentedAttribute):
                         setattr(record, key, value)
@@ -194,24 +175,17 @@ class DbManager:
                     if isinstance(value, list) and og_primary_key:
                         # Delete existing related records
                         related_class = relationship.mapper.class_
-                        related_relationships = class_mapper(
-                            related_class
-                        ).relationships.keys()
-                        session.query(related_class).filter(
-                            getattr(related_class, og_primary_key) == id
-                        ).delete()
+                        related_relationships = class_mapper(related_class).relationships.keys()
+                        session.query(related_class).filter(getattr(related_class, og_primary_key) == id).delete()
                         # Add new related records
                         items = [item.__dict__ for item in value]
                         for related_item in items:
                             update_dict = {
                                 k: v
                                 for k, v in related_item.items()
-                                if hasattr(related_class, k)
-                                and k not in related_relationships
+                                if hasattr(related_class, k) and k not in related_relationships
                             }
-                            related_record = related_class(
-                                **{og_primary_key: id, **update_dict}
-                            )
+                            related_record = related_class(**{og_primary_key: id, **update_dict})
                             session.add(related_record)
 
             try:
@@ -234,9 +208,7 @@ class DbManager:
                 # Update simple fields
                 for attr, value in fields.items():
                     key = attr.key
-                    if key in valid_attributes and not isinstance(
-                        value, InstrumentedList
-                    ):
+                    if key in valid_attributes and not isinstance(value, InstrumentedList):
                         setattr(obj, key, value)
 
                 # Update relationships separately
@@ -256,9 +228,7 @@ class DbManager:
                         if isinstance(value, list) and og_primary_key:
                             # Delete existing related records
                             related_class = relationship.mapper.class_
-                            related_relationships = class_mapper(
-                                related_class
-                            ).relationships.keys()
+                            related_relationships = class_mapper(related_class).relationships.keys()
                             session.query(related_class).filter(
                                 getattr(related_class, og_primary_key) == obj.id
                             ).delete()
@@ -268,12 +238,9 @@ class DbManager:
                                 update_dict = {
                                     k: v
                                     for k, v in related_item.items()
-                                    if hasattr(related_class, k)
-                                    and k not in related_relationships
+                                    if hasattr(related_class, k) and k not in related_relationships
                                 }
-                                related_record = related_class(
-                                    **{og_primary_key: obj.id, **update_dict}
-                                )
+                                related_record = related_class(**{og_primary_key: obj.id, **update_dict})
                                 session.add(related_record)
 
             session.flush()
@@ -307,11 +274,7 @@ class DbManager:
         session = get_session()
         try:
             for record in records:
-                record_dict = {
-                    k: v
-                    for k, v in record.__dict__.items()
-                    if k != "_sa_instance_state"
-                }
+                record_dict = {k: v for k, v in record.__dict__.items() if k != "_sa_instance_state"}
                 stmt = insert(cls).values(record_dict).on_conflict_do_nothing()
                 session.execute(stmt)
             session.flush()
@@ -323,15 +286,9 @@ class DbManager:
         session = get_session()
         try:
             for record in records:
-                record_dict = {
-                    k: v
-                    for k, v in record.__dict__.items()
-                    if k != "_sa_instance_state"
-                }
+                record_dict = {k: v for k, v in record.__dict__.items() if k != "_sa_instance_state"}
                 stmt = insert(cls).values(record_dict)
-                update_dict = {
-                    c.name: getattr(record, c.name) for c in cls.__table__.columns
-                }
+                update_dict = {c.name: getattr(record, c.name) for c in cls.__table__.columns}
                 stmt = stmt.on_conflict_do_update(
                     index_elements=[cls.__table__.primary_key.columns.keys()],
                     set_=update_dict,

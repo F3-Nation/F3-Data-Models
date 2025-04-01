@@ -777,13 +777,12 @@ class User(Base):
     """  # noqa: E501
 
     __tablename__ = "users"
-    __table_args__ = (Index("idx_users_email", func.lower("email"), unique=True),)
 
     id: Mapped[intpk]
     f3_name: Mapped[Optional[str]]
     first_name: Mapped[Optional[str]]
     last_name: Mapped[Optional[str]]
-    email: Mapped[str] = mapped_column(CIText)
+    email: Mapped[str] = mapped_column(CIText, unique=True)
     phone: Mapped[Optional[str]]
     emergency_contact: Mapped[Optional[str]]
     emergency_phone: Mapped[Optional[str]]
