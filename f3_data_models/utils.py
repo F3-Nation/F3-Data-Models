@@ -10,7 +10,6 @@ from sqlalchemy import Select, and_, inspect, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import class_mapper, joinedload, sessionmaker
-from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy_schemadisplay import create_schema_graph
 
@@ -158,9 +157,13 @@ class DbManager:
             relationships = mapper.relationships.keys()
             for attr, value in fields.items():
                 key = attr if isinstance(attr, str) else attr.key
+                print(f"key: {key}, value: {value}")
                 if hasattr(cls, key) and key not in relationships:
-                    if isinstance(attr, InstrumentedAttribute):
-                        setattr(record, key, value)
+                    setattr(record, key, value)
+                    # if isinstance(attr, InstrumentedAttribute):
+                    #     setattr(record, key, value)
+                    # else:
+                    #     setattr(record, key, value)
                 elif key in relationships:
                     # Handle relationships separately
                     relationship = mapper.relationships[key]
@@ -189,6 +192,7 @@ class DbManager:
                             session.add(related_record)
 
             try:
+                print(record)
                 session.commit()
             except pg8000.IntegrityError as e:
                 session.rollback()
