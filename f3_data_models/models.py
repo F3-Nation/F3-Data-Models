@@ -6,6 +6,7 @@ from citext import CIText
 from sqlalchemy import (
     ARRAY,
     JSON,
+    REAL,
     TEXT,
     TIME,
     UUID,
@@ -509,6 +510,25 @@ class EventType_x_Event(Base):
     event: Mapped["Event"] = relationship(back_populates="event_x_event_types")
 
 
+class EventType_x_EventInstance(Base):
+    """
+    Model representing the association between event instances and event types. The intention is that a single event instance can be associated with multiple event types.
+
+    Attributes:
+        event_instance_id (int): The ID of the associated event instance.
+        event_type_id (int): The ID of the associated event type.
+
+        event_instance (EventInstance): The associated event instance.
+    """  # noqa: E501
+
+    __tablename__ = "event_instances_x_event_types"
+
+    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), primary_key=True)
+    event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"), primary_key=True)
+
+    event_instance: Mapped["EventInstance"] = relationship(back_populates="event_instances_x_event_types")
+
+
 class EventTag(Base):
     """
     Model representing an event tag. These are used to mark special events, such as anniversaries or special workouts.
@@ -551,6 +571,24 @@ class EventTag_x_Event(Base):
     event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"), primary_key=True)
 
     event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
+
+class EventTag_x_EventInstance(Base):
+    """
+    Model representing the association between event tags and event instances. The intention is that a single event instance can be associated with multiple event tags.
+
+    Attributes:
+        event_instance_id (int): The ID of the associated event instance.
+        event_tag_id (int): The ID of the associated event tag.
+
+        event_instance (EventInstance): The associated event instance.
+    """  # noqa: E501
+
+    __tablename__ = "event_tags_x_event_instances"
+
+    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), primary_key=True)
+    event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"), primary_key=True)
+
+    event_instance: Mapped["EventInstance"] = relationship(back_populates="event_tags_x_event_instances")
 
 
 class Org_x_SlackSpace(Base):
@@ -643,12 +681,6 @@ class Event(Base):
         index_within_interval (Optional[int]): The index within the recurrence interval. (e.g. 2nd Tuesday of the month).
         pax_count (Optional[int]): The number of participants.
         fng_count (Optional[int]): The number of first-time participants.
-        preblast (Optional[text]): The pre-event announcement.
-        backblast (Optional[text]): The post-event report.
-        preblast_rich (Optional[Dict[str, Any]]): The rich text pre-event announcement (e.g. Slack message).
-        backblast_rich (Optional[Dict[str, Any]]): The rich text post-event report (e.g. Slack message).
-        preblast_ts (Optional[float]): The Slack post timestamp of the pre-event announcement.
-        backblast_ts (Optional[float]): The Slack post timestamp of the post-event report.
         meta (Optional[Dict[str, Any]]): Additional metadata for the event.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -667,7 +699,6 @@ class Event(Base):
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
     series_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
-    is_series: Mapped[bool] = mapped_column(Boolean, default=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     highlight: Mapped[bool] = mapped_column(Boolean, default=False)
     start_date: Mapped[date]
@@ -681,14 +712,6 @@ class Event(Base):
     recurrence_pattern: Mapped[Optional[Event_Cadence]]
     recurrence_interval: Mapped[Optional[int]]
     index_within_interval: Mapped[Optional[int]]
-    pax_count: Mapped[Optional[int]]
-    fng_count: Mapped[Optional[int]]
-    preblast: Mapped[Optional[text]]
-    backblast: Mapped[Optional[text]]
-    preblast_rich: Mapped[Optional[Dict[str, Any]]]
-    backblast_rich: Mapped[Optional[Dict[str, Any]]]
-    preblast_ts: Mapped[Optional[float]]
-    backblast_ts: Mapped[Optional[float]]
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
@@ -716,7 +739,97 @@ class Event(Base):
     event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
         back_populates="event", cascade="save-update, merge, delete"
     )
-    attendance: Mapped[List["Attendance"]] = relationship(back_populates="event", cascade="expunge, delete")
+
+
+class EventInstance(Base):
+    """
+    Model representing an event instance (a single occurrence of an event).
+
+    Attributes:
+        id (int): Primary Key of the model.
+        org_id (int): The ID of the associated organization.
+        location_id (Optional[int]): The ID of the associated location.
+        series_id (Optional[int]): The ID of the associated event series.
+        is_active (bool): Whether the event is active. Default is True.
+        highlight (bool): Whether the event is highlighted. Default is False.
+        start_date (date): The start date of the event.
+        end_date (Optional[date]): The end date of the event.
+        start_time (Optional[str]): The start time of the event. Format is 'HHMM', 24-hour time, timezone naive.
+        end_time (Optional[str]): The end time of the event. Format is 'HHMM', 24-hour time, timezone naive.
+        name (str): The name of the event.
+        description (Optional[text]): A description of the event.
+        email (Optional[str]): A contact email address associated with the event.
+        pax_count (Optional[int]): The number of participants.
+        fng_count (Optional[int]): The number of first-time participants.
+        preblast (Optional[text]): The pre-event announcement.
+        backblast (Optional[text]): The post-event report.
+        preblast_rich (Optional[Dict[str, Any]]): The rich text pre-event announcement (e.g. Slack message).
+        backblast_rich (Optional[Dict[str, Any]]): The rich text post-event report (e.g. Slack message).
+        preblast_ts (Optional[float]): The Slack post timestamp of the pre-event announcement.
+        backblast_ts (Optional[float]): The Slack post timestamp of the post-event report.
+        meta (Optional[Dict[str, Any]]): Additional metadata for the event.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+
+        org (Org): The associated organization.
+        location (Location): The associated location.
+        event_types (List[EventType]): The associated event types.
+        event_tags (Optional[List[EventTag]]): The associated event tags.
+        event_x_event_types (List[EventType_x_Event]): The association between the event and event types.
+        event_x_event_tags (Optional[List[EventTag_x_Event]]): The association between the event and event tags.
+    """  # noqa: E501
+
+    __tablename__ = "event_instances"
+
+    id: Mapped[intpk]
+    org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
+    location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
+    series_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    highlight: Mapped[bool] = mapped_column(Boolean, default=False)
+    start_date: Mapped[date]
+    end_date: Mapped[Optional[date]]
+    start_time: Mapped[Optional[str]]
+    end_time: Mapped[Optional[str]]
+    name: Mapped[str]
+    description: Mapped[Optional[text]]
+    email: Mapped[Optional[str]]
+    pax_count: Mapped[Optional[int]]
+    fng_count: Mapped[Optional[int]]
+    preblast: Mapped[Optional[text]]
+    backblast: Mapped[Optional[text]]
+    preblast_rich: Mapped[Optional[Dict[str, Any]]]
+    backblast_rich: Mapped[Optional[Dict[str, Any]]]
+    preblast_ts: Mapped[Optional[float]]
+    backblast_ts: Mapped[Optional[float]]
+    meta: Mapped[Optional[Dict[str, Any]]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+    __table_args__ = (
+        Index("idx_event_instances_org_id", "org_id"),
+        Index("idx_event_instances_location_id", "location_id"),
+        Index("idx_event_instances_is_active", "is_active"),
+    )
+
+    org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    location: Mapped[Location] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    event_types: Mapped[List[EventType]] = relationship(
+        secondary="event_instances_x_event_types",
+        innerjoin=True,
+        cascade="expunge",
+        viewonly=True,
+    )
+    event_tags: Mapped[Optional[List[EventTag]]] = relationship(
+        secondary="event_tags_x_event_instances", cascade="expunge", viewonly=True
+    )
+    event_instances_x_event_types: Mapped[List[EventType_x_EventInstance]] = relationship(
+        back_populates="event_instances", cascade="save-update, merge, delete"
+    )
+    event_instances_x_event_tags: Mapped[Optional[List[EventTag_x_EventInstance]]] = relationship(
+        back_populates="event_instance", cascade="save-update, merge, delete"
+    )
+    attendance: Mapped[List["Attendance"]] = relationship(back_populates="event_instance", cascade="expunge, delete")
 
 
 class AttendanceType(Base):
@@ -849,14 +962,14 @@ class Attendance(Base):
 
     Attributes:
         id (int): Primary Key of the model.
-        event_id (int): The ID of the associated event.
+        event_instance_id (int): The ID of the associated event instance.
         user_id (Optional[int]): The ID of the associated user.
         is_planned (bool): Whether this is planned attendance (True) vs actual attendance (False).
         meta (Optional[Dict[str, Any]]): Additional metadata for the attendance.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
 
-        event (Event): The associated event.
+        event_instance (EventInstance): The associated event instance.
         user (User): The associated user.
         slack_user (Optional[SlackUser]): The associated Slack user.
         attendance_x_attendance_types (List[Attendance_x_AttendanceType]): The association between the attendance and attendance types.
@@ -864,17 +977,17 @@ class Attendance(Base):
     """  # noqa: E501
 
     __tablename__ = "attendance"
-    __table_args__ = (UniqueConstraint("event_id", "user_id", "is_planned"),)
+    __table_args__ = (UniqueConstraint("event_instance_id", "user_id", "is_planned"),)
 
     id: Mapped[intpk]
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"))
+    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     is_planned: Mapped[bool]
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
-    event: Mapped[Event] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    event_instance: Mapped[EventInstance] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     user: Mapped[User] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     slack_user: Mapped[Optional[SlackUser]] = relationship(
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
@@ -1185,8 +1298,8 @@ class UpdateRequest(Base):
     location_state: Mapped[Optional[str]]
     location_zip: Mapped[Optional[str]]
     location_country: Mapped[Optional[str]]
-    location_lat: Mapped[Optional[float]] = mapped_column(Float(precision=8, decimal_return_scale=5))
-    location_lng: Mapped[Optional[float]] = mapped_column(Float(precision=8, decimal_return_scale=5))
+    location_lat: Mapped[Optional[float]] = mapped_column(REAL())
+    location_lng: Mapped[Optional[float]] = mapped_column(REAL())
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
     location_contact_email: Mapped[Optional[str]]
 
