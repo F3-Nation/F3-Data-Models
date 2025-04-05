@@ -824,7 +824,7 @@ class EventInstance(Base):
         secondary="event_tags_x_event_instances", cascade="expunge", viewonly=True
     )
     event_instances_x_event_types: Mapped[List[EventType_x_EventInstance]] = relationship(
-        back_populates="event_instances", cascade="save-update, merge, delete"
+        back_populates="event_instance", cascade="save-update, merge, delete"
     )
     event_instances_x_event_tags: Mapped[Optional[List[EventTag_x_EventInstance]]] = relationship(
         back_populates="event_instance", cascade="save-update, merge, delete"
