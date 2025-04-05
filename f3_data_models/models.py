@@ -588,7 +588,7 @@ class EventTag_x_EventInstance(Base):
     event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), primary_key=True)
     event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"), primary_key=True)
 
-    event_instance: Mapped["EventInstance"] = relationship(back_populates="event_tags_x_event_instances")
+    event_instance: Mapped["EventInstance"] = relationship(back_populates="event_instances_x_event_tags")
 
 
 class Org_x_SlackSpace(Base):
@@ -775,8 +775,8 @@ class EventInstance(Base):
         location (Location): The associated location.
         event_types (List[EventType]): The associated event types.
         event_tags (Optional[List[EventTag]]): The associated event tags.
-        event_x_event_types (List[EventType_x_Event]): The association between the event and event types.
-        event_x_event_tags (Optional[List[EventTag_x_Event]]): The association between the event and event tags.
+        event_instances_x_event_types (List[EventType_x_EventInstance]): The association between the event and event types.
+        event_instances_x_event_tags (Optional[List[EventTag_x_EventInstance]]): The association between the event and event tags.
     """  # noqa: E501
 
     __tablename__ = "event_instances"
