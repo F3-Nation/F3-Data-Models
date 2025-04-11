@@ -572,6 +572,7 @@ class EventTag_x_Event(Base):
 
     event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
 
+
 class EventTag_x_EventInstance(Base):
     """
     Model representing the association between event tags and event instances. The intention is that a single event instance can be associated with multiple event tags.
@@ -1252,6 +1253,7 @@ class UpdateRequest(Base):
         location_lng (Optional[float]): The longitude of the location.
         location_id (Optional[int]): The ID of the location.
         location_contact_email (Optional[str]): The contact email of the location.
+        ao_id (Optional[int]): The ID of the associated AO.
         ao_name (Optional[text]): The name of the AO.
         ao_logo (Optional[text]): The URL of the AO logo.
         submitted_by (str): The user who submitted the request.
@@ -1303,6 +1305,7 @@ class UpdateRequest(Base):
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
     location_contact_email: Mapped[Optional[str]]
 
+    ao_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     ao_name: Mapped[Optional[text]]
     ao_logo: Mapped[Optional[text]]
 
