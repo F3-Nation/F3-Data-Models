@@ -1,4 +1,5 @@
 import os
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar  # noqa
 
@@ -53,48 +54,66 @@ def get_engine(echo=False) -> Engine:
     return engine
 
 
-def get_session(echo=os.environ.get("SQL_ECHO", "False") == "True"):
-    if GLOBAL_SESSION:
-        return GLOBAL_SESSION
-
-    global GLOBAL_ENGINE
-    GLOBAL_ENGINE = get_engine(echo=echo)
-    return sessionmaker()(bind=GLOBAL_ENGINE)
+GLOBAL_ENGINE = get_engine(echo=os.environ.get("SQL_ECHO", "False") == "True")
+GLOBAL_SESSION = sessionmaker(bind=GLOBAL_ENGINE)
 
 
-def close_session(session):
-    global GLOBAL_SESSION, GLOBAL_ENGINE
-    if GLOBAL_SESSION == session:
-        if GLOBAL_ENGINE:
-            GLOBAL_ENGINE.close()
-            GLOBAL_SESSION = None
+def get_session():
+    # if GLOBAL_SESSION:
+    #     return GLOBAL_SESSION
+
+    # global GLOBAL_ENGINE
+    # GLOBAL_ENGINE = get_engine(echo=echo)
+    # return sessionmaker()(bind=GLOBAL_ENGINE)
+    return GLOBAL_SESSION()
+
+
+@contextmanager
+def session_scope():
+    """Provide a transactional scope around a series of operations."""
+    session = get_session()
+    try:
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        raise e
+    finally:
+        session.close()
+
+
+# def close_session(session):
+#     global GLOBAL_SESSION, GLOBAL_ENGINE
+#     if GLOBAL_SESSION == session:
+#         if GLOBAL_ENGINE:
+#             GLOBAL_ENGINE.close()
+#             GLOBAL_SESSION = None
 
 
 T = TypeVar("T")
 
 
-def _joinedloads(cls: T, query: Select, joinedloads: list | str) -> Select:
+def _joinedloads(cls: T, query: Select, joinedloads: list | str = None) -> Select:
+    if joinedloads is None:
+        return query
     if joinedloads == "all":
         joinedloads = [getattr(cls, relationship.key) for relationship in cls.__mapper__.relationships]
     return query.options(*[joinedload(load) for load in joinedloads])
 
 
 class DbManager:
-    def get(cls: Type[T], id: int, joinedloads: list | str = []) -> T:
-        session = get_session()
-        try:
+    @classmethod
+    def get(cls: Type[T], id: int, joinedloads: list | str = None) -> T:
+        with session_scope() as session:
             query = select(cls).filter(cls.id == id)
             query = _joinedloads(cls, query, joinedloads)
             record = session.scalars(query).unique().one()
             session.expunge(record)
             return record
-        finally:
-            session.rollback()
-            close_session(session)
 
-    def find_records(cls: T, filters: Optional[List], joinedloads: List | str = []) -> List[T]:
-        session = get_session()
-        try:
+    @classmethod
+    def find_records(cls: T, filters: Optional[List], joinedloads: List | str = None) -> List[T]:
+        with session_scope() as session:
             query = select(cls)
             query = _joinedloads(cls, query, joinedloads)
             query = query.filter(*filters)
@@ -102,13 +121,10 @@ class DbManager:
             for r in records:
                 session.expunge(r)
             return records
-        finally:
-            session.rollback()
-            close_session(session)
 
-    def find_first_record(cls: T, filters: Optional[List], joinedloads: List | str = []) -> T:
-        session = get_session()
-        try:
+    @classmethod
+    def find_first_record(cls: T, filters: Optional[List], joinedloads: List | str = None) -> T:
+        with session_scope() as session:
             query = select(cls)
             query = _joinedloads(cls, query, joinedloads)
             query = query.filter(*filters)
@@ -116,23 +132,17 @@ class DbManager:
             if record:
                 session.expunge(record)
             return record
-        finally:
-            session.rollback()
-            close_session(session)
 
+    @classmethod
     def find_join_records2(left_cls: T, right_cls: T, filters) -> List[Tuple[T]]:
-        session = get_session()
-        try:
+        with session_scope() as session:
             records = session.query(left_cls, right_cls).join(right_cls).filter(and_(*filters)).all()
             session.expunge_all()
             return records
-        finally:
-            session.rollback()
-            close_session(session)
 
+    @classmethod
     def find_join_records3(left_cls: T, right_cls1: T, right_cls2: T, filters, left_join=False) -> List[Tuple[T]]:
-        session = get_session()
-        try:
+        with session_scope() as session:
             records = (
                 session.query(left_cls, right_cls1, right_cls2)
                 .select_from(left_cls)
@@ -143,12 +153,10 @@ class DbManager:
             )
             session.expunge_all()
             return records
-        finally:
-            session.rollback()
-            close_session(session)
 
+    @classmethod
     def update_record(cls: T, id, fields):
-        with get_session() as session:
+        with session_scope() as session:
             record = session.query(cls).get(id)
             if not record:
                 raise ValueError(f"Record with id {id} not found in {cls.__name__}")
@@ -191,16 +199,9 @@ class DbManager:
                             related_record = related_class(**{og_primary_key: id, **update_dict})
                             session.add(related_record)
 
-            try:
-                print(record)
-                session.commit()
-            except pg8000.IntegrityError as e:
-                session.rollback()
-                raise e
-
+    @classmethod
     def update_records(cls, filters, fields):
-        session = get_session()
-        try:
+        with session_scope() as session:
             # Fetch the objects to be updated
             objects = session.query(cls).filter(and_(*filters)).all()
 
@@ -248,47 +249,35 @@ class DbManager:
                                 session.add(related_record)
 
             session.flush()
-        finally:
-            session.commit()
-            close_session(session)
 
+    @classmethod
     def create_record(record: Base) -> Base:
-        session = get_session()
-        try:
+        with session_scope() as session:
             session.add(record)
             session.flush()
             session.expunge(record)
-        finally:
-            session.commit()
-            close_session(session)
             return record  # noqa
 
+    @classmethod
     def create_records(records: List[Base]):
-        session = get_session()
-        try:
+        with session_scope() as session:
             session.add_all(records)
             session.flush()
             session.expunge_all()
-        finally:
-            session.commit()
-            close_session(session)
             return records  # noqa
 
+    @classmethod
     def create_or_ignore(cls: T, records: List[Base]):
-        session = get_session()
-        try:
+        with session_scope() as session:
             for record in records:
                 record_dict = {k: v for k, v in record.__dict__.items() if k != "_sa_instance_state"}
                 stmt = insert(cls).values(record_dict).on_conflict_do_nothing()
                 session.execute(stmt)
             session.flush()
-        finally:
-            session.commit()
-            close_session(session)
 
+    @classmethod
     def upsert_records(cls, records):
-        session = get_session()
-        try:
+        with session_scope() as session:
             for record in records:
                 record_dict = {k: v for k, v in record.__dict__.items() if k != "_sa_instance_state"}
                 stmt = insert(cls).values(record_dict)
@@ -299,22 +288,16 @@ class DbManager:
                 )
                 session.execute(stmt)
             session.flush()
-        finally:
-            session.commit()
-            close_session(session)
 
+    @classmethod
     def delete_record(cls: T, id):
-        session = get_session()
-        try:
+        with session_scope() as session:
             session.query(cls).filter(cls.id == id).delete()
             session.flush()
-        finally:
-            session.commit()
-            close_session(session)
 
-    def delete_records(cls: T, filters, joinedloads: List | str = []):
-        session = get_session()
-        try:
+    @classmethod
+    def delete_records(cls: T, filters, joinedloads: List | str = None):
+        with session_scope() as session:
             query = select(cls)
             query = _joinedloads(cls, query, joinedloads)
             query = query.filter(*filters)
@@ -323,17 +306,12 @@ class DbManager:
                 session.delete(r)
             # session.query(cls).filter(and_(*filters)).delete()
             session.flush()
-        finally:
-            session.commit()
-            close_session(session)
 
+    @classmethod
     def execute_sql_query(sql_query):
-        session = get_session()
-        try:
+        with session_scope() as session:
             records = session.execute(sql_query)
             return records
-        finally:
-            close_session(session)
 
 
 def create_diagram():
