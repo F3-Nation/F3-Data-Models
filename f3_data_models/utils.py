@@ -59,12 +59,6 @@ GLOBAL_SESSION = sessionmaker(bind=GLOBAL_ENGINE)
 
 
 def get_session():
-    # if GLOBAL_SESSION:
-    #     return GLOBAL_SESSION
-
-    # global GLOBAL_ENGINE
-    # GLOBAL_ENGINE = get_engine(echo=echo)
-    # return sessionmaker()(bind=GLOBAL_ENGINE)
     return GLOBAL_SESSION()
 
 
@@ -80,14 +74,6 @@ def session_scope():
         raise e
     finally:
         session.close()
-
-
-# def close_session(session):
-#     global GLOBAL_SESSION, GLOBAL_ENGINE
-#     if GLOBAL_SESSION == session:
-#         if GLOBAL_ENGINE:
-#             GLOBAL_ENGINE.close()
-#             GLOBAL_SESSION = None
 
 
 T = TypeVar("T")
@@ -136,28 +122,29 @@ class DbManager:
     @classmethod
     def find_join_records2(left_cls: T, right_cls: T, filters) -> List[Tuple[T]]:
         with session_scope() as session:
-            records = session.query(left_cls, right_cls).join(right_cls).filter(and_(*filters)).all()
+            result = session.execute(select(left_cls, right_cls).join(right_cls).filter(and_(*filters)))
+            records = result.all()
             session.expunge_all()
             return records
 
     @classmethod
     def find_join_records3(left_cls: T, right_cls1: T, right_cls2: T, filters, left_join=False) -> List[Tuple[T]]:
         with session_scope() as session:
-            records = (
-                session.query(left_cls, right_cls1, right_cls2)
+            result = session.execute(
+                select(left_cls, right_cls1, right_cls2)
                 .select_from(left_cls)
                 .join(right_cls1, isouter=left_join)
                 .join(right_cls2, isouter=left_join)
                 .filter(and_(*filters))
-                .all()
             )
+            records = result.all()
             session.expunge_all()
             return records
 
     @classmethod
     def update_record(cls: T, id, fields):
         with session_scope() as session:
-            record = session.query(cls).get(id)
+            record = session.get(cls, id)
             if not record:
                 raise ValueError(f"Record with id {id} not found in {cls.__name__}")
 
@@ -168,10 +155,6 @@ class DbManager:
                 print(f"key: {key}, value: {value}")
                 if hasattr(cls, key) and key not in relationships:
                     setattr(record, key, value)
-                    # if isinstance(attr, InstrumentedAttribute):
-                    #     setattr(record, key, value)
-                    # else:
-                    #     setattr(record, key, value)
                 elif key in relationships:
                     # Handle relationships separately
                     relationship = mapper.relationships[key]
@@ -202,8 +185,7 @@ class DbManager:
     @classmethod
     def update_records(cls, filters, fields):
         with session_scope() as session:
-            # Fetch the objects to be updated
-            objects = session.query(cls).filter(and_(*filters)).all()
+            objects = session.scalars(select(cls).filter(and_(*filters))).all()
 
             # Get the list of valid attributes for the class
             valid_attributes = {attr.key for attr in inspect(cls).mapper.column_attrs}
@@ -304,7 +286,6 @@ class DbManager:
             records = session.scalars(query).unique().all()
             for r in records:
                 session.delete(r)
-            # session.query(cls).filter(and_(*filters)).delete()
             session.flush()
 
     @classmethod
