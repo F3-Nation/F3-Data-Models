@@ -88,7 +88,7 @@ def _joinedloads(cls: T, query: Select, joinedloads: list | str = None) -> Selec
 
 
 class DbManager:
-    @classmethod
+    @staticmethod
     def get(cls: Type[T], id: int, joinedloads: list | str = None) -> T:
         with session_scope() as session:
             query = select(cls).filter(cls.id == id)
@@ -97,7 +97,7 @@ class DbManager:
             session.expunge(record)
             return record
 
-    @classmethod
+    @staticmethod
     def find_records(cls: T, filters: Optional[List], joinedloads: List | str = None) -> List[T]:
         with session_scope() as session:
             query = select(cls)
@@ -108,7 +108,7 @@ class DbManager:
                 session.expunge(r)
             return records
 
-    @classmethod
+    @staticmethod
     def find_first_record(cls: T, filters: Optional[List], joinedloads: List | str = None) -> T:
         with session_scope() as session:
             query = select(cls)
@@ -119,7 +119,7 @@ class DbManager:
                 session.expunge(record)
             return record
 
-    @classmethod
+    @staticmethod
     def find_join_records2(left_cls: T, right_cls: T, filters) -> List[Tuple[T]]:
         with session_scope() as session:
             result = session.execute(select(left_cls, right_cls).join(right_cls).filter(and_(*filters)))
@@ -127,7 +127,7 @@ class DbManager:
             session.expunge_all()
             return records
 
-    @classmethod
+    @staticmethod
     def find_join_records3(left_cls: T, right_cls1: T, right_cls2: T, filters, left_join=False) -> List[Tuple[T]]:
         with session_scope() as session:
             result = session.execute(
@@ -141,7 +141,7 @@ class DbManager:
             session.expunge_all()
             return records
 
-    @classmethod
+    @staticmethod
     def update_record(cls: T, id, fields):
         with session_scope() as session:
             record = session.get(cls, id)
@@ -182,7 +182,7 @@ class DbManager:
                             related_record = related_class(**{og_primary_key: id, **update_dict})
                             session.add(related_record)
 
-    @classmethod
+    @staticmethod
     def update_records(cls, filters, fields):
         with session_scope() as session:
             objects = session.scalars(select(cls).filter(and_(*filters))).all()
@@ -232,7 +232,7 @@ class DbManager:
 
             session.flush()
 
-    @classmethod
+    @staticmethod
     def create_record(record: Base) -> Base:
         with session_scope() as session:
             session.add(record)
@@ -240,7 +240,7 @@ class DbManager:
             session.expunge(record)
             return record  # noqa
 
-    @classmethod
+    @staticmethod
     def create_records(records: List[Base]):
         with session_scope() as session:
             session.add_all(records)
@@ -248,7 +248,7 @@ class DbManager:
             session.expunge_all()
             return records  # noqa
 
-    @classmethod
+    @staticmethod
     def create_or_ignore(cls: T, records: List[Base]):
         with session_scope() as session:
             for record in records:
@@ -257,7 +257,7 @@ class DbManager:
                 session.execute(stmt)
             session.flush()
 
-    @classmethod
+    @staticmethod
     def upsert_records(cls, records):
         with session_scope() as session:
             for record in records:
@@ -271,13 +271,13 @@ class DbManager:
                 session.execute(stmt)
             session.flush()
 
-    @classmethod
+    @staticmethod
     def delete_record(cls: T, id):
         with session_scope() as session:
             session.query(cls).filter(cls.id == id).delete()
             session.flush()
 
-    @classmethod
+    @staticmethod
     def delete_records(cls: T, filters, joinedloads: List | str = None):
         with session_scope() as session:
             query = select(cls)
@@ -288,7 +288,7 @@ class DbManager:
                 session.delete(r)
             session.flush()
 
-    @classmethod
+    @staticmethod
     def execute_sql_query(sql_query):
         with session_scope() as session:
             records = session.execute(sql_query)
