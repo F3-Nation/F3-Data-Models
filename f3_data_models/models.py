@@ -909,6 +909,8 @@ class User(Base):
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
+    home_region_org: Mapped[Optional[Org]] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+
 
 class SlackUser(Base):
     """
