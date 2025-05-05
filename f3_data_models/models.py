@@ -1258,6 +1258,7 @@ class UpdateRequest(Base):
         ao_id (Optional[int]): The ID of the associated AO.
         ao_name (Optional[text]): The name of the AO.
         ao_logo (Optional[text]): The URL of the AO logo.
+        ao_website (Optional[text]): The website of the AO.
         submitted_by (str): The user who submitted the request.
         submitter_validated (Optional[bool]): Whether the submitter has validated the request. Default is False.
         reviewed_by (Optional[str]): The user who reviewed the request.
@@ -1310,6 +1311,7 @@ class UpdateRequest(Base):
     ao_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
     ao_name: Mapped[Optional[text]]
     ao_logo: Mapped[Optional[text]]
+    ao_website: Mapped[Optional[text]]
 
     submitted_by: Mapped[text]
     submitter_validated: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
