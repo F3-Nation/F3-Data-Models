@@ -500,7 +500,7 @@ class EventType_x_Event(Base):
 
     __tablename__ = "events_x_event_types"
 
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True, onupdate="CASCADE")
     event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"), primary_key=True)
     __table_args__ = (
         Index("idx_events_x_event_types_event_id", "event_id"),
@@ -523,7 +523,9 @@ class EventType_x_EventInstance(Base):
 
     __tablename__ = "event_instances_x_event_types"
 
-    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), primary_key=True)
+    event_instance_id: Mapped[int] = mapped_column(
+        ForeignKey("event_instances.id"), primary_key=True, onupdate="CASCADE"
+    )
     event_type_id: Mapped[int] = mapped_column(ForeignKey("event_types.id"), primary_key=True)
 
     event_instance: Mapped["EventInstance"] = relationship(back_populates="event_instances_x_event_types")
@@ -567,7 +569,7 @@ class EventTag_x_Event(Base):
 
     __tablename__ = "event_tags_x_events"
 
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True, onupdate="CASCADE")
     event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"), primary_key=True)
 
     event: Mapped["Event"] = relationship(back_populates="event_x_event_tags")
@@ -586,7 +588,9 @@ class EventTag_x_EventInstance(Base):
 
     __tablename__ = "event_tags_x_event_instances"
 
-    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), primary_key=True)
+    event_instance_id: Mapped[int] = mapped_column(
+        ForeignKey("event_instances.id"), primary_key=True, onupdate="CASCADE"
+    )
     event_tag_id: Mapped[int] = mapped_column(ForeignKey("event_tags.id"), primary_key=True)
 
     event_instance: Mapped["EventInstance"] = relationship(back_populates="event_instances_x_event_tags")
@@ -735,10 +739,12 @@ class Event(Base):
         secondary="event_tags_x_events", cascade="expunge", viewonly=True
     )
     event_x_event_types: Mapped[List[EventType_x_Event]] = relationship(
-        back_populates="event", cascade="save-update, merge, delete"
+        back_populates="event",
+        passive_deletes=True,
     )
     event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
-        back_populates="event", cascade="save-update, merge, delete"
+        back_populates="event",
+        passive_deletes=True,
     )
 
 
@@ -785,7 +791,7 @@ class EventInstance(Base):
     id: Mapped[intpk]
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
     location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id"))
-    series_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"))
+    series_id: Mapped[Optional[int]] = mapped_column(ForeignKey("events.id"), onupdate="CASCADE")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     highlight: Mapped[bool] = mapped_column(Boolean, default=False)
     start_date: Mapped[date]
@@ -825,12 +831,14 @@ class EventInstance(Base):
         secondary="event_tags_x_event_instances", cascade="expunge", viewonly=True
     )
     event_instances_x_event_types: Mapped[List[EventType_x_EventInstance]] = relationship(
-        back_populates="event_instance", cascade="save-update, merge, delete"
+        back_populates="event_instance",
+        passive_deletes=True,
     )
     event_instances_x_event_tags: Mapped[Optional[List[EventTag_x_EventInstance]]] = relationship(
-        back_populates="event_instance", cascade="save-update, merge, delete"
+        back_populates="event_instance",
+        passive_deletes=True,
     )
-    attendance: Mapped[List["Attendance"]] = relationship(back_populates="event_instance", cascade="expunge, delete")
+    attendance: Mapped[List["Attendance"]] = relationship(back_populates="event_instance", passive_deletes=True)
 
 
 class AttendanceType(Base):
@@ -864,7 +872,7 @@ class Attendance_x_AttendanceType(Base):
 
     __tablename__ = "attendance_x_attendance_types"
 
-    attendance_id: Mapped[int] = mapped_column(ForeignKey("attendance.id"), primary_key=True)
+    attendance_id: Mapped[int] = mapped_column(ForeignKey("attendance.id"), primary_key=True, onupdate="CASCADE")
     attendance_type_id: Mapped[int] = mapped_column(ForeignKey("attendance_types.id"), primary_key=True)
 
     attendance: Mapped["Attendance"] = relationship(back_populates="attendance_x_attendance_types")
@@ -983,7 +991,7 @@ class Attendance(Base):
     __table_args__ = (UniqueConstraint("event_instance_id", "user_id", "is_planned"),)
 
     id: Mapped[intpk]
-    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"))
+    event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), onupdate="CASCADE")
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     is_planned: Mapped[bool]
     meta: Mapped[Optional[Dict[str, Any]]]
@@ -996,7 +1004,7 @@ class Attendance(Base):
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
     attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = relationship(
-        back_populates="attendance", cascade="save-update, merge, delete"
+        back_populates="attendance", passive_deletes=True
     )
     attendance_types: Mapped[List[AttendanceType]] = relationship(
         secondary="attendance_x_attendance_types",
