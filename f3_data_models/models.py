@@ -787,6 +787,11 @@ class EventInstance(Base):
     """  # noqa: E501
 
     __tablename__ = "event_instances"
+    __table_args__ = (
+        Index("idx_event_instances_org_id", "org_id"),
+        Index("idx_event_instances_location_id", "location_id"),
+        Index("idx_event_instances_is_active", "is_active"),
+    )
 
     id: Mapped[intpk]
     org_id: Mapped[int] = mapped_column(ForeignKey("orgs.id"))
@@ -988,7 +993,12 @@ class Attendance(Base):
     """  # noqa: E501
 
     __tablename__ = "attendance"
-    __table_args__ = (UniqueConstraint("event_instance_id", "user_id", "is_planned"),)
+    __table_args__ = (
+        UniqueConstraint("event_instance_id", "user_id", "is_planned"),
+        Index("idx_attendance_event_instance_id", "event_instance_id"),
+        Index("idx_attendance_user_id", "user_id"),
+        Index("idx_attendance_is_planned", "is_planned"),
+    )
 
     id: Mapped[intpk]
     event_instance_id: Mapped[int] = mapped_column(ForeignKey("event_instances.id"), onupdate="CASCADE")
