@@ -10,6 +10,9 @@ license = "MIT"
 repository = "https://github.com/F3-Nation/f3-data-models"
 documentation = "https://github.io/F3-Nation/f3-data-models"
 
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.34.0"
+
 [tool.ruff]
 line-length = 120
 
@@ -50,6 +53,10 @@ sqlmodel = "^0.0.22"
 alembic-postgresql-enum = "^1.6.1"
 sqlalchemy-citext = "^1.8.0"
 
+[tool.poe.tasks]
+install-js = "npm install"
+build-js = "npm run build"
+install-mermaid-js = "npm install --save-dev @mermaid-js/mermaid-cli"
 
 [build-system]
 requires = ["poetry-core"]
