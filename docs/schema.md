@@ -1,4 +1,10 @@
 ```mermaid
+---
+config:
+    look: handDrawn
+    theme: dark
+---
+
 erDiagram
     USERS ||--|{ ATTENDANCE : have
     ATTENDANCE }|--|| EVENT_INSTANCES: at
