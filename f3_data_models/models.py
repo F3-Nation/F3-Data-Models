@@ -399,6 +399,7 @@ class Org(Base):
         instagram (Optional[str]): The organization's Instagram handle.
         last_annual_review (Optional[date]): The date of the last annual review.
         meta (Optional[Dict[str, Any]]): Additional metadata for the organization.
+        ao_count (int): The number of AOs associated with the organization. Defaults to 0, will be updated by triggers.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
 
@@ -427,6 +428,7 @@ class Org(Base):
     instagram: Mapped[Optional[str]]
     last_annual_review: Mapped[Optional[date]]
     meta: Mapped[Optional[Dict[str, Any]]]
+    ao_count: Mapped[Optional[int]] = mapped_column(Integer, default=0, nullable=True)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -471,6 +473,7 @@ class EventType(Base):
         acronym (Optional[str]): Acronyms associated with the event type.
         event_category (Event_Category): The category of the event type (first_f, second_f, third_f).
         specific_org_id (Optional[int]): The ID of the specific organization.
+        is_active (bool): Whether the event type is active. Default is True.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """  # noqa: E501
@@ -483,6 +486,7 @@ class EventType(Base):
     acronym: Mapped[Optional[str]]
     event_category: Mapped[Event_Category]
     specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
