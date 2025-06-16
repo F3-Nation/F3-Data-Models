@@ -745,10 +745,12 @@ class Event(Base):
     event_x_event_types: Mapped[List[EventType_x_Event]] = relationship(
         back_populates="event",
         passive_deletes=True,
+        cascade="all, delete-orphan",
     )
     event_x_event_tags: Mapped[Optional[List[EventTag_x_Event]]] = relationship(
         back_populates="event",
         passive_deletes=True,
+        cascade="all, delete-orphan",
     )
 
 
@@ -842,12 +844,18 @@ class EventInstance(Base):
     event_instances_x_event_types: Mapped[List[EventType_x_EventInstance]] = relationship(
         back_populates="event_instance",
         passive_deletes=True,
+        cascade="all, delete-orphan",
     )
     event_instances_x_event_tags: Mapped[Optional[List[EventTag_x_EventInstance]]] = relationship(
         back_populates="event_instance",
         passive_deletes=True,
+        cascade="all, delete-orphan",
     )
-    attendance: Mapped[List["Attendance"]] = relationship(back_populates="event_instance", passive_deletes=True)
+    attendance: Mapped[List["Attendance"]] = relationship(
+        back_populates="event_instance",
+        passive_deletes=True,
+        cascade="all, delete-orphan",
+    )
 
 
 class AttendanceType(Base):
@@ -1018,7 +1026,7 @@ class Attendance(Base):
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
     attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = relationship(
-        back_populates="attendance", passive_deletes=True
+        back_populates="attendance", passive_deletes=True, cascade="all, delete-orphan"
     )
     attendance_types: Mapped[List[AttendanceType]] = relationship(
         secondary="attendance_x_attendance_types",
