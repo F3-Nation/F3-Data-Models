@@ -991,7 +991,7 @@ class Attendance(Base):
 
         event_instance (EventInstance): The associated event instance.
         user (User): The associated user.
-        slack_user (Optional[SlackUser]): The associated Slack user.
+        slack_users (Optional[List[SlackUser]]): The associated Slack Users for this User (a User can be in multiple SlackSpaces).
         attendance_x_attendance_types (List[Attendance_x_AttendanceType]): The association between the attendance and attendance types.
         attendance_types (List[AttendanceType]): The associated attendance types.
     """  # noqa: E501
@@ -1014,7 +1014,7 @@ class Attendance(Base):
 
     event_instance: Mapped[EventInstance] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
     user: Mapped[User] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
-    slack_user: Mapped[Optional[SlackUser]] = relationship(
+    slack_users: Mapped[Optional[List[SlackUser]]] = relationship(
         innerjoin=False, cascade="expunge", secondary="users", viewonly=True
     )
     attendance_x_attendance_types: Mapped[List[Attendance_x_AttendanceType]] = relationship(
