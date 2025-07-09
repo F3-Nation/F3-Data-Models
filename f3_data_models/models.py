@@ -145,12 +145,27 @@ class Achievement_Cadence(enum.Enum):
         monthly
         quarterly
         yearly
+        lifetime
     """
 
     weekly = 1
     monthly = 2
     quarterly = 3
     yearly = 4
+    lifetime = 5
+
+
+class Achievement_Threshold_Type(enum.Enum):
+    """
+    Enum representing the type of threshold for an achievement.
+
+    Attributes:
+        posts
+        unique_aos
+    """
+
+    posts = 1
+    unique_aos = 2
 
 
 class Org_Type(enum.Enum):
@@ -966,7 +981,7 @@ class SlackUser(Base):
         strava_expires_at (Optional[datetime]): The expiration time of the Strava token.
         strava_athlete_id (Optional[int]): The Strava athlete ID of the user.
         meta (Optional[Dict[str, Any]]): Additional metadata for the Slack user.
-        slack_updated (Optional[datetime]): The last update time of the Slack user.
+        slack_updated (Optional[int]): The last update time of the Slack user.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """  # noqa: E501
@@ -988,7 +1003,7 @@ class SlackUser(Base):
     strava_expires_at: Mapped[Optional[datetime]]
     strava_athlete_id: Mapped[Optional[int]]
     meta: Mapped[Optional[Dict[str, Any]]]
-    slack_updated: Mapped[Optional[datetime]]
+    slack_updated: Mapped[Optional[int]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
@@ -1053,21 +1068,14 @@ class Achievement(Base):
         id (int): Primary Key of the model.
         name (str): The name of the achievement.
         description (Optional[str]): A description of the achievement.
-        verb (str): The verb associated with the achievement.
         image_url (Optional[str]): The URL of the achievement's image.
         specific_org_id (Optional[int]): The ID of the specific region if a custom achievement. If null, the achievement is available to all regions.
-        auto_award (bool): Whether the achievement is automatically awarded or needs to be manually tagged. Default is False.
         is_active (bool): Whether the achievement is active. Default is True.
+        auto_award (bool): Whether the achievement is automatically awarded or needs to be manually tagged. Default is False.
         auto_cadence (Optional[Achievement_Cadence]): The cadence for automatic awarding of the achievement.
         auto_threshold (Optional[int]): The threshold for automatic awarding of the achievement.
-        auto_event_type_ids_include (Optional[List[int]]): List of event type IDs to include for automatic awarding.
-        auto_event_type_ids_exclude (Optional[List[int]]): List of event type IDs to exclude for automatic awarding.
-        auto_event_tag_ids_include (Optional[List[int]]): List of event tag IDs to include for automatic awarding.
-        auto_event_tag_ids_exclude (Optional[List[int]]): List of event tag IDs to exclude for automatic awarding.
-        auto_event_categories_include (Optional[List[Event_Category]]): List of event categories to include for automatic awarding.
-        auto_event_categories_exclude (Optional[List[Event_Category]]): List of event categories to exclude for automatic awarding.
-        auto_custom_sql (Optional[str]): Custom SQL for automatic awarding of the achievement.
-        meta (Optional[Dict[str, Any]]): Additional metadata for the achievement.
+        auto_threshold_type (Optional[Achievement_Threshold_Type]): The type of threshold for automatic awarding of the achievement ('posts', 'unique_aos', etc.).
+        auto_filters (Optional[Dict[str, Any]]): Event filters for automatic awarding of the achievement. Should be a format like {'include': [{'event_type_id': [1, 2]}, {'event_tag_id': [3]}], 'exclude': [{'event_category': ['third_f']}]}.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
     """  # noqa: E501
@@ -1077,28 +1085,14 @@ class Achievement(Base):
     id: Mapped[intpk]
     name: Mapped[str]
     description: Mapped[Optional[str]]
-    verb: Mapped[str]
     image_url: Mapped[Optional[str]]
     specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
-    auto_award: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, server_default="true", nullable=False)
+    auto_award: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
     auto_cadence: Mapped[Optional[Achievement_Cadence]]
+    auto_threshold_type: Mapped[Optional[Achievement_Threshold_Type]]
     auto_threshold: Mapped[Optional[int]]
-    auto_event_type_ids_include: Mapped[Optional[List[int]]] = mapped_column(
-        ARRAY(Integer, dimensions=1, as_tuple=True)
-    )
-    auto_event_type_ids_exclude: Mapped[Optional[List[int]]] = mapped_column(
-        ARRAY(Integer, dimensions=1, as_tuple=True)
-    )
-    auto_event_tag_ids_include: Mapped[Optional[List[int]]] = mapped_column(ARRAY(Integer, dimensions=1, as_tuple=True))
-    auto_event_tag_ids_exclude: Mapped[Optional[List[int]]] = mapped_column(ARRAY(Integer, dimensions=1, as_tuple=True))
-    auto_event_categories_include: Mapped[Optional[List[Event_Category]]] = mapped_column(
-        ARRAY(Enum(Event_Category), dimensions=1, as_tuple=True)
-    )
-    auto_event_categories_exclude: Mapped[Optional[List[Event_Category]]] = mapped_column(
-        ARRAY(Enum(Event_Category), dimensions=1, as_tuple=True)
-    )
-    auto_custom_sql: Mapped[Optional[str]]
+    auto_filters: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSON, default=dict)
     meta: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSON, default=dict)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
