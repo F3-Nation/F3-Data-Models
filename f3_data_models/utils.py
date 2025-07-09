@@ -194,13 +194,13 @@ class DbManager:
             for obj in objects:
                 # Update simple fields
                 for attr, value in fields.items():
-                    key = attr.key
+                    key = attr if isinstance(attr, str) else attr.key
                     if key in valid_attributes and not isinstance(value, InstrumentedList):
                         setattr(obj, key, value)
 
                 # Update relationships separately
                 for attr, value in fields.items():
-                    key = attr.key
+                    key = attr if isinstance(attr, str) else attr.key
                     if key in valid_relationships:
                         # Handle relationships separately
                         relationship = inspect(cls).mapper.relationships[key]
