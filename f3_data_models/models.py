@@ -1113,6 +1113,8 @@ class Achievement_x_User(Base):
     Attributes:
         achievement_id (int): The ID of the associated achievement.
         user_id (int): The ID of the associated user.
+        award_year (int): The year the achievement was awarded. Default is -1 (used for lifetime achievements).
+        award_period (int): The period (ie week, month) the achievement was awarded in. Default is -1 (used for lifetime achievements).
         date_awarded (date): The date the achievement was awarded. Default is the current date.
     """  # noqa: E501
 
@@ -1120,6 +1122,8 @@ class Achievement_x_User(Base):
 
     achievement_id: Mapped[int] = mapped_column(ForeignKey("achievements.id"), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    award_year: Mapped[int] = mapped_column(Integer, primary_key=True, server_default="-1")
+    award_period: Mapped[int] = mapped_column(Integer, primary_key=True, server_default="-1")
     date_awarded: Mapped[date] = mapped_column(DateTime, server_default=func.timezone("utc", func.now()))
 
 
