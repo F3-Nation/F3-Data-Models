@@ -23,6 +23,7 @@ from sqlalchemy import (
     func,
     inspect,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -47,6 +48,21 @@ dt_update = Annotated[
         server_onupdate=func.timezone("utc", func.now()),
     ),
 ]
+
+
+class Codex_Submission_Status(enum.Enum):
+    """
+    Enum representing the status of a codex submission.
+
+    Attributes:
+        pending
+        approved
+        rejected
+    """
+
+    pending = 1
+    approved = 2
+    rejected = 3
 
 
 class User_Status(enum.Enum):
@@ -1399,5 +1415,168 @@ class UpdateRequest(Base):
     )
     meta: Mapped[Optional[Dict[str, Any]]]
     request_type: Mapped[Request_Type]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+
+# -- Main table for entries
+# CREATE TABLE IF NOT EXISTS codex_entries (
+#   id SERIAL PRIMARY KEY,
+#   title VARCHAR(255) NOT NULL,
+#   definition TEXT NOT NULL,
+#   type VARCHAR(50) NOT NULL,
+#   aliases JSONB DEFAULT '[]'::jsonb,
+#   video_link TEXT,
+#   updated_at TIMESTAMP NOT NULL DEFAULT now()
+# );
+
+# -- Tags used to categorize entries
+# CREATE TABLE IF NOT EXISTS codex_tags (
+#   id SERIAL PRIMARY KEY,
+#   name VARCHAR(255) UNIQUE NOT NULL
+# );
+
+# -- Many-to-many relationship between entries and tags
+# CREATE TABLE IF NOT EXISTS codex_entry_tags (
+#   entry_id INTEGER NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+#   tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+#   PRIMARY KEY (entry_id, tag_id)
+# );
+
+# -- User-submitted suggestions (entries, edits, tags, etc.)
+# CREATE TABLE IF NOT EXISTS codex_user_submissions (
+#   id SERIAL PRIMARY KEY,
+#   submission_type VARCHAR(50) NOT NULL,
+#   data JSONB NOT NULL,
+#   submitter_name VARCHAR(255),
+#   submitter_email VARCHAR(255),
+#   timestamp TIMESTAMP NOT NULL DEFAULT now(),
+#   status VARCHAR(50) NOT NULL DEFAULT 'pending'
+# );
+
+# -- Internal linking between entries
+
+# CREATE TABLE IF NOT EXISTS codex_references (
+#   id SERIAL PRIMARY KEY,
+#   from_entry_id INTEGER NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+#   to_entry_id INTEGER NOT NULL REFERENCES entries(id) ON DELETE CASCADE,
+#   context TEXT,
+#   created_at TIMESTAMP NOT NULL DEFAULT now()
+# );
+
+
+class CodexEntry(Base):
+    """
+    Model representing a Codex entry.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        title (str): The title of the entry.
+        definition (text): The definition of the entry.
+        type (str): The type of the entry.
+        aliases (Optional[List[str]]): Aliases for the entry.
+        video_link (Optional[str]): A link to a video related to the entry.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """  # noqa: E501
+
+    __tablename__ = "codex_entries"
+
+    id: Mapped[intpk]
+    title: Mapped[str]
+    definition: Mapped[text]
+    type: Mapped[str]
+    aliases: Mapped[Optional[List[str]]] = mapped_column(JSONB, server_default="[]")
+    video_link: Mapped[Optional[str]]
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+
+class CodexTag(Base):
+    """
+    Model representing a Codex tag.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        name (str): The name of the tag.
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """  # noqa: E501
+
+    __tablename__ = "codex_tags"
+
+    id: Mapped[intpk]
+    name: Mapped[str] = mapped_column(VARCHAR, unique=True, nullable=False)
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+
+class CodexEntryTag(Base):
+    """
+    Model representing the association between Codex entries and tags.
+
+    Attributes:
+        entry_id (int): The ID of the associated Codex entry.
+        tag_id (int): The ID of the associated Codex tag.
+    """  # noqa: E501
+
+    __tablename__ = "codex_entry_tags"
+
+    entry_id: Mapped[int] = mapped_column(ForeignKey("codex_entries.id", ondelete="CASCADE"), primary_key=True)
+    tag_id: Mapped[int] = mapped_column(ForeignKey("codex_tags.id", ondelete="CASCADE"), primary_key=True)
+
+
+class CodexUserSubmission(Base):
+    """
+    Model representing a user submission for the Codex.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        submission_type (str): The type of the submission (e.g., 'entry', 'edit', 'tag').
+        data (Dict[str, Any]): The data of the submission in JSON format.
+        submitter_name (Optional[str]): The name of the submitter.
+        submitter_email (Optional[str]): The email of the submitter.
+        submitter_user_id (Optional[int]): The ID of the associated user, if available.
+        timestamp (datetime): The timestamp when the submission was made.
+        status (str): The status of the submission (e.g., 'pending', 'approved', 'rejected').
+        created (datetime): The timestamp when the record was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """  # noqa: E501
+
+    __tablename__ = "codex_user_submissions"
+
+    id: Mapped[intpk]
+    submission_type: Mapped[str]
+    data: Mapped[Dict[str, Any]] = mapped_column(JSON)
+    submitter_name: Mapped[Optional[str]]
+    submitter_email: Mapped[Optional[str]]
+    submitter_user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
+    timestamp: Mapped[dt_create]
+    status: Mapped[Codex_Submission_Status] = mapped_column(
+        Enum(Codex_Submission_Status), default=Codex_Submission_Status.pending
+    )
+    created: Mapped[dt_create]
+    updated: Mapped[dt_update]
+
+
+class CodexReference(Base):
+    """
+    Model representing a reference between Codex entries.
+
+    Attributes:
+        id (int): Primary Key of the model.
+        from_entry_id (int): The ID of the entry from which the reference originates.
+        to_entry_id (int): The ID of the entry to which the reference points.
+        context (Optional[str]): Context or description of the reference.
+        created (datetime): The timestamp when the reference was created.
+        updated (datetime): The timestamp when the record was last updated.
+    """  # noqa: E501
+
+    __tablename__ = "codex_references"
+
+    id: Mapped[intpk]
+    from_entry_id: Mapped[int] = mapped_column(ForeignKey("codex_entries.id", ondelete="CASCADE"))
+    to_entry_id: Mapped[int] = mapped_column(ForeignKey("codex_entries.id", ondelete="CASCADE"))
+    context: Mapped[Optional[str]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
