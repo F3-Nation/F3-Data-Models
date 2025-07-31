@@ -780,7 +780,7 @@ class Event(Base):
     )
 
     org: Mapped[Org] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
-    location: Mapped[Location] = relationship(innerjoin=True, cascade="expunge", viewonly=True)
+    location: Mapped[Location] = relationship(innerjoin=False, cascade="expunge", viewonly=True)
     event_types: Mapped[List[EventType]] = relationship(
         secondary="events_x_event_types",
         innerjoin=True,
