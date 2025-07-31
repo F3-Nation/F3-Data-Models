@@ -1,0 +1,648 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>models &mdash; F3 Nation Data 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/my_theme.css?v=a0fc712e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="models package" href="models.html" />
+    <link rel="prev" title="F3 Nation Data Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            F3 Nation Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html">models package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">F3 Nation Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="models">
+<h1>models<a class="headerlink" href="#models" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="models.html">models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Codex_Submission_Status"><code class="docutils literal notranslate"><span class="pre">Codex_Submission_Status</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Codex_Submission_Status.pending"><code class="docutils literal notranslate"><span class="pre">Codex_Submission_Status.pending</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Codex_Submission_Status.approved"><code class="docutils literal notranslate"><span class="pre">Codex_Submission_Status.approved</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Codex_Submission_Status.rejected"><code class="docutils literal notranslate"><span class="pre">Codex_Submission_Status.rejected</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.User_Status"><code class="docutils literal notranslate"><span class="pre">User_Status</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User_Status.active"><code class="docutils literal notranslate"><span class="pre">User_Status.active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User_Status.inactive"><code class="docutils literal notranslate"><span class="pre">User_Status.inactive</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User_Status.deleted"><code class="docutils literal notranslate"><span class="pre">User_Status.deleted</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Region_Role"><code class="docutils literal notranslate"><span class="pre">Region_Role</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Region_Role.user"><code class="docutils literal notranslate"><span class="pre">Region_Role.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Region_Role.editor"><code class="docutils literal notranslate"><span class="pre">Region_Role.editor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Region_Role.admin"><code class="docutils literal notranslate"><span class="pre">Region_Role.admin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.User_Role"><code class="docutils literal notranslate"><span class="pre">User_Role</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User_Role.user"><code class="docutils literal notranslate"><span class="pre">User_Role.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User_Role.editor"><code class="docutils literal notranslate"><span class="pre">User_Role.editor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User_Role.admin"><code class="docutils literal notranslate"><span class="pre">User_Role.admin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Update_Request_Status"><code class="docutils literal notranslate"><span class="pre">Update_Request_Status</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Update_Request_Status.pending"><code class="docutils literal notranslate"><span class="pre">Update_Request_Status.pending</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Update_Request_Status.approved"><code class="docutils literal notranslate"><span class="pre">Update_Request_Status.approved</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Update_Request_Status.rejected"><code class="docutils literal notranslate"><span class="pre">Update_Request_Status.rejected</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Day_Of_Week"><code class="docutils literal notranslate"><span class="pre">Day_Of_Week</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Event_Cadence"><code class="docutils literal notranslate"><span class="pre">Event_Cadence</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event_Cadence.weekly"><code class="docutils literal notranslate"><span class="pre">Event_Cadence.weekly</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event_Cadence.monthly"><code class="docutils literal notranslate"><span class="pre">Event_Cadence.monthly</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Cadence"><code class="docutils literal notranslate"><span class="pre">Achievement_Cadence</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Cadence.weekly"><code class="docutils literal notranslate"><span class="pre">Achievement_Cadence.weekly</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Cadence.monthly"><code class="docutils literal notranslate"><span class="pre">Achievement_Cadence.monthly</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Cadence.quarterly"><code class="docutils literal notranslate"><span class="pre">Achievement_Cadence.quarterly</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Cadence.yearly"><code class="docutils literal notranslate"><span class="pre">Achievement_Cadence.yearly</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Cadence.lifetime"><code class="docutils literal notranslate"><span class="pre">Achievement_Cadence.lifetime</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Threshold_Type"><code class="docutils literal notranslate"><span class="pre">Achievement_Threshold_Type</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Threshold_Type.posts"><code class="docutils literal notranslate"><span class="pre">Achievement_Threshold_Type.posts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_Threshold_Type.unique_aos"><code class="docutils literal notranslate"><span class="pre">Achievement_Threshold_Type.unique_aos</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Org_Type"><code class="docutils literal notranslate"><span class="pre">Org_Type</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_Type.ao"><code class="docutils literal notranslate"><span class="pre">Org_Type.ao</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_Type.region"><code class="docutils literal notranslate"><span class="pre">Org_Type.region</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_Type.area"><code class="docutils literal notranslate"><span class="pre">Org_Type.area</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_Type.sector"><code class="docutils literal notranslate"><span class="pre">Org_Type.sector</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_Type.nation"><code class="docutils literal notranslate"><span class="pre">Org_Type.nation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Event_Category"><code class="docutils literal notranslate"><span class="pre">Event_Category</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event_Category.first_f"><code class="docutils literal notranslate"><span class="pre">Event_Category.first_f</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event_Category.second_f"><code class="docutils literal notranslate"><span class="pre">Event_Category.second_f</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event_Category.third_f"><code class="docutils literal notranslate"><span class="pre">Event_Category.third_f</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Request_Type"><code class="docutils literal notranslate"><span class="pre">Request_Type</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Request_Type.create_location"><code class="docutils literal notranslate"><span class="pre">Request_Type.create_location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Request_Type.create_event"><code class="docutils literal notranslate"><span class="pre">Request_Type.create_event</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Request_Type.edit"><code class="docutils literal notranslate"><span class="pre">Request_Type.edit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Request_Type.delete_event"><code class="docutils literal notranslate"><span class="pre">Request_Type.delete_event</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base.get_id"><code class="docutils literal notranslate"><span class="pre">Base.get_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base.get"><code class="docutils literal notranslate"><span class="pre">Base.get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base.to_json"><code class="docutils literal notranslate"><span class="pre">Base.to_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base.__repr__"><code class="docutils literal notranslate"><span class="pre">Base.__repr__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base._update"><code class="docutils literal notranslate"><span class="pre">Base._update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#id0"><code class="docutils literal notranslate"><span class="pre">Base.get_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#id1"><code class="docutils literal notranslate"><span class="pre">Base.get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#id2"><code class="docutils literal notranslate"><span class="pre">Base.to_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base.metadata"><code class="docutils literal notranslate"><span class="pre">Base.metadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Base.registry"><code class="docutils literal notranslate"><span class="pre">Base.registry</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace"><code class="docutils literal notranslate"><span class="pre">SlackSpace</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.id"><code class="docutils literal notranslate"><span class="pre">SlackSpace.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.team_id"><code class="docutils literal notranslate"><span class="pre">SlackSpace.team_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.workspace_name"><code class="docutils literal notranslate"><span class="pre">SlackSpace.workspace_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.bot_token"><code class="docutils literal notranslate"><span class="pre">SlackSpace.bot_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.settings"><code class="docutils literal notranslate"><span class="pre">SlackSpace.settings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.created"><code class="docutils literal notranslate"><span class="pre">SlackSpace.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackSpace.updated"><code class="docutils literal notranslate"><span class="pre">SlackSpace.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Role"><code class="docutils literal notranslate"><span class="pre">Role</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role.id"><code class="docutils literal notranslate"><span class="pre">Role.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role.name"><code class="docutils literal notranslate"><span class="pre">Role.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role.description"><code class="docutils literal notranslate"><span class="pre">Role.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role.created"><code class="docutils literal notranslate"><span class="pre">Role.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role.updated"><code class="docutils literal notranslate"><span class="pre">Role.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Permission"><code class="docutils literal notranslate"><span class="pre">Permission</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Permission.id"><code class="docutils literal notranslate"><span class="pre">Permission.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Permission.name"><code class="docutils literal notranslate"><span class="pre">Permission.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Permission.description"><code class="docutils literal notranslate"><span class="pre">Permission.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Permission.created"><code class="docutils literal notranslate"><span class="pre">Permission.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Permission.updated"><code class="docutils literal notranslate"><span class="pre">Permission.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_Permission"><code class="docutils literal notranslate"><span class="pre">Role_x_Permission</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_Permission.role_id"><code class="docutils literal notranslate"><span class="pre">Role_x_Permission.role_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_Permission.permission_id"><code class="docutils literal notranslate"><span class="pre">Role_x_Permission.permission_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_User_x_Org"><code class="docutils literal notranslate"><span class="pre">Role_x_User_x_Org</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_User_x_Org.role_id"><code class="docutils literal notranslate"><span class="pre">Role_x_User_x_Org.role_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_User_x_Org.user_id"><code class="docutils literal notranslate"><span class="pre">Role_x_User_x_Org.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Role_x_User_x_Org.org_id"><code class="docutils literal notranslate"><span class="pre">Role_x_User_x_Org.org_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Org"><code class="docutils literal notranslate"><span class="pre">Org</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.id"><code class="docutils literal notranslate"><span class="pre">Org.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.parent_id"><code class="docutils literal notranslate"><span class="pre">Org.parent_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.org_type"><code class="docutils literal notranslate"><span class="pre">Org.org_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.default_location_id"><code class="docutils literal notranslate"><span class="pre">Org.default_location_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.name"><code class="docutils literal notranslate"><span class="pre">Org.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.description"><code class="docutils literal notranslate"><span class="pre">Org.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.is_active"><code class="docutils literal notranslate"><span class="pre">Org.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.logo_url"><code class="docutils literal notranslate"><span class="pre">Org.logo_url</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.website"><code class="docutils literal notranslate"><span class="pre">Org.website</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.email"><code class="docutils literal notranslate"><span class="pre">Org.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.twitter"><code class="docutils literal notranslate"><span class="pre">Org.twitter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.facebook"><code class="docutils literal notranslate"><span class="pre">Org.facebook</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.instagram"><code class="docutils literal notranslate"><span class="pre">Org.instagram</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.last_annual_review"><code class="docutils literal notranslate"><span class="pre">Org.last_annual_review</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.meta"><code class="docutils literal notranslate"><span class="pre">Org.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.ao_count"><code class="docutils literal notranslate"><span class="pre">Org.ao_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.created"><code class="docutils literal notranslate"><span class="pre">Org.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.updated"><code class="docutils literal notranslate"><span class="pre">Org.updated</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.locations"><code class="docutils literal notranslate"><span class="pre">Org.locations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.event_types"><code class="docutils literal notranslate"><span class="pre">Org.event_types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.event_tags"><code class="docutils literal notranslate"><span class="pre">Org.event_tags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.achievements"><code class="docutils literal notranslate"><span class="pre">Org.achievements</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.parent_org"><code class="docutils literal notranslate"><span class="pre">Org.parent_org</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org.slack_space"><code class="docutils literal notranslate"><span class="pre">Org.slack_space</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventType"><code class="docutils literal notranslate"><span class="pre">EventType</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.id"><code class="docutils literal notranslate"><span class="pre">EventType.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.name"><code class="docutils literal notranslate"><span class="pre">EventType.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.description"><code class="docutils literal notranslate"><span class="pre">EventType.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.acronym"><code class="docutils literal notranslate"><span class="pre">EventType.acronym</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.event_category"><code class="docutils literal notranslate"><span class="pre">EventType.event_category</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.specific_org_id"><code class="docutils literal notranslate"><span class="pre">EventType.specific_org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.is_active"><code class="docutils literal notranslate"><span class="pre">EventType.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.created"><code class="docutils literal notranslate"><span class="pre">EventType.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType.updated"><code class="docutils literal notranslate"><span class="pre">EventType.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_Event"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_Event.event_id"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_Event.event_type_id"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event_type_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_Event.event"><code class="docutils literal notranslate"><span class="pre">EventType_x_Event.event</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_EventInstance"><code class="docutils literal notranslate"><span class="pre">EventType_x_EventInstance</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_EventInstance.event_instance_id"><code class="docutils literal notranslate"><span class="pre">EventType_x_EventInstance.event_instance_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_EventInstance.event_type_id"><code class="docutils literal notranslate"><span class="pre">EventType_x_EventInstance.event_type_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventType_x_EventInstance.event_instance"><code class="docutils literal notranslate"><span class="pre">EventType_x_EventInstance.event_instance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventTag"><code class="docutils literal notranslate"><span class="pre">EventTag</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.id"><code class="docutils literal notranslate"><span class="pre">EventTag.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.name"><code class="docutils literal notranslate"><span class="pre">EventTag.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.description"><code class="docutils literal notranslate"><span class="pre">EventTag.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.color"><code class="docutils literal notranslate"><span class="pre">EventTag.color</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.specific_org_id"><code class="docutils literal notranslate"><span class="pre">EventTag.specific_org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.created"><code class="docutils literal notranslate"><span class="pre">EventTag.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag.updated"><code class="docutils literal notranslate"><span class="pre">EventTag.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_Event"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_Event.event_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_Event.event_tag_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event_tag_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_Event.event"><code class="docutils literal notranslate"><span class="pre">EventTag_x_Event.event</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_EventInstance"><code class="docutils literal notranslate"><span class="pre">EventTag_x_EventInstance</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_EventInstance.event_instance_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_EventInstance.event_instance_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_EventInstance.event_tag_id"><code class="docutils literal notranslate"><span class="pre">EventTag_x_EventInstance.event_tag_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventTag_x_EventInstance.event_instance"><code class="docutils literal notranslate"><span class="pre">EventTag_x_EventInstance.event_instance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Org_x_SlackSpace"><code class="docutils literal notranslate"><span class="pre">Org_x_SlackSpace</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_x_SlackSpace.org_id"><code class="docutils literal notranslate"><span class="pre">Org_x_SlackSpace.org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Org_x_SlackSpace.slack_space_id"><code class="docutils literal notranslate"><span class="pre">Org_x_SlackSpace.slack_space_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Location"><code class="docutils literal notranslate"><span class="pre">Location</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.id"><code class="docutils literal notranslate"><span class="pre">Location.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.org_id"><code class="docutils literal notranslate"><span class="pre">Location.org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.name"><code class="docutils literal notranslate"><span class="pre">Location.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.description"><code class="docutils literal notranslate"><span class="pre">Location.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.is_active"><code class="docutils literal notranslate"><span class="pre">Location.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.email"><code class="docutils literal notranslate"><span class="pre">Location.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.lat"><code class="docutils literal notranslate"><span class="pre">Location.lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.lon"><code class="docutils literal notranslate"><span class="pre">Location.lon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.address_street"><code class="docutils literal notranslate"><span class="pre">Location.address_street</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.address_city"><code class="docutils literal notranslate"><span class="pre">Location.address_city</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.address_state"><code class="docutils literal notranslate"><span class="pre">Location.address_state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.address_zip"><code class="docutils literal notranslate"><span class="pre">Location.address_zip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.address_country"><code class="docutils literal notranslate"><span class="pre">Location.address_country</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.meta"><code class="docutils literal notranslate"><span class="pre">Location.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.created"><code class="docutils literal notranslate"><span class="pre">Location.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Location.updated"><code class="docutils literal notranslate"><span class="pre">Location.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.id"><code class="docutils literal notranslate"><span class="pre">Event.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.org_id"><code class="docutils literal notranslate"><span class="pre">Event.org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.location_id"><code class="docutils literal notranslate"><span class="pre">Event.location_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.series_id"><code class="docutils literal notranslate"><span class="pre">Event.series_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.is_series"><code class="docutils literal notranslate"><span class="pre">Event.is_series</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.is_active"><code class="docutils literal notranslate"><span class="pre">Event.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.highlight"><code class="docutils literal notranslate"><span class="pre">Event.highlight</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.start_date"><code class="docutils literal notranslate"><span class="pre">Event.start_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.end_date"><code class="docutils literal notranslate"><span class="pre">Event.end_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.start_time"><code class="docutils literal notranslate"><span class="pre">Event.start_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.end_time"><code class="docutils literal notranslate"><span class="pre">Event.end_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.day_of_week"><code class="docutils literal notranslate"><span class="pre">Event.day_of_week</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.name"><code class="docutils literal notranslate"><span class="pre">Event.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.description"><code class="docutils literal notranslate"><span class="pre">Event.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.email"><code class="docutils literal notranslate"><span class="pre">Event.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.recurrence_pattern"><code class="docutils literal notranslate"><span class="pre">Event.recurrence_pattern</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.recurrence_interval"><code class="docutils literal notranslate"><span class="pre">Event.recurrence_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.index_within_interval"><code class="docutils literal notranslate"><span class="pre">Event.index_within_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.pax_count"><code class="docutils literal notranslate"><span class="pre">Event.pax_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.fng_count"><code class="docutils literal notranslate"><span class="pre">Event.fng_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.meta"><code class="docutils literal notranslate"><span class="pre">Event.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.created"><code class="docutils literal notranslate"><span class="pre">Event.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.updated"><code class="docutils literal notranslate"><span class="pre">Event.updated</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.org"><code class="docutils literal notranslate"><span class="pre">Event.org</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.location"><code class="docutils literal notranslate"><span class="pre">Event.location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.event_types"><code class="docutils literal notranslate"><span class="pre">Event.event_types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.event_tags"><code class="docutils literal notranslate"><span class="pre">Event.event_tags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.event_x_event_types"><code class="docutils literal notranslate"><span class="pre">Event.event_x_event_types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Event.event_x_event_tags"><code class="docutils literal notranslate"><span class="pre">Event.event_x_event_tags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance"><code class="docutils literal notranslate"><span class="pre">EventInstance</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.id"><code class="docutils literal notranslate"><span class="pre">EventInstance.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.org_id"><code class="docutils literal notranslate"><span class="pre">EventInstance.org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.location_id"><code class="docutils literal notranslate"><span class="pre">EventInstance.location_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.series_id"><code class="docutils literal notranslate"><span class="pre">EventInstance.series_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.is_active"><code class="docutils literal notranslate"><span class="pre">EventInstance.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.highlight"><code class="docutils literal notranslate"><span class="pre">EventInstance.highlight</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.start_date"><code class="docutils literal notranslate"><span class="pre">EventInstance.start_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.end_date"><code class="docutils literal notranslate"><span class="pre">EventInstance.end_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.start_time"><code class="docutils literal notranslate"><span class="pre">EventInstance.start_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.end_time"><code class="docutils literal notranslate"><span class="pre">EventInstance.end_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.name"><code class="docutils literal notranslate"><span class="pre">EventInstance.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.description"><code class="docutils literal notranslate"><span class="pre">EventInstance.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.email"><code class="docutils literal notranslate"><span class="pre">EventInstance.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.pax_count"><code class="docutils literal notranslate"><span class="pre">EventInstance.pax_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.fng_count"><code class="docutils literal notranslate"><span class="pre">EventInstance.fng_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.preblast"><code class="docutils literal notranslate"><span class="pre">EventInstance.preblast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.backblast"><code class="docutils literal notranslate"><span class="pre">EventInstance.backblast</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.preblast_rich"><code class="docutils literal notranslate"><span class="pre">EventInstance.preblast_rich</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.backblast_rich"><code class="docutils literal notranslate"><span class="pre">EventInstance.backblast_rich</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.preblast_ts"><code class="docutils literal notranslate"><span class="pre">EventInstance.preblast_ts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.backblast_ts"><code class="docutils literal notranslate"><span class="pre">EventInstance.backblast_ts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.meta"><code class="docutils literal notranslate"><span class="pre">EventInstance.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.created"><code class="docutils literal notranslate"><span class="pre">EventInstance.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.updated"><code class="docutils literal notranslate"><span class="pre">EventInstance.updated</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.org"><code class="docutils literal notranslate"><span class="pre">EventInstance.org</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.location"><code class="docutils literal notranslate"><span class="pre">EventInstance.location</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.event_types"><code class="docutils literal notranslate"><span class="pre">EventInstance.event_types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.event_tags"><code class="docutils literal notranslate"><span class="pre">EventInstance.event_tags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.event_instances_x_event_types"><code class="docutils literal notranslate"><span class="pre">EventInstance.event_instances_x_event_types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.EventInstance.event_instances_x_event_tags"><code class="docutils literal notranslate"><span class="pre">EventInstance.event_instances_x_event_tags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.AttendanceType"><code class="docutils literal notranslate"><span class="pre">AttendanceType</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.AttendanceType.type"><code class="docutils literal notranslate"><span class="pre">AttendanceType.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.AttendanceType.description"><code class="docutils literal notranslate"><span class="pre">AttendanceType.description</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Attendance_x_AttendanceType"><code class="docutils literal notranslate"><span class="pre">Attendance_x_AttendanceType</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance_x_AttendanceType.attendance_id"><code class="docutils literal notranslate"><span class="pre">Attendance_x_AttendanceType.attendance_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance_x_AttendanceType.attendance_type_id"><code class="docutils literal notranslate"><span class="pre">Attendance_x_AttendanceType.attendance_type_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance_x_AttendanceType.attendance"><code class="docutils literal notranslate"><span class="pre">Attendance_x_AttendanceType.attendance</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.f3_name"><code class="docutils literal notranslate"><span class="pre">User.f3_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.first_name"><code class="docutils literal notranslate"><span class="pre">User.first_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.last_name"><code class="docutils literal notranslate"><span class="pre">User.last_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.email"><code class="docutils literal notranslate"><span class="pre">User.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.phone"><code class="docutils literal notranslate"><span class="pre">User.phone</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.home_region_id"><code class="docutils literal notranslate"><span class="pre">User.home_region_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.avatar_url"><code class="docutils literal notranslate"><span class="pre">User.avatar_url</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.meta"><code class="docutils literal notranslate"><span class="pre">User.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.email_verified"><code class="docutils literal notranslate"><span class="pre">User.email_verified</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.status"><code class="docutils literal notranslate"><span class="pre">User.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.created"><code class="docutils literal notranslate"><span class="pre">User.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.User.updated"><code class="docutils literal notranslate"><span class="pre">User.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser"><code class="docutils literal notranslate"><span class="pre">SlackUser</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.id"><code class="docutils literal notranslate"><span class="pre">SlackUser.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.slack_id"><code class="docutils literal notranslate"><span class="pre">SlackUser.slack_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.user_name"><code class="docutils literal notranslate"><span class="pre">SlackUser.user_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.email"><code class="docutils literal notranslate"><span class="pre">SlackUser.email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.is_admin"><code class="docutils literal notranslate"><span class="pre">SlackUser.is_admin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.is_owner"><code class="docutils literal notranslate"><span class="pre">SlackUser.is_owner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.is_bot"><code class="docutils literal notranslate"><span class="pre">SlackUser.is_bot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.user_id"><code class="docutils literal notranslate"><span class="pre">SlackUser.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.avatar_url"><code class="docutils literal notranslate"><span class="pre">SlackUser.avatar_url</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.slack_team_id"><code class="docutils literal notranslate"><span class="pre">SlackUser.slack_team_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.strava_access_token"><code class="docutils literal notranslate"><span class="pre">SlackUser.strava_access_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.strava_refresh_token"><code class="docutils literal notranslate"><span class="pre">SlackUser.strava_refresh_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.strava_expires_at"><code class="docutils literal notranslate"><span class="pre">SlackUser.strava_expires_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.strava_athlete_id"><code class="docutils literal notranslate"><span class="pre">SlackUser.strava_athlete_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.meta"><code class="docutils literal notranslate"><span class="pre">SlackUser.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.slack_updated"><code class="docutils literal notranslate"><span class="pre">SlackUser.slack_updated</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.created"><code class="docutils literal notranslate"><span class="pre">SlackUser.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.SlackUser.updated"><code class="docutils literal notranslate"><span class="pre">SlackUser.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Attendance"><code class="docutils literal notranslate"><span class="pre">Attendance</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.id"><code class="docutils literal notranslate"><span class="pre">Attendance.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.event_instance_id"><code class="docutils literal notranslate"><span class="pre">Attendance.event_instance_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.user_id"><code class="docutils literal notranslate"><span class="pre">Attendance.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.is_planned"><code class="docutils literal notranslate"><span class="pre">Attendance.is_planned</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.meta"><code class="docutils literal notranslate"><span class="pre">Attendance.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.created"><code class="docutils literal notranslate"><span class="pre">Attendance.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.updated"><code class="docutils literal notranslate"><span class="pre">Attendance.updated</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.event_instance"><code class="docutils literal notranslate"><span class="pre">Attendance.event_instance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.user"><code class="docutils literal notranslate"><span class="pre">Attendance.user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.slack_users"><code class="docutils literal notranslate"><span class="pre">Attendance.slack_users</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.attendance_x_attendance_types"><code class="docutils literal notranslate"><span class="pre">Attendance.attendance_x_attendance_types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Attendance.attendance_types"><code class="docutils literal notranslate"><span class="pre">Attendance.attendance_types</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Achievement"><code class="docutils literal notranslate"><span class="pre">Achievement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.id"><code class="docutils literal notranslate"><span class="pre">Achievement.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.name"><code class="docutils literal notranslate"><span class="pre">Achievement.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.description"><code class="docutils literal notranslate"><span class="pre">Achievement.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.image_url"><code class="docutils literal notranslate"><span class="pre">Achievement.image_url</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.specific_org_id"><code class="docutils literal notranslate"><span class="pre">Achievement.specific_org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.is_active"><code class="docutils literal notranslate"><span class="pre">Achievement.is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.auto_award"><code class="docutils literal notranslate"><span class="pre">Achievement.auto_award</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.auto_cadence"><code class="docutils literal notranslate"><span class="pre">Achievement.auto_cadence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.auto_threshold"><code class="docutils literal notranslate"><span class="pre">Achievement.auto_threshold</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.auto_threshold_type"><code class="docutils literal notranslate"><span class="pre">Achievement.auto_threshold_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.auto_filters"><code class="docutils literal notranslate"><span class="pre">Achievement.auto_filters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.created"><code class="docutils literal notranslate"><span class="pre">Achievement.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement.updated"><code class="docutils literal notranslate"><span class="pre">Achievement.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_x_User"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_x_User.achievement_id"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.achievement_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_x_User.user_id"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_x_User.award_year"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.award_year</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_x_User.award_period"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.award_period</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Achievement_x_User.date_awarded"><code class="docutils literal notranslate"><span class="pre">Achievement_x_User.date_awarded</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Position"><code class="docutils literal notranslate"><span class="pre">Position</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position.name"><code class="docutils literal notranslate"><span class="pre">Position.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position.description"><code class="docutils literal notranslate"><span class="pre">Position.description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position.org_type"><code class="docutils literal notranslate"><span class="pre">Position.org_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position.org_id"><code class="docutils literal notranslate"><span class="pre">Position.org_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Position_x_Org_x_User"><code class="docutils literal notranslate"><span class="pre">Position_x_Org_x_User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position_x_Org_x_User.position_id"><code class="docutils literal notranslate"><span class="pre">Position_x_Org_x_User.position_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position_x_Org_x_User.org_id"><code class="docutils literal notranslate"><span class="pre">Position_x_Org_x_User.org_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Position_x_Org_x_User.user_id"><code class="docutils literal notranslate"><span class="pre">Position_x_Org_x_User.user_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Expansion"><code class="docutils literal notranslate"><span class="pre">Expansion</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.id"><code class="docutils literal notranslate"><span class="pre">Expansion.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.area"><code class="docutils literal notranslate"><span class="pre">Expansion.area</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.pinned_lat"><code class="docutils literal notranslate"><span class="pre">Expansion.pinned_lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.pinned_lon"><code class="docutils literal notranslate"><span class="pre">Expansion.pinned_lon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.user_lat"><code class="docutils literal notranslate"><span class="pre">Expansion.user_lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.user_lon"><code class="docutils literal notranslate"><span class="pre">Expansion.user_lon</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.interested_in_organizing"><code class="docutils literal notranslate"><span class="pre">Expansion.interested_in_organizing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.created"><code class="docutils literal notranslate"><span class="pre">Expansion.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion.updated"><code class="docutils literal notranslate"><span class="pre">Expansion.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.Expansion_x_User"><code class="docutils literal notranslate"><span class="pre">Expansion_x_User</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion_x_User.expansion_id"><code class="docutils literal notranslate"><span class="pre">Expansion_x_User.expansion_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion_x_User.user_id"><code class="docutils literal notranslate"><span class="pre">Expansion_x_User.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion_x_User.requst_date"><code class="docutils literal notranslate"><span class="pre">Expansion_x_User.requst_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.Expansion_x_User.notes"><code class="docutils literal notranslate"><span class="pre">Expansion_x_User.notes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.user_id"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.type"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.provider"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.provider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.provider_account_id"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.provider_account_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.refresh_token"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.refresh_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.access_token"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.access_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.expires_at"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.expires_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.token_type"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.token_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.scope"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.scope</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.id_token"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.id_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.session_state"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.session_state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.created"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthAccount.updated"><code class="docutils literal notranslate"><span class="pre">NextAuthAccount.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthSession"><code class="docutils literal notranslate"><span class="pre">NextAuthSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthSession.session_token"><code class="docutils literal notranslate"><span class="pre">NextAuthSession.session_token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthSession.user_id"><code class="docutils literal notranslate"><span class="pre">NextAuthSession.user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthSession.expires"><code class="docutils literal notranslate"><span class="pre">NextAuthSession.expires</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthSession.created"><code class="docutils literal notranslate"><span class="pre">NextAuthSession.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthSession.updated"><code class="docutils literal notranslate"><span class="pre">NextAuthSession.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthVerificationToken"><code class="docutils literal notranslate"><span class="pre">NextAuthVerificationToken</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthVerificationToken.identifier"><code class="docutils literal notranslate"><span class="pre">NextAuthVerificationToken.identifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthVerificationToken.token"><code class="docutils literal notranslate"><span class="pre">NextAuthVerificationToken.token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthVerificationToken.expires"><code class="docutils literal notranslate"><span class="pre">NextAuthVerificationToken.expires</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthVerificationToken.created"><code class="docutils literal notranslate"><span class="pre">NextAuthVerificationToken.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.NextAuthVerificationToken.updated"><code class="docutils literal notranslate"><span class="pre">NextAuthVerificationToken.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest"><code class="docutils literal notranslate"><span class="pre">UpdateRequest</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.id"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.token"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.token</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.region_id"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.region_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_id"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_type_ids"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_type_ids</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_tag"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_tag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_series_id"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_series_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_is_series"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_is_series</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_is_active"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_is_active</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_highlight"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_highlight</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_start_date"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_start_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_end_date"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_end_date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_start_time"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_start_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_end_time"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_end_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_day_of_week"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_day_of_week</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_name"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_description"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_recurrence_pattern"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_recurrence_pattern</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_recurrence_interval"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_recurrence_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_index_within_interval"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_index_within_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_meta"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.event_contact_email"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.event_contact_email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_name"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_description"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_address"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_address</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_address2"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_address2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_city"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_city</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_state"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_zip"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_zip</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_country"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_country</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_lat"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_lng"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_lng</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_id"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.location_contact_email"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.location_contact_email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.ao_id"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.ao_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.ao_name"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.ao_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.ao_logo"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.ao_logo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.ao_website"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.ao_website</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.submitted_by"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.submitted_by</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.submitter_validated"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.submitter_validated</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.reviewed_by"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.reviewed_by</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.reviewed_at"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.reviewed_at</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.status"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.meta"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.meta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.request_type"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.request_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.created"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.UpdateRequest.updated"><code class="docutils literal notranslate"><span class="pre">UpdateRequest.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry"><code class="docutils literal notranslate"><span class="pre">CodexEntry</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.id"><code class="docutils literal notranslate"><span class="pre">CodexEntry.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.title"><code class="docutils literal notranslate"><span class="pre">CodexEntry.title</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.definition"><code class="docutils literal notranslate"><span class="pre">CodexEntry.definition</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.type"><code class="docutils literal notranslate"><span class="pre">CodexEntry.type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.aliases"><code class="docutils literal notranslate"><span class="pre">CodexEntry.aliases</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.video_link"><code class="docutils literal notranslate"><span class="pre">CodexEntry.video_link</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.created"><code class="docutils literal notranslate"><span class="pre">CodexEntry.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntry.updated"><code class="docutils literal notranslate"><span class="pre">CodexEntry.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.CodexTag"><code class="docutils literal notranslate"><span class="pre">CodexTag</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexTag.id"><code class="docutils literal notranslate"><span class="pre">CodexTag.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexTag.name"><code class="docutils literal notranslate"><span class="pre">CodexTag.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexTag.created"><code class="docutils literal notranslate"><span class="pre">CodexTag.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexTag.updated"><code class="docutils literal notranslate"><span class="pre">CodexTag.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntryTag"><code class="docutils literal notranslate"><span class="pre">CodexEntryTag</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntryTag.entry_id"><code class="docutils literal notranslate"><span class="pre">CodexEntryTag.entry_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexEntryTag.tag_id"><code class="docutils literal notranslate"><span class="pre">CodexEntryTag.tag_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.id"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.submission_type"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.submission_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.data"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.submitter_name"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.submitter_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.submitter_email"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.submitter_email</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.submitter_user_id"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.submitter_user_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.timestamp"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.timestamp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.status"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.status</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.created"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexUserSubmission.updated"><code class="docutils literal notranslate"><span class="pre">CodexUserSubmission.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference"><code class="docutils literal notranslate"><span class="pre">CodexReference</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference.id"><code class="docutils literal notranslate"><span class="pre">CodexReference.id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference.from_entry_id"><code class="docutils literal notranslate"><span class="pre">CodexReference.from_entry_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference.to_entry_id"><code class="docutils literal notranslate"><span class="pre">CodexReference.to_entry_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference.context"><code class="docutils literal notranslate"><span class="pre">CodexReference.context</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference.created"><code class="docutils literal notranslate"><span class="pre">CodexReference.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#f3_data_models.models.CodexReference.updated"><code class="docutils literal notranslate"><span class="pre">CodexReference.updated</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="F3 Nation Data Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models.html" class="btn btn-neutral float-right" title="models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Evan Petzoldt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
