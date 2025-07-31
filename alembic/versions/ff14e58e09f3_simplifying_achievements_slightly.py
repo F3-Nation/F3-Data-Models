@@ -74,7 +74,7 @@ def downgrade() -> None:
         existing_type=sa.Integer(),
         type_=postgresql.TIMESTAMP(),
         existing_nullable=True,
-        postgresql_using="TO_TIMESTAMP(slack_updated, 'epoch') AT TIME ZONE 'UTC'",
+        postgresql_using="TO_TIMESTAMP(slack_updated) AT TIME ZONE 'UTC'",
     )
     op.add_column(
         "achievements",
@@ -96,7 +96,9 @@ def downgrade() -> None:
             nullable=True,
         ),
     )
-    op.add_column("achievements", sa.Column("verb", sa.VARCHAR(), autoincrement=False, nullable=False))
+    op.add_column(
+        "achievements", sa.Column("verb", sa.VARCHAR(), autoincrement=False, nullable=False, server_default="")
+    )
     op.add_column(
         "achievements",
         sa.Column("auto_event_tag_ids_exclude", postgresql.ARRAY(sa.INTEGER()), autoincrement=False, nullable=True),

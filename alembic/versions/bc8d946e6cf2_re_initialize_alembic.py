@@ -8,9 +8,9 @@ Create Date: 2024-12-11 07:51:18.059779
 
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "bc8d946e6cf2"
@@ -806,7 +806,9 @@ def upgrade() -> None:
     op.bulk_insert(
         table=roles_table,
         rows=[
-            {"name": "Admin"},
+            {"name": "user"},
+            {"name": "editor"},
+            {"name": "admin"},
         ],
     )
     op.bulk_insert(
