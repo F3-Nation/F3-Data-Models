@@ -359,7 +359,7 @@ class Role(Base):
 
     Attributes:
         id (int): Primary Key of the model.
-        name (Region_Role): The name of the role.
+        name (str): The unique name of the role.
         description (Optional[text]): A description of the role.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -368,7 +368,7 @@ class Role(Base):
     __tablename__ = "roles"
 
     id: Mapped[intpk]
-    name: Mapped[Region_Role]
+    name: Mapped[str] = mapped_column(VARCHAR, unique=True)
     description: Mapped[Optional[text]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
