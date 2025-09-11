@@ -604,6 +604,7 @@ class EventTag(Base):
     description: Mapped[Optional[text]]
     color: Mapped[Optional[str]]
     specific_org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
