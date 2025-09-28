@@ -1269,6 +1269,7 @@ class Position(Base):
         description (Optional[str]): A description of the position.
         org_type (Optional[Org_Type]): The associated organization type. This is used to limit the positions available to certain types of organizations. If null, the position is available to all organization types.
         org_id (Optional[int]): The ID of the associated organization. This is used to limit the positions available to certain organizations. If null, the position is available to all organizations.
+        is_active (bool): Whether the position is active. Default is True.
     """  # noqa: E501
 
     __tablename__ = "positions"
@@ -1278,6 +1279,7 @@ class Position(Base):
     description: Mapped[Optional[str]]
     org_type: Mapped[Optional[Org_Type]]
     org_id: Mapped[Optional[int]] = mapped_column(ForeignKey("orgs.id"))
+    is_active: Mapped[bool] = mapped_column(Boolean, server_default="true", nullable=False)
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
 
