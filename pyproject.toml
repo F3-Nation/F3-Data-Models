@@ -12,11 +12,18 @@ documentation = "https://github.io/F3-Nation/f3-data-models"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.34.0"
+sqlalchemy-schemadisplay = "^2.0"
+graphviz = "^0.20.3"
+sphinx = "^8.1.3"
+sphinx-autodoc-typehints = "^2.5.0"
+sphinx-rtd-theme = "^3.0.2"
+sphinx-multiversion = "^0.2.4"
+alembic = "^1.14.0"
 
 [tool.ruff]
 line-length = 120
 
-select = [
+lint.select = [
     "E",  # pycodestyle errors (settings from FastAPI, thanks, @tiangolo!)
     "W",  # pycodestyle warnings
     "F",  # pyflakes
@@ -24,11 +31,11 @@ select = [
     "C",  # flake8-comprehensions
     "B",  # flake8-bugbear
 ]
-ignore = [
-    "C901",  # too complex
+lint.ignore = [
+    "C901",  # too complex 
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 order-by-type = true
 relative-imports-order = "closest-to-furthest"
 extra-standard-library = ["typing"]
@@ -39,15 +46,6 @@ known-first-party = []
 [tool.poetry.dependencies]
 python = "^3.12"
 sqlalchemy = "^2.0.36"
-sqlalchemy-schemadisplay = "^2.0"
-graphviz = "^0.20.3"
-alembic = "^1.14.0"
-cloud-sql-python-connector = "^1.13.0"
-pg8000 = "^1.31.2"
-sphinx = "^8.1.3"
-sphinx-autodoc-typehints = "^2.5.0"
-sphinx-rtd-theme = "^3.0.2"
-sphinx-multiversion = "^0.2.4"
 psycopg2-binary = "^2.9.10"
 sqlmodel = "^0.0.22"
 alembic-postgresql-enum = "^1.6.1"

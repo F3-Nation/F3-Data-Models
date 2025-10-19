@@ -3,16 +3,12 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar  # noqa
 
-import pg8000
 import sqlalchemy
-from google.cloud.sql.connector import Connector, IPTypes
-from pydot import Dot
 from sqlalchemy import Select, and_, inspect, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import class_mapper, joinedload, sessionmaker
 from sqlalchemy.orm.collections import InstrumentedList
-from sqlalchemy_schemadisplay import create_schema_graph
 
 from f3_data_models.models import Base
 
@@ -37,20 +33,21 @@ def get_engine(echo=False) -> Engine:
         db_url = f"postgresql://{user}:{passwd}@{host}:5432/{database}"
         engine = sqlalchemy.create_engine(db_url, echo=echo)
     else:
-        connector = Connector()
+        engine: Engine = None
+        # connector = Connector()
 
-        def get_connection():
-            conn: pg8000.dbapi.Connection = connector.connect(
-                instance_connection_string=host,
-                driver="pg8000",
-                user=user,
-                password=passwd,
-                db=database,
-                ip_type=IPTypes.PUBLIC,
-            )
-            return conn
+        # def get_connection():
+        #     conn: pg8000.dbapi.Connection = connector.connect(
+        #         instance_connection_string=host,
+        #         driver="pg8000",
+        #         user=user,
+        #         password=passwd,
+        #         db=database,
+        #         ip_type=IPTypes.PUBLIC,
+        #     )
+        #     return conn
 
-        engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_connection, echo=echo)
+        # engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_connection, echo=echo)
     return engine
 
 
@@ -296,6 +293,9 @@ class DbManager:
 
 
 def create_diagram():
+    from pydot import Dot
+    from sqlalchemy_schemadisplay import create_schema_graph
+
     graph: Dot = create_schema_graph(
         engine=get_engine(),
         metadata=Base.metadata,
