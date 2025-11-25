@@ -172,19 +172,6 @@ class Achievement_Cadence(enum.Enum):
     lifetime = 5
 
 
-class Achievement_Threshold_Type(enum.Enum):
-    """
-    Enum representing the type of threshold for an achievement.
-
-    Attributes:
-        posts
-        unique_aos
-    """
-
-    posts = 1
-    unique_aos = 2
-
-
 class Org_Type(enum.Enum):
     """
     Enum representing the type of organization.
@@ -1231,7 +1218,7 @@ class Achievement(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, server_default="true", nullable=False)
     auto_award: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
     auto_cadence: Mapped[Optional[Achievement_Cadence]]
-    auto_threshold_type: Mapped[Optional[Achievement_Threshold_Type]]
+    auto_threshold_type: Mapped[Optional[str]]
     auto_threshold: Mapped[Optional[int]]
     auto_filters: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSON, default=dict)
     meta: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSON, default=dict)
