@@ -728,6 +728,7 @@ class Event(Base):
         index_within_interval (Optional[int]): The index within the recurrence interval. (e.g. 2nd Tuesday of the month).
         pax_count (Optional[int]): The number of participants.
         fng_count (Optional[int]): The number of first-time participants.
+        is_private (bool): Whether the event is private (won't be shown on maps, etc.). Default is False.
         meta (Optional[Dict[str, Any]]): Additional metadata for the event.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -759,6 +760,7 @@ class Event(Base):
     recurrence_pattern: Mapped[Optional[Event_Cadence]]
     recurrence_interval: Mapped[Optional[int]]
     index_within_interval: Mapped[Optional[int]]
+    is_private: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
@@ -858,6 +860,7 @@ class EventInstance(Base):
     backblast_rich: Mapped[Optional[Dict[str, Any]]]
     preblast_ts: Mapped[Optional[float]]
     backblast_ts: Mapped[Optional[float]]
+    is_private: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
