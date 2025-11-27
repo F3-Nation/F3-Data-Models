@@ -28,9 +28,10 @@ def get_engine(echo=False) -> Engine:
     user = os.environ["DATABASE_USER"]
     passwd = os.environ["DATABASE_PASSWORD"]
     database = os.environ["DATABASE_SCHEMA"]
+    port = os.environ.get("DATABASE_PORT", "5432")
 
     if os.environ.get("USE_GCP", "False") == "False":
-        db_url = f"postgresql://{user}:{passwd}@{host}:5432/{database}"
+        db_url = f"postgresql://{user}:{passwd}@{host}:{port}/{database}"
         engine = sqlalchemy.create_engine(db_url, echo=echo)
     else:
         engine: Engine = None
