@@ -223,6 +223,21 @@ class Request_Type(enum.Enum):
     delete_event = 4
 
 
+class Series_Exception(enum.Enum):
+    """
+    Enum representing exceptions to an event series.
+
+    Attributes:
+        none
+        skip
+        reschedule
+    """
+
+    closed = 1
+    different_time = 2
+    miscellaneous = 3
+
+
 class Base(DeclarativeBase):
     """
     Base class for all models, providing common methods.
@@ -820,6 +835,7 @@ class EventInstance(Base):
         backblast_rich (Optional[Dict[str, Any]]): The rich text post-event report (e.g. Slack message).
         preblast_ts (Optional[float]): The Slack post timestamp of the pre-event announcement.
         backblast_ts (Optional[float]): The Slack post timestamp of the post-event report.
+        series_exception (Optional[Series_Exception]): Any exceptions to the normal series pattern for this event instance.
         meta (Optional[Dict[str, Any]]): Additional metadata for the event.
         created (datetime): The timestamp when the record was created.
         updated (datetime): The timestamp when the record was last updated.
@@ -861,6 +877,7 @@ class EventInstance(Base):
     preblast_ts: Mapped[Optional[float]]
     backblast_ts: Mapped[Optional[float]]
     is_private: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
+    series_exception: Mapped[Optional[Series_Exception]]
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
