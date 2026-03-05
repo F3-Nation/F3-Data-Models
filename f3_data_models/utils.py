@@ -3,7 +3,9 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar  # noqa
 
+import pg8000
 import sqlalchemy
+from google.cloud.sql.connector import Connector, IPTypes
 from sqlalchemy import Select, and_, inspect, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
@@ -30,25 +32,25 @@ def get_engine(echo=False) -> Engine:
     database = os.environ["DATABASE_SCHEMA"]
     port = os.environ.get("DATABASE_PORT", "5432")
 
-    if os.environ.get("USE_GCP", "False") == "False":
+    if os.environ.get("USE_GCP_AUTH_PROXY", "false").lower() == "false":
         db_url = f"postgresql://{user}:{passwd}@{host}:{port}/{database}"
         engine = sqlalchemy.create_engine(db_url, echo=echo)
     else:
         engine: Engine = None
-        # connector = Connector()
+        connector = Connector()
 
-        # def get_connection():
-        #     conn: pg8000.dbapi.Connection = connector.connect(
-        #         instance_connection_string=host,
-        #         driver="pg8000",
-        #         user=user,
-        #         password=passwd,
-        #         db=database,
-        #         ip_type=IPTypes.PUBLIC,
-        #     )
-        #     return conn
+        def get_connection():
+            conn: pg8000.dbapi.Connection = connector.connect(
+                instance_connection_string=host,
+                driver="pg8000",
+                user=user,
+                password=passwd,
+                db=database,
+                ip_type=IPTypes.PUBLIC,
+            )
+            return conn
 
-        # engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_connection, echo=echo)
+        engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_connection, echo=echo)
     return engine
 
 

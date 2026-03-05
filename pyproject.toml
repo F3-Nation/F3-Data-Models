@@ -50,6 +50,8 @@ psycopg2-binary = "^2.9.10"
 sqlmodel = "^0.0.22"
 alembic-postgresql-enum = "^1.6.1"
 sqlalchemy-citext = "^1.8.0"
+pg8000 = "^1.31.5"
+cloud-sql-python-connector = "^1.20.0"
 
 [tool.poe.tasks]
 install-js = "npm install"
