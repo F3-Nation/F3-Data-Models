@@ -877,7 +877,7 @@ class EventInstance(Base):
     preblast_ts: Mapped[Optional[float]]
     backblast_ts: Mapped[Optional[float]]
     is_private: Mapped[bool] = mapped_column(Boolean, server_default="false", nullable=False)
-    series_exception: Mapped[Optional[Series_Exception]]
+    # series_exception: Mapped[Optional[Series_Exception]]
     meta: Mapped[Optional[Dict[str, Any]]]
     created: Mapped[dt_create]
     updated: Mapped[dt_update]
