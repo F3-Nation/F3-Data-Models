@@ -24,6 +24,8 @@ class DatabaseField:
 GLOBAL_ENGINE = None
 GLOBAL_SESSION = None
 
+connector = Connector()
+
 
 def get_engine(echo=False) -> Engine:
     host = os.environ["DATABASE_HOST"]
@@ -37,7 +39,6 @@ def get_engine(echo=False) -> Engine:
         engine = sqlalchemy.create_engine(db_url, echo=echo)
     else:
         engine: Engine = None
-        connector = Connector()
 
         def get_connection():
             conn: pg8000.dbapi.Connection = connector.connect(
