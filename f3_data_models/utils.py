@@ -24,7 +24,7 @@ class DatabaseField:
 GLOBAL_ENGINE = None
 GLOBAL_SESSION = None
 
-connector = Connector()
+connector = Connector(refresh_strategy="lazy")
 
 
 def get_engine(echo=False) -> Engine:
