@@ -5,9 +5,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar  # noqa
 
-import pg8000
 import sqlalchemy
-from google.cloud.sql.connector import Connector, IPTypes
 from sqlalchemy import Select, and_, inspect, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.engine import Engine
@@ -30,8 +28,6 @@ class DatabaseField:
 GLOBAL_ENGINE = None
 GLOBAL_SESSION = None
 
-connector = Connector(refresh_strategy="lazy")
-
 
 def get_engine(echo=False) -> Engine:
     host = os.environ["DATABASE_HOST"]
@@ -40,24 +36,23 @@ def get_engine(echo=False) -> Engine:
     database = os.environ["DATABASE_SCHEMA"]
     port = os.environ.get("DATABASE_PORT", "5432")
 
+    print(
+        f"[DB DEBUG] DATABASE_HOST={host}, USE_GCP_AUTH_PROXY={os.environ.get('USE_GCP_AUTH_PROXY', 'false')}, port={port}"
+    )
+
     if os.environ.get("USE_GCP_AUTH_PROXY", "false").lower() == "false":
         db_url = f"postgresql://{user}:{passwd}@{host}:{port}/{database}"
         engine = sqlalchemy.create_engine(db_url, echo=echo)
     else:
-        engine: Engine = None
-
-        def get_connection():
-            conn: pg8000.dbapi.Connection = connector.connect(
-                instance_connection_string=host,
-                driver="pg8000",
-                user=user,
-                password=passwd,
-                db=database,
-                ip_type=IPTypes.PUBLIC,
-            )
-            return conn
-
-        engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_connection, echo=echo)
+        # Connect via Cloud Run's built-in Cloud SQL Auth Proxy Unix socket
+        unix_sock = f"/cloudsql/{host}/.s.PGSQL.{port}"
+        print(f"[DB DEBUG] Connecting via Unix socket: {unix_sock}")
+        db_url = f"postgresql+pg8000://{user}:{passwd}@/{database}"
+        engine = sqlalchemy.create_engine(
+            db_url,
+            echo=echo,
+            connect_args={"unix_sock": unix_sock},
+        )
     return engine
 
 
