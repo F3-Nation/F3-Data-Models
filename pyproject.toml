@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "f3-data-models"
-version = "1.0.8"
+version = "1.0.9"
 description = "The data schema and models for F3 Nation applications."
 authors = ["Evan Petzoldt <evan.petzoldt@protonmail.com>"]
 readme = "README.md"
