@@ -1,4 +1,6 @@
+import logging
 import os
+import sys
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar  # noqa
@@ -13,6 +15,10 @@ from sqlalchemy.orm import class_mapper, joinedload, sessionmaker
 from sqlalchemy.orm.collections import InstrumentedList
 
 from f3_data_models.models import Base
+
+logging_level = logging.DEBUG if os.environ.get("LOG_LEVEL", "INFO").upper() == "DEBUG" else logging.INFO
+logging.getLogger("google.cloud.sql.connector").setLevel(logging_level)
+logging.basicConfig(stream=sys.stdout, level=logging_level)
 
 
 @dataclass
