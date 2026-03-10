@@ -36,25 +36,17 @@ def get_engine(echo=False) -> Engine:
     database = os.environ["DATABASE_SCHEMA"]
     port = os.environ.get("DATABASE_PORT", "5432")
 
-    print(
-        f"[DB DEBUG] DATABASE_HOST={host}, USE_GCP_AUTH_PROXY={os.environ.get('USE_GCP_AUTH_PROXY', 'false')}, port={port}"
-    )
-
     if os.environ.get("USE_GCP_AUTH_PROXY", "false").lower() == "false":
         db_url = f"postgresql://{user}:{passwd}@{host}:{port}/{database}"
         engine = sqlalchemy.create_engine(db_url, echo=echo)
     else:
         # Connect via Cloud Run's built-in Cloud SQL Auth Proxy Unix socket
-        unix_sock = f"/cloudsql/{host}/.s.PGSQL.{port}"
-        print(f"[DB DEBUG] Connecting via Unix socket: {unix_sock}")
+        unix_sock_dir = f"/cloudsql/{host}"
+        db_url = f"postgresql://{user}:{passwd}@/{database}"
         engine = sqlalchemy.create_engine(
-            f"postgresql+pg8000:///{database}",
+            db_url,
             echo=echo,
-            connect_args={
-                "unix_sock": unix_sock,
-                "user": user,
-                "password": passwd,
-            },
+            connect_args={"host": unix_sock_dir},
         )
     return engine
 
