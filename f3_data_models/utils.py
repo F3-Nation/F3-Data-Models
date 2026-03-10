@@ -47,11 +47,14 @@ def get_engine(echo=False) -> Engine:
         # Connect via Cloud Run's built-in Cloud SQL Auth Proxy Unix socket
         unix_sock = f"/cloudsql/{host}/.s.PGSQL.{port}"
         print(f"[DB DEBUG] Connecting via Unix socket: {unix_sock}")
-        db_url = f"postgresql+pg8000://{user}:{passwd}@/{database}"
         engine = sqlalchemy.create_engine(
-            db_url,
+            f"postgresql+pg8000:///{database}",
             echo=echo,
-            connect_args={"unix_sock": unix_sock},
+            connect_args={
+                "unix_sock": unix_sock,
+                "user": user,
+                "password": passwd,
+            },
         )
     return engine
 
