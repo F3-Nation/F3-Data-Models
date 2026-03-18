@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "f3-data-models"
-version = "1.0.9"
+version = "1.1.0"
 description = "The data schema and models for F3 Nation applications."
 authors = ["Evan Petzoldt <evan.petzoldt@protonmail.com>"]
 readme = "README.md"
@@ -52,6 +52,7 @@ alembic-postgresql-enum = "^1.6.1"
 sqlalchemy-citext = "^1.8.0"
 pg8000 = "^1.31.5"
 cloud-sql-python-connector = "^1.20.0"
+sqlalchemy-bigquery = "^1.13.0"
 
 [tool.poe.tasks]
 install-js = "npm install"
