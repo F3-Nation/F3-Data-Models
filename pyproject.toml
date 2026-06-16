@@ -11,6 +11,7 @@ repository = "https://github.com/F3-Nation/f3-data-models"
 documentation = "https://github.io/F3-Nation/f3-data-models"
 
 [tool.poetry.group.dev.dependencies]
+python = "^3.12"
 poethepoet = "^0.34.0"
 sqlalchemy-schemadisplay = "^2.0"
 graphviz = "^0.20.3"
@@ -44,7 +45,7 @@ known-first-party = []
 
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.15"
 sqlalchemy = "^2.0.36"
 psycopg2-binary = "^2.9.10"
 sqlmodel = "^0.0.22"
